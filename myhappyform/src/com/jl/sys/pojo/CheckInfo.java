@@ -18,7 +18,7 @@ public class CheckInfo implements java.io.Serializable{
 	private String id;
 	private String staffname;//员工名
 	private Date workdate;//工作日期；
-	private double workduringtime;//工作时长
+	private double workduringtime=8;//工作时长
 	private String departmentname;//工作地点 对应部门 
 	private String departmentcode;//对应部门 编码
 	private String workcontent;//工作内容

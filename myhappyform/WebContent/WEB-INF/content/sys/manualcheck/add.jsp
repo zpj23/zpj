@@ -51,6 +51,12 @@ $(function(){
 			  $("#departmentcode").html(str);
 			  $('#departmentcode').val("${cinfo.departmentcode}");
 			  $('#address').val("${cinfo.address}");
+// 				console.log("${cinfo.workduringtime}");
+// 			  if("${cinfo.workduringtime}"=="0.0"||"${cinfo.workduringtime}"==null){
+// 				    ('#workduringtime').val(8.0);
+// 			  }
+			  
+			  $('#address').val("${cinfo.address}");
 			  $('#workcontent').html("${cinfo.workcontent}");
 			  $('#remark').html("${cinfo.remark}");
 			  $('#workdate').val("${cinfo.workdate}".substring(0,10));
@@ -93,7 +99,7 @@ function closethisWin(){
     <div class="row cl">
       <label class="form-label col-3"><span class="c-red">*</span>出勤时间（小时）：</label>
       <div class="formControls col-5">
-        <input type="text" class="input-text" datatype="*" value="${cinfo.workduringtime}" placeholder="数字" id="workduringtime" name="cinfo.workduringtime"   nullmsg="工作时长不能为空">
+        <input type="text" class="input-text" datatype="*" value="${cinfo.workduringtime}" placeholder="默认8小时（数字）" id="workduringtime" name="cinfo.workduringtime"   nullmsg="出勤时间不能为空">
       </div>
       <div class="col-4"> </div>
     </div>

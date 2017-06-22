@@ -1,6 +1,7 @@
 package com.jl.sys.action;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.goldenweb.sys.pojo.SysUserinfo;
 import com.goldenweb.sys.util.IAction;
 import com.jl.sys.pojo.CheckInfo;
 import com.jl.sys.pojo.UserInfo;
@@ -146,7 +148,8 @@ public class ManualCheckInfoAction extends IAction{
 		String datemax=request.getParameter("datemax");//结束时间
 		String username=request.getParameter("username");//用户名称
 		String departmentid=request.getParameter("departmentid");//部门id
-		String address = request.getParameter("address");
+		String address = request.getParameter("address");//施工项目及区域
+		String workcontent =request.getParameter("workcontent");//工作内容
 		String tpage=request.getParameter("page");
 		String trows=request.getParameter("rows");
 		if(null!=tpage&&!"".equalsIgnoreCase(tpage)){
@@ -161,6 +164,7 @@ public class ManualCheckInfoAction extends IAction{
 		param.put("username", username);
 		param.put("departmentid", departmentid);
 		param.put("address", address);
+		param.put("workcontent", workcontent);
 		Map map=mService.findList(user,page,rows,param);
 		List<UserInfo> list=(List<UserInfo>)map.get("list");
 		int countNumber=(Integer)map.get("count");
@@ -182,4 +186,36 @@ public class ManualCheckInfoAction extends IAction{
 		}
 	}
 	
+	
+	@Action(value="jlManualCheckInfoAction_exportExcel",results={
+			@Result(name="success",type="json", params={"root","jsonData"})
+	})
+	public void exportExcel(){
+		user = (UserInfo) request.getSession().getAttribute("jluserinfo");
+		String datemin=request.getParameter("datemin");//开始时间
+		String datemax=request.getParameter("datemax");//结束时间
+		String username=request.getParameter("username");//用户名称
+		String departmentid=request.getParameter("departmentid");//部门id
+		String address = request.getParameter("address");//施工项目及区域
+		String workcontent=request.getParameter("workcontent");//工作内容
+		Map<String,String> param=new HashMap<String,String>();
+		param.put("datemin", datemin);
+		param.put("datemax", datemax);
+		param.put("username", username);
+		param.put("departmentid", departmentid);
+		param.put("address", address);
+		param.put("workcontent", workcontent);
+		mService.exportExcel(param,request,response,user);
+		
+	}
+	
+	public String dcode(String value){
+		try {
+			String reStr=java.net.URLDecoder.decode(value, "utf-8");
+			return reStr;
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return "";
+		}
+	}
 }

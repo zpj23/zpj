@@ -39,6 +39,9 @@ public class ManualInfoDaoImpl extends BaseDao<CheckInfo> implements ManualInfoD
 		if(null!=param.get("address")&&!"".equalsIgnoreCase(param.get("address").toString())){
 			sql.append(" and  address like ").append("'%"+param.get("address")+"%'  ");
 		}
+		if(null!=param.get("workcontent")&&!"".equalsIgnoreCase(param.get("workcontent").toString())){
+			sql.append(" and  workcontent like ").append("'%"+param.get("workcontent")+"%'  ");
+		}
 		if(null!=param.get("departmentid")&&!"".equalsIgnoreCase(param.get("departmentid").toString())){
 			sql.append(" and departmentcode = ").append("'"+param.get("departmentid")+"'");
 		}
@@ -61,6 +64,9 @@ public class ManualInfoDaoImpl extends BaseDao<CheckInfo> implements ManualInfoD
 		}
 		if(null!=param.get("address")&&!"".equalsIgnoreCase(param.get("address").toString())){
 			sql.append(" and  address like ").append("'%"+param.get("address")+"%'  ");
+		}
+		if(null!=param.get("workcontent")&&!"".equalsIgnoreCase(param.get("workcontent").toString())){
+			sql.append(" and  workcontent like ").append("'%"+param.get("workcontent")+"%'  ");
 		}
 		if(null!=param.get("departmentid")&&!"".equalsIgnoreCase(param.get("departmentid").toString())){
 			sql.append(" and departmentcode = ").append("'"+param.get("departmentid")+"'");

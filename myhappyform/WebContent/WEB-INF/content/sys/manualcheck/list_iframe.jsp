@@ -99,13 +99,14 @@ function selectOneData(){
 
 
 
-function load(datemin,datemax,username,departmentid,address){
+function load(datemin,datemax,username,departmentid,address,workcontent){
 	datagrid.datagrid("load", { 
 		datemin:datemin,
 		datemax:datemax,
 		username:username,
 		departmentid:departmentid,
-		address:address
+		address:address,
+		workcontent:workcontent
 	});
 }
 

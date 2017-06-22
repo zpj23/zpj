@@ -2,6 +2,9 @@ package com.jl.sys.service;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.jl.sys.pojo.CheckInfo;
 import com.jl.sys.pojo.UserInfo;
 
@@ -39,4 +42,17 @@ public interface ManualInfoService {
 	 * @time 2017-6-19 下午5:01:37
 	 */
 	public void delInfo(String id);
+	
+	
+	/**
+	 * 导出
+	 * @Title exportExcel
+	 * @param param
+	 * @param request
+	 * @param response
+	 * @param user
+	 * @author zpj
+	 * @time 2017-6-22 下午2:51:12
+	 */
+	public void exportExcel(Map<String,String> param,HttpServletRequest request, HttpServletResponse response,UserInfo user);
 }

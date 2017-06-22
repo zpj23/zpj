@@ -74,10 +74,10 @@ function admin_del(id){
 
 
 function searchInfo(){
-	list_iframe.contentWindow.load($('#datemin').val(),$('#datemax').val(),$('#username').val(),$('#departmentid').val(),$('#address').val());
+	list_iframe.contentWindow.load($('#datemin').val(),$('#datemax').val(),$('#username').val(),$('#departmentid').val(),$('#address').val(),$("#workcontent").val());
 }
 function tolist(){
-	list_iframe.contentWindow.load($('#datemin').val(),$('#datemax').val(),$('#username').val(),$('#departmentid').val(),$('#address').val());
+	list_iframe.contentWindow.load($('#datemin').val(),$('#datemax').val(),$('#username').val(),$('#departmentid').val(),$('#address').val(),$("#workcontent").val());
 }
 
 function dataimport(){
@@ -114,7 +114,7 @@ function initDep(){
 </script>
 </head>
 <body>
-<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 系统管理 <span class="c-gray en">&gt;</span> 用户管理<a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 系统管理 <span class="c-gray en">&gt;</span> 微信考勤<a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 <div class="pd-20">
 <form action="" name="form1" method="post"  id="form1" enctype="multipart/form-data" >
  
@@ -122,8 +122,9 @@ function initDep(){
 		<input type="text" onfocus="WdatePicker({maxDate:'#F{$dp.$D(\'datemax\')}'})" id="datemin" name="datemin" class="input-text Wdate" style="width:120px;">
 		-
 		<input type="text" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'datemin\')}'})" id="datemax" name="datemax" class="input-text Wdate" style="width:120px;">
-		<input type="text" class="input-text" style="width:250px" placeholder="输入施工人员名称" id="username" name="username">
-		<input type="text" class="input-text" style="width:250px" placeholder="输入施工项目及施工区域" id="address" name="address">
+		<input type="text" class="input-text" style="width:150px" placeholder="输入施工人员名称" id="username" name="username" />
+		<input type="text" class="input-text" style="width:170px" placeholder="输入施工项目及施工区域" id="address" name="address" />
+		<input type="text" class="input-text" style="width:150px" placeholder="输入工作内容" id="workcontent" name="workcontent" />
 		<span class="select-box inline">
 			<select class="select" size="1" name="departmentid" id="departmentid" value="" onchange="" datatype="*" nullmsg="请选择所属部门！">
 	          <option value="" selected>请选择部门</option>
@@ -134,12 +135,13 @@ function initDep(){
 	<div class="cl pd-5 bg-1 bk-gray mt-20">
 	 <span class="l">
 <!-- 	 <input type="file" id="file" name="file" style="width:150px;" /> -->
-		<span class="btn-upload form-group">
-			<input class="input-text upload-url" type="text" name="ad" id="ad" readonly  datatype="*" nullmsg="请添加附件！" style="width:200px">
-			<a href="javascript:void();" style="color: white" class="btn btn-primary upload-btn radius"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a>
-			<input type="file" multiple name="file" class="input-file">
-		</span>
-	  <a href="javascript:;" style="color: white" onclick="dataimport()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe600;</i>批量导入</a>
+<!-- 		<span class="btn-upload form-group"> -->
+<!-- 			<input class="input-text upload-url" type="text" name="ad" id="ad" readonly  datatype="*" nullmsg="请添加附件！" style="width:200px"> -->
+<!-- 			<a href="javascript:void();" style="color: white" class="btn btn-primary upload-btn radius"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a> -->
+<!-- 			<input type="file" multiple name="file" class="input-file"> -->
+<!-- 		</span> -->
+<!-- 	  <a href="javascript:;" style="color: white" onclick="dataimport()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe600;</i>批量导入</a> -->
+	  <a href="javascript:;" style="color: white" onclick="dataimport()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe644;</i>导出数据</a>
 	  <a href="javascript:;" style="color: white" onclick="admin_add('添加信息','jlManualCheckInfoAction_toAdd','800','650')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加信息</a></span>
 <!-- 	  <a href="javascript:;" style="color: white" onclick="changePw()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe692;</i>修改密码</a> -->
 	  
