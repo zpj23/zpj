@@ -30,7 +30,7 @@
 $(document).ready(function(){
   $('#username').val("admin");
   $('#pwd').val("666666");
-  checkLogin();
+  //checkLogin();
 });
 function checkLogin() {
 	form1.action = "jlLoginAction_checkLogin";
