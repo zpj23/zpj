@@ -29,6 +29,16 @@ public interface ManualInfoDao {
 	 * @time 2017-6-17 下午3:50:23
 	 */
 	public List findList(UserInfo user,int page,int rows,Map<String,String> param);
+	/**
+	 * 根据条件查询返回object[]
+	 * @Title findListObjectArray
+	 * @param user
+	 * @param param
+	 * @return
+	 * @author zpj
+	 * @time 2017-6-23 下午3:19:01
+	 */
+	public List findListObjectArray(UserInfo user,Map<String,String> param);
 	
 	
 	/**

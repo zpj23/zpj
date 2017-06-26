@@ -90,6 +90,10 @@ function dataimport(){
 	form1.action="jlUserInfoAction_importExcel";
 	form1.submit();
 }
+function dataoutput(){
+	form1.action="jlManualCheckInfoAction_exportExcel";
+	form1.submit();
+}
 
 
 //初始化部门下拉框
@@ -141,7 +145,7 @@ function initDep(){
 <!-- 			<input type="file" multiple name="file" class="input-file"> -->
 <!-- 		</span> -->
 <!-- 	  <a href="javascript:;" style="color: white" onclick="dataimport()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe600;</i>批量导入</a> -->
-	  <a href="javascript:;" style="color: white" onclick="dataimport()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe644;</i>导出数据</a>
+	  <a href="javascript:;" style="color: white" onclick="dataoutput()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe644;</i>导出数据</a>
 	  <a href="javascript:;" style="color: white" onclick="admin_add('添加信息','jlManualCheckInfoAction_toAdd','800','650')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加信息</a></span>
 <!-- 	  <a href="javascript:;" style="color: white" onclick="changePw()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe692;</i>修改密码</a> -->
 	  

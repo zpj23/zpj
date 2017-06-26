@@ -78,6 +78,7 @@ public class ManualCheckInfoAction extends IAction{
 			results={
 			@Result(type="json", params={"root","jsonData"})})
 	public void doAdd(){
+		user = (UserInfo)request.getSession().getAttribute("jluserinfo");
 		try {
 			String staffnames=cinfo.getStaffname();
 			cinfo.setAdddate(new Date());
@@ -97,9 +98,11 @@ public class ManualCheckInfoAction extends IAction{
 					tmpci.setAddress(cinfo.getAddress());
 					tmpci.setOvertime(cinfo.getOvertime());	
 					tmpci.setRemark(cinfo.getRemark());
+					tmpci.setCreateuserid(user.getId());
 					mService.saveInfo(tmpci);
 				}
 			}else{
+				cinfo.setCreateuserid(user.getCreateuserid());
 				mService.saveInfo(cinfo);
 			}
 			

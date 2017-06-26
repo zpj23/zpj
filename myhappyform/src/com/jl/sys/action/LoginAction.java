@@ -16,6 +16,11 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -36,6 +41,7 @@ import com.jl.sys.service.LogInfoService;
 import com.jl.sys.service.MenuInfoService;
 import com.jl.sys.service.RoleInfoService;
 import com.jl.sys.service.UserInfoService;
+import com.jl.util.ClientTool;
 import com.jl.util.DateHelper;
 
 /**
@@ -176,7 +182,7 @@ public class LoginAction extends IAction{
 						rolecodeSet.add(dlist.get(j)[1]);
 					}
 				}
-				if(rolecodeSet.contains("ROLE_1462257894696")||rolecodeSet.contains("ROLE_1497868626547")){//是管理员角色
+				if(rolecodeSet.contains("ROLE_1462257894696")){//是管理员角色
 					luser.setIsAdmin("1");
 				}else{
 					luser.setIsAdmin("0");
@@ -309,6 +315,37 @@ public class LoginAction extends IAction{
 //		 getMonthDate();
 //	}
 		 
+	 public String  findWeather(List<String> list, String address){
+			
+			CloseableHttpClient  httpClient=ClientTool.getHttpClient();
+		    HttpClientContext localContext= HttpClientContext.create();
+		    String temp="";
+		    String cityname="南通";
+		    if(!temp.equalsIgnoreCase("")){
+		    	cityname=temp;
+		    }else{
+		    	if(address!=null&&!address.equalsIgnoreCase("")){
+		    		cityname=address;
+		    	}
+		    }
+		    try {
+				String result= httpGetContent("http://api.avatardata.cn/Weather/Query?key=3207af0008c9409cbb35402f9df86c02&cityname="+cityname,httpClient,localContext);
+				System.out.println(result);
+				return result;
+		    } catch (Exception e) {
+				e.printStackTrace();
+				return "";
+			}
+		     
+		}
+		
+		public String httpGetContent(String url,CloseableHttpClient httpClient ,HttpClientContext localContext ) throws Exception{
+			HttpGet httpGet = new HttpGet(url);
+			CloseableHttpResponse response = httpClient.execute(httpGet,localContext);
+	        String postResult = EntityUtils.toString(response.getEntity(), "UTF-8");
+	        response.close();
+			return postResult;  
+		}
 	
 	public  String getIp2(HttpServletRequest request) {
         String ip = request.getHeader("X-Forwarded-For");
