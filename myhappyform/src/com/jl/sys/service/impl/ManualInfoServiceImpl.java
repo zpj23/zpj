@@ -38,10 +38,18 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 	
 	public Map findList(UserInfo user,int page,int rows,Map<String,String> param){
 		List list=mDao.findList(user,page,rows,param);
+		double zgs=0;
+		for(int i=0;i<list.size();i++){
+			Object str=((Map)(list.get(i))).get("workduringtime");
+			double workduringtime=Double.valueOf(str.toString());
+			double overtime=Double.valueOf(((Map)(list.get(i))).get("overtime").toString());
+			zgs+=workduringtime+overtime;
+		}
 		int count=mDao.findCount(user,param); 
 		Map map=new HashMap();
 		map.put("list", list);
 		map.put("count", count);
+		map.put("zgs", zgs);
 		return map;
 	}
 	

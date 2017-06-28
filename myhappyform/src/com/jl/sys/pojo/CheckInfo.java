@@ -26,7 +26,6 @@ public class CheckInfo implements java.io.Serializable{
 	private String address;//施工项目及区域
 	private double overtime;//加班时长
 	private int createuserid;//创建人id
-	
 	private String remark;//备注
 	
 	@Id

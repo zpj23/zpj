@@ -15,9 +15,10 @@ $(document).ready(function(){
 		queryParams : {
 			
 		},
-		rowStyler:function(rowIndex,rowData){  
-            return 'height:55px;';  
-        },
+		showFooter:true,
+// 		rowStyler:function(rowIndex,rowData){  
+//             return 'height:55px;';  
+//         },
 		idField : 'id',
 		frozenColumns : [ [ {
 			title : 'id',
@@ -47,7 +48,8 @@ $(document).ready(function(){
 			width : 30,
 			formatter: function(value, rowData, rowIndex){
 				var str=rowData.workdate;
-				return str.substring(0,10);
+				var ret=str.substr(0,10);
+				return ret;
 			}
 			
 		},{
@@ -68,15 +70,20 @@ $(document).ready(function(){
 			title : '操作',
 			width : 50,
 			formatter: function(value, rowData, rowIndex){
-				var tempStr="";
-				var col="black";
-				var str= '<a title="编辑" href="javascript:;" onclick="edit(\''+rowData.id+'\')"  style="text-decoration:none">编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a title="删除" href="javascript:;" onclick="del(\''+rowData.id+'\')"  style="text-decoration:none">删除</a>';
-				return str;
+				if(rowData.id=="1"){
+					return "";
+				}else{
+					var tempStr="";
+					var col="black";
+					var str= '<a title="编辑" href="javascript:;" onclick="edit(\''+rowData.id+'\')"  style="text-decoration:none">编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a title="删除" href="javascript:;" onclick="del(\''+rowData.id+'\')"  style="text-decoration:none">删除</a>';
+					return str;
+				}
 			}
 		}
 		
 		] ]
 	});
+	
 });
 /****编辑****/
 function edit(id){
@@ -120,7 +127,7 @@ function load(datemin,datemax,username,departmentid,address,workcontent){
 				style="height: auto; width: auto;" toolbar="" title=""
 				pageSize="${ipagesize}" pageList="${ipagelist}"
 				queryParams="" idField="id" border="false"
-				rownumbers="true" singleSelect="true" pagination="true">
+				rownumbers="true" singleSelect="true" pagination="true" >
 			</table>
 </body>
 </html>

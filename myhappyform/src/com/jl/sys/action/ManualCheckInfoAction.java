@@ -171,12 +171,26 @@ public class ManualCheckInfoAction extends IAction{
 		Map map=mService.findList(user,page,rows,param);
 		List<UserInfo> list=(List<UserInfo>)map.get("list");
 		int countNumber=(Integer)map.get("count");
+		request.setAttribute("zgs", (Double)map.get("zgs"));
 		if(list!=null&&list.size()>0){
 			  StringBuffer str =new StringBuffer();
 			  str.append("{\"total\":\"").append(countNumber).append("\",\"rows\":");
 //			  JSONArray jsonArray = JSONArray.fromObject(list);
 			  String lstr=gson.toJson(list);
 			  str.append(lstr);
+//			  str.append(",\"footer\":[");
+//			  CheckInfo footer=new CheckInfo();
+//			  footer.setDepartmentname("合计");
+//			  footer.setWorkduringtime((Double)map.get("zgs"));
+//			  footer.setId("1");
+//			  footer.setAddress("");
+//			  footer.setWorkcontent("");
+//			  footer.setRemark("");
+//			  footer.setStaffname("");
+//			  System.out.println(gson.toJson(footer));
+//			  str.append(gson.toJson(footer));
+//			  str.append("]");
+			  str.append(",\"footer\":[{\"id\":\"1\",\"departmentname\":\"合计\",\"workdate\":\"\",\"workduringtime\":\""+(Double)map.get("zgs")+"\",\"workcontent\":\"\",\"overtime\":\"\",\"staffname\":\"\"}]");
 			  str.append("}");
 			  jsonData= str.toString();
 		}else{

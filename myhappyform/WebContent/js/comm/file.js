@@ -29,7 +29,7 @@ var baidufile = {
 	 $("#FileList_"+uploadifyID).html("");
  	str = "";
      $.ajax({
-         url: '/sdwwdm/uploadfileAction_getFiles',
+         url: '/myhappyform/uploadfileAction_getFiles',
          type: 'POST',
          async: false,
          dataType : 'json',
