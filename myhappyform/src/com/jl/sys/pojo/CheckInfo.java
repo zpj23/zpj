@@ -27,6 +27,7 @@ public class CheckInfo implements java.io.Serializable{
 	private double overtime;//加班时长
 	private int createuserid;//创建人id
 	private String remark;//备注
+	private String shenhe;//审核功能 0待审核，1已审核
 	
 	@Id
 	@Column(name = "id", nullable = false, length=50)
@@ -125,5 +126,14 @@ public class CheckInfo implements java.io.Serializable{
 	public void setCreateuserid(int createuserid) {
 		this.createuserid = createuserid;
 	}
+	@Column(name = "shenhe",  length=10)
+	public String getShenhe() {
+		return shenhe;
+	}
+	public void setShenhe(String shenhe) {
+		this.shenhe = shenhe;
+	}
+	
+	
 	
 }

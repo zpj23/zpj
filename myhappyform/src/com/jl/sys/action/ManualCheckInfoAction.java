@@ -99,10 +99,24 @@ public class ManualCheckInfoAction extends IAction{
 					tmpci.setOvertime(cinfo.getOvertime());	
 					tmpci.setRemark(cinfo.getRemark());
 					tmpci.setCreateuserid(user.getId());
+					if(user.getIsAdmin().equalsIgnoreCase("1")){
+						//管理员  审核状态改成已审核
+						tmpci.setShenhe("1");
+					}else{
+						//普通人 录入的状态是未审核
+						tmpci.setShenhe("0");
+					}
 					mService.saveInfo(tmpci);
 				}
 			}else{
-				cinfo.setCreateuserid(user.getCreateuserid());
+				cinfo.setCreateuserid(user.getId());
+				if(user.getIsAdmin().equalsIgnoreCase("1")){
+					//管理员  审核状态改成已审核
+					cinfo.setShenhe("1");
+				}else{
+					//普通人 录入的状态是未审核
+					cinfo.setShenhe("0");
+				}
 				mService.saveInfo(cinfo);
 			}
 			
@@ -113,6 +127,26 @@ public class ManualCheckInfoAction extends IAction{
 			job.put("responseText", "true");
 			this.jsonWrite(job);
 		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * 管理员审核功能
+	 * @Title shenhe
+	 * @author zpj
+	 * @time 2017-7-1 下午2:14:36
+	 */
+	@Action(value="jlManualCheckInfoAction_doshenhe",
+			results={
+			@Result(type="json", params={"root","jsonData"})})
+	public void shenhe(){
+		String id=request.getParameter("id");
+		CheckInfo cInfo1=mService.findById(id);
+		cInfo1.setShenhe("1");
+		mService.saveInfo(cInfo1);
+		try {
+			this.jsonWrite(1);
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -153,6 +187,7 @@ public class ManualCheckInfoAction extends IAction{
 		String departmentid=request.getParameter("departmentid");//部门id
 		String address = request.getParameter("address");//施工项目及区域
 		String workcontent =request.getParameter("workcontent");//工作内容
+		String shenhe=request.getParameter("shenhe");//审核状态
 		String tpage=request.getParameter("page");
 		String trows=request.getParameter("rows");
 		if(null!=tpage&&!"".equalsIgnoreCase(tpage)){
@@ -168,6 +203,7 @@ public class ManualCheckInfoAction extends IAction{
 		param.put("departmentid", departmentid);
 		param.put("address", address);
 		param.put("workcontent", workcontent);
+		param.put("shenhe", shenhe);
 		Map map=mService.findList(user,page,rows,param);
 		List<UserInfo> list=(List<UserInfo>)map.get("list");
 		int countNumber=(Integer)map.get("count");

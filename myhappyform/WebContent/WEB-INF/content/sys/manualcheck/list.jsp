@@ -72,12 +72,31 @@ function admin_del(id){
 	});
 }
 
+function admin_shenhe(id){
+	layer.confirm('确认要审核吗？',function(index){
+		//此处请求后台程序，下方是成功后的前台处理……
+		$.ajax({
+			   type: "POST",
+			   url: "jlManualCheckInfoAction_doshenhe",
+			   async:false,
+			   data: "id="+id,
+			   success: function(data){
+				   if(data==1){
+						layer.msg('已审核!',{icon:1,time:1000});
+				   }else{
+					   layer.msg('审核失败!',{icon: 5,time:1000});
+				   }
+				   tolist();
+			   }
+			});
+	});
+}
 
 function searchInfo(){
-	list_iframe.contentWindow.load($('#datemin').val(),$('#datemax').val(),$('#username').val(),$('#departmentid').val(),$('#address').val(),$("#workcontent").val());
+	list_iframe.contentWindow.load($('#datemin').val(),$('#datemax').val(),$('#username').val(),$('#departmentid').val(),$('#address').val(),$("#workcontent").val(),$("#shenhe").val());
 }
 function tolist(){
-	list_iframe.contentWindow.load($('#datemin').val(),$('#datemax').val(),$('#username').val(),$('#departmentid').val(),$('#address').val(),$("#workcontent").val());
+	list_iframe.contentWindow.load($('#datemin').val(),$('#datemax').val(),$('#username').val(),$('#departmentid').val(),$('#address').val(),$("#workcontent").val(),$("#shenhe").val());
 }
 
 function dataimport(){
@@ -131,7 +150,14 @@ function initDep(){
 		<input type="text" class="input-text" style="width:150px" placeholder="输入工作内容" id="workcontent" name="workcontent" />
 		<span class="select-box inline">
 			<select class="select" size="1" name="departmentid" id="departmentid" value="" onchange="" datatype="*" nullmsg="请选择所属部门！">
-	          <option value="" selected>请选择部门</option>
+	          <option value="" selected>所属区域</option>
+	        </select>
+        </span>
+        <span class="select-box inline">
+			<select class="select" size="1" name="shenhe" id="shenhe" value="" onchange="" datatype="*" nullmsg="是否审核">
+	          <option value="" selected>审核状态</option>
+	          <option value="0" >已上报，待审核</option>
+	          <option value="1" >已审核</option>
 	        </select>
         </span>
 		<button type="button"  class="btn btn-success" onclick="searchInfo();" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 查询</button>

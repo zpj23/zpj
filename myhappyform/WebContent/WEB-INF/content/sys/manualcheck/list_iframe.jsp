@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" %>
     <%@ include file="/common/header.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -16,9 +16,12 @@ $(document).ready(function(){
 			
 		},
 		showFooter:true,
-// 		rowStyler:function(rowIndex,rowData){  
+		rowStyler:function(rowIndex,rowData){  
+			if(rowData.shenhe=="0"){
+				return 'color:red';
+			}
 //             return 'height:55px;';  
-//         },
+        },
 		idField : 'id',
 		frozenColumns : [ [ {
 			title : 'id',
@@ -73,10 +76,22 @@ $(document).ready(function(){
 				if(rowData.id=="1"){
 					return "";
 				}else{
-					var tempStr="";
-					var col="black";
-					var str= '<a title="编辑" href="javascript:;" onclick="edit(\''+rowData.id+'\')"  style="text-decoration:none">编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a title="删除" href="javascript:;" onclick="del(\''+rowData.id+'\')"  style="text-decoration:none">删除</a>';
-					return str;
+					var str="";
+					//判断是否是管理员
+					if("${jluserinfo.isAdmin}"=="1"){
+						str= '<a title="编辑" href="javascript:;" onclick="edit(\''+rowData.id+'\')"  style="text-decoration:none">编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a title="删除" href="javascript:;" onclick="del(\''+rowData.id+'\')"  style="text-decoration:none">删除</a>';
+						if(rowData.shenhe=="0"){
+							str+='&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a title="审核" href="javascript:;" onclick="shenhe(\''+rowData.id+'\')"  style="text-decoration:none">审核</a>';
+						}
+						return str;
+					}else{
+						if(rowData.shenhe=="0"){
+							str= '<a title="编辑" href="javascript:;" onclick="edit(\''+rowData.id+'\')"  style="text-decoration:none">编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a title="删除" href="javascript:;" onclick="del(\''+rowData.id+'\')"  style="text-decoration:none">删除</a>';
+						}
+						return str;
+					}					
+					
+					
 				}
 			}
 		}
@@ -93,6 +108,9 @@ function edit(id){
 function del(id){
 	parent.admin_del(id);
 }
+function shenhe(id){
+	parent.admin_shenhe(id);
+}
 
 function selectOneData(){
 	var rowData=$("#datagrid").datagrid("getSelected");
@@ -106,14 +124,15 @@ function selectOneData(){
 
 
 
-function load(datemin,datemax,username,departmentid,address,workcontent){
+function load(datemin,datemax,username,departmentid,address,workcontent,shenhe){
 	datagrid.datagrid("load", { 
 		datemin:datemin,
 		datemax:datemax,
 		username:username,
 		departmentid:departmentid,
 		address:address,
-		workcontent:workcontent
+		workcontent:workcontent,
+		shenhe:shenhe
 	});
 }
 
