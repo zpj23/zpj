@@ -93,7 +93,7 @@ public class SetCharacterFilter implements Filter{
         //初始化properties
 		ArgsUtil.init();
 		//初始化组织机构信息
-		OrginfoCache.init();
+//		OrginfoCache.init();
 		
 //		ResourceCodeUtil.initCode();
 

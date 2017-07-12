@@ -1,5 +1,6 @@
 package com.jl.sys.service;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -55,4 +56,13 @@ public interface ManualInfoService {
 	 * @time 2017-6-22 下午2:51:12
 	 */
 	public void exportExcel(Map<String,String> param,HttpServletRequest request, HttpServletResponse response,UserInfo user);
+	
+	/**
+	 * 根据用户分类查询每个月的工时
+	 * @Title findChartByUser
+	 * @param username
+	 * @author zpj
+	 * @time 2017-7-10 下午4:35:45
+	 */
+	public List findChartByUser(Map username);
 }

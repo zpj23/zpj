@@ -115,4 +115,8 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 
 		}
 	}
+	
+	public List findChartByUser(Map param){
+		return mDao.findChartByUser(param);
+	}
 }

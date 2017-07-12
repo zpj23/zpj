@@ -82,6 +82,7 @@ public class ManualCheckInfoAction extends IAction{
 		try {
 			String staffnames=cinfo.getStaffname();
 			cinfo.setAdddate(new Date());
+			
 			//判断是否是多人同时输入的
 			if(staffnames.contains("，")){
 				String[] nameArr=staffnames.split("，");
@@ -107,6 +108,11 @@ public class ManualCheckInfoAction extends IAction{
 						tmpci.setShenhe("0");
 					}
 					mService.saveInfo(tmpci);
+				}
+				CheckInfo temp=mService.findById(cinfo.getId());
+				if(temp!=null){
+					//编辑的时候 如果是有分隔符 说明是需要分割这条数据  ，在分割保存完这些数据以后要删除之前未分割的数据
+					mService.delInfo(temp.getId());
 				}
 			}else{
 				cinfo.setCreateuserid(user.getId());
@@ -214,18 +220,6 @@ public class ManualCheckInfoAction extends IAction{
 //			  JSONArray jsonArray = JSONArray.fromObject(list);
 			  String lstr=gson.toJson(list);
 			  str.append(lstr);
-//			  str.append(",\"footer\":[");
-//			  CheckInfo footer=new CheckInfo();
-//			  footer.setDepartmentname("合计");
-//			  footer.setWorkduringtime((Double)map.get("zgs"));
-//			  footer.setId("1");
-//			  footer.setAddress("");
-//			  footer.setWorkcontent("");
-//			  footer.setRemark("");
-//			  footer.setStaffname("");
-//			  System.out.println(gson.toJson(footer));
-//			  str.append(gson.toJson(footer));
-//			  str.append("]");
 			  str.append(",\"footer\":[{\"id\":\"1\",\"departmentname\":\"合计\",\"workdate\":\"\",\"workduringtime\":\""+(Double)map.get("zgs")+"\",\"workcontent\":\"\",\"overtime\":\"\",\"staffname\":\"\"}]");
 			  str.append("}");
 			  jsonData= str.toString();
@@ -262,13 +256,43 @@ public class ManualCheckInfoAction extends IAction{
 		
 	}
 	
-	public String dcode(String value){
+	/**
+	 * 根据用户展示一年根据月分的工时记录柱状图（分正常和加班两项）
+	 * @Title toShowByType
+	 * @return
+	 * @author zpj
+	 * @time 2017-7-12 下午4:18:44
+	 */
+	@Action(value="jlManualCheckInfoAction_toShowByType",results={
+			@Result(name="success",location="sys/manualcheck/analysis.jsp"),//fashionHome.jsp
+			@Result(name="error",location="/login.jsp")
+	})
+	public String toShowByType(){
+		return "success";
+	}
+	
+	@Action(value="jlManualCheckInfoAction_initChart",
+			results={
+			@Result(type="json", params={"root","jsonData"})})
+	public void  jlDepartmentInfoAction_initDu(){
+		String datemin=request.getParameter("datemin");//开始时间
+		String datemax=request.getParameter("datemax");//结束时间
+		String username=request.getParameter("username");//用户名称
+		String departmentid=request.getParameter("departmentid");//部门id
+		String address = request.getParameter("address");//施工项目及区域
+		String workcontent=request.getParameter("workcontent");//工作内容
+		Map<String,String> param=new HashMap<String,String>();
+		param.put("datemin", datemin);
+		param.put("datemax", datemax);
+		param.put("username", username);
+		param.put("departmentid", departmentid);
+		param.put("address", address);
+		param.put("workcontent", workcontent);
+		List list=mService.findChartByUser(param);
 		try {
-			String reStr=java.net.URLDecoder.decode(value, "utf-8");
-			return reStr;
-		} catch (UnsupportedEncodingException e) {
+			this.jsonWrite(list);
+		} catch (IOException e) {
 			e.printStackTrace();
-			return "";
 		}
 	}
 }
