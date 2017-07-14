@@ -64,4 +64,7 @@ public interface ManualInfoDao {
 	
 	public void delInfo(String id) throws Exception;
 	
+	
+	public List findChartByUser(Map param);
+	
 }

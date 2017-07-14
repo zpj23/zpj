@@ -53,7 +53,7 @@ public class ManualInfoDaoImpl extends BaseDao<CheckInfo> implements ManualInfoD
 			//不是管理员
 			sql.append(" and  createuserid="+user.getId());
 		}
-		sql.append(" order by workdate desc");
+		sql.append(" order by workdate desc,adddate desc ");
 		List list=this.findMapObjBySql(sql.toString(), null, page, rows);
 		return list;
 	}
@@ -117,7 +117,7 @@ public class ManualInfoDaoImpl extends BaseDao<CheckInfo> implements ManualInfoD
 			//不是管理员
 			sql.append(" and  createuserid="+user.getId());
 		}
-		sql.append(" order by workdate desc");
+		sql.append(" order by workdate desc,adddate desc");
 		List list=this.findBySql2(sql.toString());
 		return list;
 	}
@@ -131,5 +131,32 @@ public class ManualInfoDaoImpl extends BaseDao<CheckInfo> implements ManualInfoD
 		CheckInfo c=this.get(id);
 		if(c!=null)
 			this.delete(c);
+	}
+	
+	public List findChartByUser(Map param){
+		StringBuffer sql=new  StringBuffer(1000);
+		sql.append("SELECT DATE_FORMAT( workdate, '%Y-%m' ) as yuefen , SUM(workduringtime) as wdt , SUM(overtime) ot FROM jl_check_info where  ");
+		sql.append(" shenhe ='1' ");
+		if(null!=param.get("datemin")&&!"".equalsIgnoreCase(param.get("datemin").toString())){
+			sql.append(" and workdate like ").append("'"+param.get("datemin")+"%'");
+		}
+//		if(null!=param.get("datemax")&&!"".equalsIgnoreCase(param.get("datemax").toString())){
+//			sql.append(" and workdate <= ").append("'"+param.get("datemax")+"'");
+//		}
+		if(param.get("username")!=null&&!((String)param.get("username")).equalsIgnoreCase("")){
+			sql.append(" and staffname ='"+(String)param.get("username")+"' ");
+		}
+		if(null!=param.get("address")&&!"".equalsIgnoreCase(param.get("address").toString())){
+			sql.append(" and  address like ").append("'%"+param.get("address")+"%'  ");
+		}
+		if(null!=param.get("workcontent")&&!"".equalsIgnoreCase(param.get("workcontent").toString())){
+			sql.append(" and  workcontent like ").append("'%"+param.get("workcontent")+"%'  ");
+		}
+		if(null!=param.get("departmentid")&&!"".equalsIgnoreCase(param.get("departmentid").toString())){
+			sql.append(" and departmentcode = ").append("'"+param.get("departmentid")+"'");
+		}
+		sql.append(" GROUP BY DATE_FORMAT( workdate, '%Y-%m' ) ORDER BY yuefen asc ");
+		List list=this.findMapObjBySql(sql.toString(), null, 1, 20);
+		return list;
 	}
 }

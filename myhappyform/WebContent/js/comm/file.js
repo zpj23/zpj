@@ -42,7 +42,7 @@ var baidufile = {
              	var showname = objs[i].originalName.length>6?(objs[i].originalName.substring(0,6)+'...')+objs[i].fileType:objs[i].originalName;
                  str = str + '<div style="position: relative; float: left; width:80px; height:100px; border:1px solid #E8E8E8; margin-left:30px;margin-top:0px;">' +
                  			' <div style="border-bottom:1px solid #e8e8e8; height:65px; background:url(js/EasyUI/EasyUI1.3.6/themes/blue/images/hymain_j10.jpg) repeat-x; text-align:center; padding-top:5px;">' +
-                             '<a href="/sdwwdm/uploadfileAction_downLoadFile?id='+objs[i].id+'" target="_blank">' +
+                             '<a href="/myhappyform/uploadfileAction_downLoadFile?id='+objs[i].id+'" target="_blank">' +
                              '<img style="width:60px;height:60px;border:0px;" src="' + baidufile.GetIcon(objs[i].id, objs[i].fileType, objs[i].fileUrl) + '" /></a>' +//
                              '</div>' +
                              '<div style="font-size: 10px;  text-align:center; height:20px; ">' + showname+ '</div>' +
@@ -68,7 +68,7 @@ bindAttDate:function (mode,moduleID,uploadifyID){
 	 $("#FileList_"+uploadifyID).html("");
 	str = "";
   $.ajax({
-      url: '/sdwwdm/uploadfileAction_getAttFiles',
+      url: '/myhappyform/uploadfileAction_getAttFiles',
       type: 'POST',
       async: false,
       dataType : 'json',
@@ -82,7 +82,7 @@ bindAttDate:function (mode,moduleID,uploadifyID){
 	          	var showname = objs[i].originalName.length>6?(objs[i].originalName.substring(0,6)+'...')+objs[i].fileType:objs[i].originalName;
 	              str = str + '<div style="position: relative; float: left; width:80px; height:100px; border:1px solid #E8E8E8; margin-left:30px;margin-top:0px;">' +
 	              			' <div style="border-bottom:1px solid #e8e8e8; height:65px; background:url(js/EasyUI/EasyUI1.3.6/themes/blue/images/hymain_j10.jpg) repeat-x; text-align:center; padding-top:5px;">' +
-	                          '<a href="/sdwwdm/uploadfileAction_downLoadFile?id='+objs[i].id+'" target="_blank">' +
+	                          '<a href="/myhappyform/uploadfileAction_downLoadFile?id='+objs[i].id+'" target="_blank">' +
 	                          '<img style="width:60px;height:60px;border:0px;" src="' + baidufile.GetIcon(objs[i].id, objs[i].fileType, objs[i].fileUrl) + '" /></a>' +//
 	                          '</div>' +
 	                          '<div style="font-size: 10px;  text-align:center; height:20px; ">' + showname+ '</div>' +
@@ -109,10 +109,10 @@ bindAttDate:function (mode,moduleID,uploadifyID){
 
 //获取图标
 GetIcon : function(id,fileType,url) {
-	var contextPath = "/sdwwdm";
+	var contextPath = "/myhappyform";
     var exts = ["png", "jpeg", "jpg", "gif", "bmp"];
     for (var i = 0; i < exts.length; i++) {
-        if (fileType.toLowerCase() == exts[i]) return "/sdwwdm/uploadfileAction_viewImages?id="+id;//contextPath+"/images/file/img.png"; //return url;
+        if (fileType.toLowerCase() == exts[i]) return "/myhappyform/uploadfileAction_viewImages?id="+id;//contextPath+"/images/file/img.png"; //return url;
     }
     if (fileType == "pptx" || fileType == "ppt") return contextPath+"/images/file/PowerPoint.png";
     if (fileType == "xlsx" || fileType == "xls") return contextPath+"/images/file/Excel.png";
@@ -126,7 +126,7 @@ GetIcon : function(id,fileType,url) {
 DelFile : function(fileID,mode,moduleID,uploadifyID){
 	if(confirm("确实要删除吗？")){
     	$.ajax({
-            url: '/sdwwdm/uploadfileAction_delFile',
+            url: '/myhappyform/uploadfileAction_delFile',
             type: 'POST',
             async: false,
             dataType : 'json',
@@ -141,7 +141,7 @@ DelFile : function(fileID,mode,moduleID,uploadifyID){
 getMutifiFile : function (moduleID){
 	var str = '[]';
 	$.ajax({
-	         url: '/sdwwdm/uploadfileAction_getFilesUrl',
+	         url: '/myhappyform/uploadfileAction_getFilesUrl',
 	         type: 'POST',
 	         async: false,
 	         dataType : 'json',

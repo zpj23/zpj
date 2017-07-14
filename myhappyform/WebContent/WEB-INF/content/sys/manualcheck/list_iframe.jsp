@@ -30,22 +30,6 @@ $(document).ready(function(){
 			checkbox : true
 		} ] ],
 		columns : [ [ {
-			field : 'departmentname',
-			title : '所属地区',
-			width : 20
-		},{
-			field : 'address',
-			title : '施工项目及区域',
-			width : 50
-		},{
-			field : 'workcontent',
-			title : '工作内容',
-			width : 100
-		},{
-			field : 'staffname',
-			title : '施工人员',
-			width : 20
-		},{
 			field : 'workdate',
 			title : '施工日期',
 			width : 30,
@@ -56,6 +40,18 @@ $(document).ready(function(){
 			}
 			
 		},{
+			field : 'staffname',
+			title : '施工人员',
+			width : 20
+		},{
+			field : 'address',
+			title : '施工项目及区域',
+			width : 50
+		},{
+			field : 'workcontent',
+			title : '工作内容',
+			width : 100
+		},{
 			field : 'workduringtime',
 			title : '出勤时间（小时）',
 			width : 50
@@ -63,6 +59,10 @@ $(document).ready(function(){
 			field : 'overtime',
 			title : '加班时间（小时）',
 			width : 50
+		},{
+			field : 'departmentname',
+			title : '所属地区',
+			width : 20
 		},{
 			field : 'remark',
 			title : '备注',

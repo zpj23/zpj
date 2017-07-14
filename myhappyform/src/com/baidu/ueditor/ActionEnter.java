@@ -11,6 +11,7 @@ import com.goldenweb.sys.dao.UploadfileHibernate;
 import com.goldenweb.sys.util.DateHelper;
 
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.json.JSONObject;
@@ -127,18 +128,27 @@ public class ActionEnter
           prestmt.setString(6,DateHelper.getToday("yyyy-MM-dd HH:mm:ss"));//DbaObj.GetDate()
           prestmt.setString(7, tableid);
           //prestmt.setInt(8, index);
-          DbaObj.Conn.setAutoCommit(true);
+          DbaObj.Conn.setAutoCommit(false);
           prestmt.execute();
           DbaObj.Conn.commit();
           prestmt.close();
     	  }
     	 
 		} catch (Exception e) {
-			e.printStackTrace();
+			if(DbaObj.Conn!=null){  
+	               try {  
+	            	   DbaObj.Conn.rollback();  
+	               } catch (SQLException e1) {  
+	                   e1.printStackTrace();  
+	               }  
+	        }  
+			throw new RuntimeException(e); 
 		}
          finally {
-	        DbaObj.CloseConnection();
-	      }
+        	 if(DbaObj.Conn!=null){
+        		 DbaObj.CloseConnection();
+        	 }
+	     }
       
       break;
     case 5:

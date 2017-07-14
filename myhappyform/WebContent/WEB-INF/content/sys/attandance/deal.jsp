@@ -48,7 +48,7 @@ function dataimport(){
    
       	 </div>
   </form>
-  			附件： <mf:FileUpload id="pglcfile" mode="edit" moduleID="${uuid}" moduleType="pglc"></mf:FileUpload>
+  			附件： <mf:FileUpload id="wj" mode="edit" moduleID="123" moduleType="wj"></mf:FileUpload>
 </div>
 </div>
 
