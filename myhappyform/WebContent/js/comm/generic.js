@@ -1391,7 +1391,7 @@ function chooseSWRY(param){
 		}
 	})
 	window.parent.Dialog.OpenDialogWithReturn("选择人员",
-			"/sdwwdm/DialogAction_toCommonSqlDialog?type=chooseSWRY",
+			"/myhappyform/DialogAction_toCommonSqlDialog?type=chooseSWRY",
 			500,400,objArray);
 }
 

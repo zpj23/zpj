@@ -77,7 +77,7 @@ function a(id){common.openWindow('查看新闻', "newsAction_toViewNews?index=1&
         <div class="slider" >
             <div class="img_li img_over" id="imgdiv">
 	            <c:forEach items="${newslist}" var="a" varStatus="t">
-	              <img src="/sdwwdm/uploadfileAction_viewImages?id=${a[4]}"  class="dan_over"/>
+	              <img src="/myhappyform/uploadfileAction_viewImages?id=${a[4]}"  class="dan_over"/>
 	            </c:forEach>                
             </div>
             <div class="txt_x">
