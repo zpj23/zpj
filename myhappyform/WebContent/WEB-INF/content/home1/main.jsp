@@ -69,7 +69,11 @@ $(document).ready(function(){
 <div class="pd-20" style="padding-top:20px;height: 100%;">
   <p class="f-20 text-success">企业管理系统 <span class="f-14">v2.3</span>
   </p>
-  <embed wmode="transparent" src="http://chabudai.sakura.ne.jp/blogparts/honehoneclock/honehone_clock_tr.swf" quality="high" bgcolor="#ffffff" width="160" height="70" name="" align="middle" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">
+	  <embed pluginspage="http://www.macromedia.com/go/getflashplayer" 
+	 menu="true" loop="true" play="true" type="application/x-shockwave-flash" 
+	 style="z-index:-1;" id="tim"
+	 src="${pageContext.request.contextPath}/swf/time.swf">
+</embed>
 <!--   <p>登录次数：18 </p> -->
   <p>上次登录IP：${jluserinfo.lastloginip}  上次登录时间：<fmt:formatDate value="${jluserinfo.lastlogintime}" type="both"/>  </p>
   <c:if test="${jluserinfo.isAdmin eq '1'}">
@@ -98,7 +102,7 @@ $(document).ready(function(){
  
 </div>
 <footer class="footer">
-  <p><a href="http://www.baidu.com" target="_blank" title="">个人</a>提供前端技术支持</p>
+  <p><a href="http://www.baidu.com" target="_blank" title="">私人</a>提供前端技术支持</p>
 </footer>
 
 </body>

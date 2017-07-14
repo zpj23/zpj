@@ -23,11 +23,13 @@ $(function () {
 	initData();
 });
 function initData(){
+	hzbArray=new Array();//横坐标
+	zzbArray=new Array();//纵坐标
 	$.ajax({
  		type: "POST",
 		   url: "jlManualCheckInfoAction_initChart",
 		   async:false,
-		   data: "datemin="+$("#datemin").val()+"&datemax="+$("#datemax").val()+"&username="+$("#username").val()+"&address="+$("#address").val()+"&workcontent="+$("#workcontent").val()+"&departmentid="+$("#departmentid").val(),
+		   data: "datemin="+$("#datemin").val()+"&username="+$("#username").val()+"&address="+$("#address").val()+"&workcontent="+$("#workcontent").val()+"&departmentid="+$("#departmentid").val(),
 		   success: function(arr){
 			  var datas=$.parseJSON(arr);
 			  initChart(datas);
@@ -53,8 +55,13 @@ function initDep(){
 	     }
 	});
 }
-
+var pictitle="工时分布图";
 function initChart(arr){
+	var depname="";
+	if($("#departmentid").find("option:selected").text()!="请选择"){
+		depname=$("#departmentid").find("option:selected").text();
+	}
+	pictitle=$("#datemin").val()+" "+depname+" "+$("#address").val()+" "+$("#username").val()+" "+"工时分布图";
 	if(arr!=null&&arr.length>0){
 		var wdtArr=new Array();//纵数据 正常
 		var otArr=new Array();// 加班
@@ -84,7 +91,7 @@ function initChart(arr){
             type: 'column'
         },
         title: {
-            text: '工时分布图'
+            text: pictitle
         },
         subtitle: {
             text: ''
@@ -109,8 +116,15 @@ function initChart(arr){
         plotOptions: {
             column: {
                 pointPadding: 0.2,
-                borderWidth: 0
+                borderWidth: 0,
+                dataLabels:{
+                    enabled:true, // dataLabels设为true
+                    style:{
+                        color:'#454545'
+                    }
+                }
             }
+            
         },
         series: zzbArray
 //         	[{
@@ -137,14 +151,11 @@ function initChart(arr){
 </head>
 <body>
 <!-- <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 统计管理 <span class="c-gray en">&gt;</span> 柱状图统计 <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav> -->
+<div class="pd-20">
 <div class="text-c"> 
-	日期：
-		<input type="text" onfocus="WdatePicker({maxDate:'#F{$dp.$D(\'datemax\')}'})" id="datemin" name="datemin" class="input-text Wdate" style="width:120px;">
-		-
-		<input type="text" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'datemin\')}'})" id="datemax" name="datemax" class="input-text Wdate" style="width:120px;">
-		<br/>
-		<input type="text" class="input-text" style="width:150px" placeholder="输入施工人员名称" id="username" name="username" />
+		<input type="text" placeholder="选择年份" onfocus="WdatePicker({dateFmt:'yyyy',minDate:'2016',maxDate:'2020'})" id="datemin" name="datemin" class="input-text Wdate" style="width:120px;">
 		<input type="text" class="input-text" style="width:170px" placeholder="输入施工项目及施工区域" id="address" name="address" />
+		<input type="text" class="input-text" style="width:150px" placeholder="输入施工人员名称" id="username" name="username" />
 		<input type="text" class="input-text" style="width:150px" placeholder="输入工作内容" id="workcontent" name="workcontent" />
 		<span class="select-box inline">
 			<select class="select" size="1" name="departmentid" id="departmentid" value="" onchange="" datatype="*" nullmsg="请选择所属部门！">
