@@ -53,11 +53,9 @@ $(function(){
 		callback:function(data){
 			if(data.map.status=="y"){
 				$.Hidemsg();
-				alert("保存成功");
-				layer.msg('保存成功!',{icon: 5,time:1000});
-	  			closethisWin();
+				layer.msg('保存成功!',{icon: 1,time:1000});
+	  			setTimeout('closethisWin()', 1000); 
 			}
-		//	setTimeout('closethisWin()', 1000); 
 		}
 	}
 	);
@@ -153,13 +151,13 @@ function closethisWin(){
       </div>
       <div class="col-4"> </div>
     </div>
-    <div class="row cl">
-      <label class="form-label col-3"><span class="c-red">*</span>邮箱：</label>
-      <div class="formControls col-5">
-        <input type="text" class="input-text" value="${user.email}" placeholder="@" name="user.email" id="email" datatype="e" nullmsg="请输入邮箱！">
-      </div>
-      <div class="col-4"> </div>
-    </div>
+<!--     <div class="row cl"> -->
+<!--       <label class="form-label col-3"><span class="c-red">*</span>邮箱：</label> -->
+<!--       <div class="formControls col-5"> -->
+<%--         <input type="text" class="input-text" value="${user.email}" placeholder="@" name="user.email" id="email" datatype="" nullmsg="请输入邮箱！"> --%>
+<!--       </div> -->
+<!--       <div class="col-4"> </div> -->
+<!--     </div> -->
     <div class="row cl">
       <label class="form-label col-3"><span class="c-red">*</span>所属部门：</label>
       <div class="formControls col-5"> <span class="select-box">

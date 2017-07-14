@@ -146,7 +146,13 @@ public class LoginAction extends IAction{
 			UserInfo luser=new UserInfo();
 			luser.setLoginname(loginname);
 			luser.setPassword(pwd);
-			luser = jlUserInfoService.findLogin(luser);		     
+			if(islogined){
+				//如果登陆过 则用md5加密过的比较
+				luser = jlUserInfoService.findLogin(luser,true);		     
+			}else{
+				//否则用 传过来的密码加密再比较
+				luser = jlUserInfoService.findLogin(luser,false);
+			}
 			if(luser==null){			
 				//不存在该用户，或密码有误
 				request.setAttribute("msg", "用户名或密码错误");

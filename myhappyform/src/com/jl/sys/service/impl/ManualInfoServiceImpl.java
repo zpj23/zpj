@@ -18,6 +18,7 @@ import org.apache.poi.hssf.util.HSSFColor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.jl.common.BaseService.MethodLog2;
 import com.jl.sys.dao.ManualInfoDao;
 import com.jl.sys.pojo.CheckInfo;
 import com.jl.sys.pojo.UserInfo;
@@ -27,6 +28,7 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 	@Autowired
 	private ManualInfoDao mDao;
 	
+	@MethodLog2(remark="保存考勤信息",type="新增/编辑")
 	public void saveInfo(CheckInfo cInfo){
 		try{
 			mDao.saveInfo(cInfo);
@@ -56,7 +58,7 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 	public CheckInfo findById(String id){
 		return mDao.findById(id);
 	}
-	
+	@MethodLog2(remark="删除考勤信息",type="删除")
 	public void delInfo(String id){
 		try{
 			mDao.delInfo(id);
@@ -65,7 +67,7 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 			throw new RuntimeException();  
 		}
 	}
-	
+	@MethodLog2(remark="导出考勤",type="导出")
 	public void exportExcel(Map<String,String> param,HttpServletRequest request, HttpServletResponse response,UserInfo user){
 		String str="所属区域,施工项目及区域,工作内容,施工人员,施工日期,出勤时间,加班时间,备注";
 		List list=mDao.findListObjectArray(user,param);

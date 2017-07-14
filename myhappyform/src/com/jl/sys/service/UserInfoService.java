@@ -14,7 +14,7 @@ public interface UserInfoService {
 	 * @author zpj
 	 * @time 2016-1-22 下午1:35:58
 	 */
-	public UserInfo findLogin(UserInfo user);
+	public UserInfo findLogin(UserInfo user,boolean flag);
 	
 	/**
 	 * 初始化查询用户列表

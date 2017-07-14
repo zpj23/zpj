@@ -76,7 +76,7 @@ function checkLogin() {
     </form>
   </div>
 </div>
-<div class="footer">Copyright 你的公司名称 by H-ui.admin.v2.3</div>
+<div class="footer">Copyright @远舟船舶</div>
 
 
 </body>

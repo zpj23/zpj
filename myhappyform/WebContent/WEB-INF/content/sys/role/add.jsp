@@ -131,14 +131,11 @@ $(function(){
      		return true;
 		},
 		callback:function(data){
-			console.log(data);
-// 			$.Showmsg();
 			if(data.map.status=="y"){
 				$.Hidemsg();
-				layer.msg('保存成功!',{icon: 5,time:1000});
-	  			closethisWin();
+				layer.msg('保存成功!',{icon: 1,time:1000});
+				setTimeout('closethisWin()', 1000); 
 			}
-		//	setTimeout('closethisWin()', 1000); 
 		}
 	}
 	);

@@ -23,12 +23,12 @@ public class UserInfoServiceImpl extends BaseService<UserInfo> implements UserIn
 	private UserInfoDao jlUserInfoDao;
 	
 	
-	public UserInfo findLogin(UserInfo user) {		
+	public UserInfo findLogin(UserInfo user,boolean flag) {		
 		try {
 //			if(user.getLoginname().equalsIgnoreCase("admin")){
 //				return jlUserInfoDao.findById(1);
 //			}
-			List<Object[]> list = jlUserInfoDao.findLogin(user.getLoginname().trim(),user.getPassword());
+			List<Object[]> list = jlUserInfoDao.findLogin(user.getLoginname().trim(),user.getPassword(),flag);
 			if(list!=null&&list.size()>0){
 				int id=Integer.parseInt(list.get(0)[0].toString());
 				UserInfo ui=jlUserInfoDao.findById(id);
