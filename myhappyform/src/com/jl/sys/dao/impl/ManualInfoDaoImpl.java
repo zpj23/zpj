@@ -138,11 +138,11 @@ public class ManualInfoDaoImpl extends BaseDao<CheckInfo> implements ManualInfoD
 		sql.append("SELECT DATE_FORMAT( workdate, '%Y-%m' ) as yuefen , SUM(workduringtime) as wdt , SUM(overtime) ot FROM jl_check_info where  ");
 		sql.append(" shenhe ='1' ");
 		if(null!=param.get("datemin")&&!"".equalsIgnoreCase(param.get("datemin").toString())){
-			sql.append(" and workdate >= ").append("'"+param.get("datemin")+"'");
+			sql.append(" and workdate like ").append("'"+param.get("datemin")+"%'");
 		}
-		if(null!=param.get("datemax")&&!"".equalsIgnoreCase(param.get("datemax").toString())){
-			sql.append(" and workdate <= ").append("'"+param.get("datemax")+"'");
-		}
+//		if(null!=param.get("datemax")&&!"".equalsIgnoreCase(param.get("datemax").toString())){
+//			sql.append(" and workdate <= ").append("'"+param.get("datemax")+"'");
+//		}
 		if(param.get("username")!=null&&!((String)param.get("username")).equalsIgnoreCase("")){
 			sql.append(" and staffname ='"+(String)param.get("username")+"' ");
 		}

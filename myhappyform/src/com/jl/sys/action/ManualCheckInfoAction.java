@@ -276,14 +276,12 @@ public class ManualCheckInfoAction extends IAction{
 			@Result(type="json", params={"root","jsonData"})})
 	public void  jlDepartmentInfoAction_initDu(){
 		String datemin=request.getParameter("datemin");//开始时间
-		String datemax=request.getParameter("datemax");//结束时间
 		String username=request.getParameter("username");//用户名称
 		String departmentid=request.getParameter("departmentid");//部门id
 		String address = request.getParameter("address");//施工项目及区域
 		String workcontent=request.getParameter("workcontent");//工作内容
 		Map<String,String> param=new HashMap<String,String>();
 		param.put("datemin", datemin);
-		param.put("datemax", datemax);
 		param.put("username", username);
 		param.put("departmentid", departmentid);
 		param.put("address", address);
