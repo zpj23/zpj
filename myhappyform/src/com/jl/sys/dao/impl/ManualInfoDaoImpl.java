@@ -22,7 +22,40 @@ public class ManualInfoDaoImpl extends BaseDao<CheckInfo> implements ManualInfoD
 				this.save(cInfo);
 			}
 	}
-	
+	public double findListSum(UserInfo user,int page,int rows,Map<String,String> param){
+		StringBuffer sql = new StringBuffer();
+		sql.append(" select workduringtime,overtime from jl_check_info a where 1=1  ");
+		if(null!=param.get("datemin")&&!"".equalsIgnoreCase(param.get("datemin").toString())){
+			sql.append(" and workdate >= ").append("'"+param.get("datemin")+"'");
+		}
+		if(null!=param.get("datemax")&&!"".equalsIgnoreCase(param.get("datemax").toString())){
+			sql.append(" and workdate <= ").append("'"+param.get("datemax")+"'");
+		}
+		if(null!=param.get("username")&&!"".equalsIgnoreCase(param.get("username").toString())){
+			sql.append(" and  staffname like ").append("'%"+param.get("username")+"%'  ");
+		}
+		if(null!=param.get("address")&&!"".equalsIgnoreCase(param.get("address").toString())){
+			sql.append(" and  address like ").append("'%"+param.get("address")+"%'  ");
+		}
+		if(null!=param.get("workcontent")&&!"".equalsIgnoreCase(param.get("workcontent").toString())){
+			sql.append(" and  workcontent like ").append("'%"+param.get("workcontent")+"%'  ");
+		}
+		if(null!=param.get("departmentid")&&!"".equalsIgnoreCase(param.get("departmentid").toString())){
+			sql.append(" and departmentcode = ").append("'"+param.get("departmentid")+"'");
+		}
+		if(null!=param.get("shenhe")&&!"".equalsIgnoreCase(param.get("shenhe").toString())){
+			sql.append(" and  shenhe =").append("'"+param.get("shenhe")+"'  ");
+		}
+		//判断是否是管理员用户
+		if(!user.getIsAdmin().equalsIgnoreCase("1")){
+			//不是管理员
+			sql.append(" and  createuserid="+user.getId());
+		}
+		List<Object[]> list=this.findBySql2("select SUM(workduringtime)+sum(overtime) as zs from ( "+sql+" ) t1 ");
+		
+		double zs=(Double)list.get(0)[0];
+		return zs;
+	}
 	
 	public List findList(UserInfo user,int page,int rows,Map<String,String> param){
 		StringBuffer sql = new StringBuffer();

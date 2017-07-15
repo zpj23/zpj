@@ -162,7 +162,8 @@ public class LoginAction extends IAction{
 			}else{		
 				//记录本次的登陆时间和ip地址供下次使用
 				UserInfo us=jlUserInfoService.findById(luser.getId());
-				us.setLastloginip(getIp2(request));
+				String loginIP=getIp2(request);
+				us.setLastloginip(loginIP);
 				us.setLastlogintime(new Date());
 				jlUserInfoService.baocunUserCurrentInfo(us);
 				//根据登陆用户信息查询 根据user id信息查询用户所有的角色和部门所有的角色查询关联表对应角色
@@ -234,7 +235,7 @@ public class LoginAction extends IAction{
 					loginfo.setId(UUID.randomUUID().toString());
 					loginfo.setCreatetime(new Date());
 					loginfo.setType("登陆");
-					loginfo.setDescription(DateHelper.getToday("yyyy-MM-dd HH:mm:ss")+"   "+luser.getUsername()+"  成功登陆系统");
+					loginfo.setDescription(DateHelper.getToday("yyyy-MM-dd HH:mm:ss")+"   "+luser.getUsername()+"  成功登陆系统"+",IP地址"+loginIP);
 					loginfo.setUserid(luser.getId());
 					loginfo.setUsername(luser.getUsername());
 					jlLogInfoService.logInfo(loginfo);

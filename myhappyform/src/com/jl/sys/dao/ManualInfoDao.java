@@ -29,6 +29,19 @@ public interface ManualInfoDao {
 	 * @time 2017-6-17 下午3:50:23
 	 */
 	public List findList(UserInfo user,int page,int rows,Map<String,String> param);
+	
+	/**
+	 * 当前页数据工时求和，原来是循环数组，这样会慢，直接交给数据库查询总和
+	 * @Title findListSum
+	 * @param user
+	 * @param page
+	 * @param rows
+	 * @param param
+	 * @return
+	 * @author zpj
+	 * @time 2017-7-15 上午9:22:49
+	 */
+	public double findListSum(UserInfo user,int page,int rows,Map<String,String> param);
 	/**
 	 * 根据条件查询返回object[]
 	 * @Title findListObjectArray
