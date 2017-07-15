@@ -43,12 +43,15 @@ function tijiao(){
 		   async:false,
 		   data: $("#form1").serialize(),
 		   success: function(data){
-			  parent.toRefreshTree();
+			  layer.msg('保存成功!',{icon: 1,time:1000});
+			  setTimeout('toRefreshTree()', 1000); 
 		   }
  		
  	});
 }
-
+function toRefreshTree(){
+	parent.toRefreshTree();
+}
 function openChoosePicture(){
 	parent.parent.layer_show("选择图标","jlMenuInfoAction_toChoosePic",600,400);
 }

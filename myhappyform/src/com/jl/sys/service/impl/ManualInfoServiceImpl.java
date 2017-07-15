@@ -41,12 +41,21 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 	public Map findList(UserInfo user,int page,int rows,Map<String,String> param){
 		List list=mDao.findList(user,page,rows,param);
 		double zgs=0;
-		for(int i=0;i<list.size();i++){
+//		double zs=mDao.findListSum(user,page,rows,param);
+//		System.out.println(zs+">>>>>>>数据库查询");
+//		System.out.println(System.currentTimeMillis());
+		double workduringtime=0;
+		double overtime=0;
+		for(int i=0,length=list.size();i<length;i++){
+			workduringtime=0;
+			overtime=0;
 			Object str=((Map)(list.get(i))).get("workduringtime");
-			double workduringtime=Double.valueOf(str.toString());
-			double overtime=Double.valueOf(((Map)(list.get(i))).get("overtime").toString());
+			workduringtime=Double.valueOf(str.toString());
+			overtime=Double.valueOf(((Map)(list.get(i))).get("overtime").toString());
 			zgs+=workduringtime+overtime;
 		}
+//		System.out.println(zgs+">>>>>>>循环数组");
+//		System.out.println(System.currentTimeMillis());
 		int count=mDao.findCount(user,param); 
 		Map map=new HashMap();
 		map.put("list", list);
