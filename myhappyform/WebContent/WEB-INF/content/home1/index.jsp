@@ -11,7 +11,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="renderer" content="webkit|ie-comp|ie-stand">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=yes" />
 <meta http-equiv="Cache-Control" content="no-siteapp" />
 <LINK rel="Bookmark" href="newUI/favicon.ico" >
 <LINK rel="Shortcut Icon" href="newUI/favicon.ico" />
@@ -21,7 +21,8 @@
 <script type="text/javascript" src="lib/PIE_IE678.js"></script>
 <![endif]-->
 <link href="newUI/css/H-ui.min.css" rel="stylesheet" type="text/css" />
-<link href="newUI/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+<link href="newUI/css/H
+-ui.admin.css" rel="stylesheet" type="text/css" />
 <link href="newUI/lib/Hui-iconfont/1.0.6/iconfont.css" rel="stylesheet" type="text/css" />
 <link href="newUI/skin/default/skin.css" rel="stylesheet" type="text/css" id="skin" />
 <link href="newUI/css/style.css" rel="stylesheet" type="text/css" />

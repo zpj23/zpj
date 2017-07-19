@@ -126,7 +126,7 @@ public class ManualInfoDaoImpl extends BaseDao<CheckInfo> implements ManualInfoD
 		StringBuffer sql = new StringBuffer();
 		String str="所属区域,施工项目及区域,工作内容,施工人员,施工日期,出勤时间,加班时间,备注";
 		
-		sql.append(" select a.departmentname,a.address,a.workcontent,a.staffname,a.workdate,a.workduringtime,a.overtime,a.remark from jl_check_info a where 1=1  ");
+		sql.append(" select a.departmentname,a.address,a.workcontent,a.staffname,DATE_FORMAT(a.workdate, '%Y-%m-%d') as workdate,a.workduringtime,a.overtime,a.remark from jl_check_info a where 1=1  ");
 		if(null!=param.get("datemin")&&!"".equalsIgnoreCase(param.get("datemin").toString())){
 			sql.append(" and workdate >= ").append("'"+param.get("datemin")+"'");
 		}

@@ -8,7 +8,7 @@
 <meta charset="utf-8">
 <meta name="renderer" content="webkit|ie-comp|ie-stand">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=yes" />
 <meta http-equiv="Cache-Control" content="no-siteapp" />
 
 <script type="text/javascript">
@@ -84,7 +84,7 @@ function closethisWin(){
     <div class="row cl">
       <label class="form-label col-3"><span class="c-red">*</span>施工人员：</label>
       <div class="formControls col-5">
-        <input type="text" class="input-text" value="${cinfo.staffname}" placeholder="多个人用，分隔（中文下的逗号）" id="staffname" name="cinfo.staffname" datatype="*1-20" nullmsg="施工人员不能为空">
+        <input type="text" class="input-text" value="${cinfo.staffname}" placeholder="多个人用，分隔（中文下的逗号）" id="staffname" name="cinfo.staffname" datatype="*1-40" nullmsg="施工人员不能为空">
       </div>
       <div class="col-4"> </div>
     </div>
