@@ -20,6 +20,14 @@ $(document).ready(function(){
 			if(rowData.shenhe=="0"){
 				return 'color:red';
 			}
+			if(rowData.workdate!=""){
+				var str=rowData.workdate;
+				var workdate1=str.substr(0,10);
+				var currentdate=getNowFormatDate();
+				if(workdate1>currentdate){
+					return 'color:grey';
+				}
+			}
 //             return 'height:55px;';  
         },
 		idField : 'id',
@@ -100,6 +108,24 @@ $(document).ready(function(){
 	});
 	
 });
+
+function getNowFormatDate() {
+    var date = new Date();
+    var seperator1 = "-";
+    var seperator2 = ":";
+    var month = date.getMonth() + 1;
+    var strDate = date.getDate();
+    if (month >= 1 && month <= 9) {
+        month = "0" + month;
+    }
+    if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+    }
+    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate;
+//             + " " + date.getHours() + seperator2 + date.getMinutes()
+//             + seperator2 + date.getSeconds();
+    return currentdate;
+}
 /****编辑****/
 function edit(id){
 	parent.admin_add('编辑','jlManualCheckInfoAction_toAdd?id='+id,'800','650');
