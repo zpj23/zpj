@@ -12,6 +12,7 @@
 <meta http-equiv="Cache-Control" content="no-siteapp" />
 
 <script type="text/javascript">
+//初始化部门名称中文，根据已选择的部门编码
 function changeDep(){
 	$("#departmentname").val($("#departmentcode").find("option:selected").text());
 }
@@ -62,15 +63,39 @@ $(function(){
 			  $('#workdate').val("${cinfo.workdate}".substring(0,10));
 		   }
 	});
-	
+	changeDep();
 });
 
-
+function judgeDate(obj){
+	
+	var workdate=$(obj).val();
+	var currentdate=getNowFormatDate();
+	if(workdate>currentdate){
+		$(obj).attr("nullmsg","已超出当前日期");
+	}
+}
+function getNowFormatDate() {
+    var date = new Date();
+    var seperator1 = "-";
+    var seperator2 = ":";
+    var month = date.getMonth() + 1;
+    var strDate = date.getDate();
+    if (month >= 1 && month <= 9) {
+        month = "0" + month;
+    }
+    if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+    }
+    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate;
+//             + " " + date.getHours() + seperator2 + date.getMinutes()
+//             + seperator2 + date.getSeconds();
+    return currentdate;
+}
 //关闭该窗口
 function closethisWin(){
 	var index = parent.layer.getFrameIndex(window.name);
 //	parent.$('.btn-refresh').click();
-	console.log(parent);
+// 	console.log(parent);
 	parent.tolist();
 	parent.layer.close(index);
 }
@@ -91,7 +116,7 @@ function closethisWin(){
     <div class="row cl">
       <label class="form-label col-3"><span class="c-red">*</span>施工日期：</label>
       <div class="formControls col-5">
-        <input type="text"  id="workdate" datatype="*" onfocus="WdatePicker()" name="cinfo.workdate" class="input-text Wdate" style="width:120px;" value="" nullmsg="不能为空">
+        <input type="text"  id="workdate" datatype="*" onfocus="WdatePicker()" name="cinfo.workdate" class="input-text Wdate"  style="width:120px;" value="" nullmsg="不能为空">
       </div>
       <div class="col-4"> </div>
     </div>

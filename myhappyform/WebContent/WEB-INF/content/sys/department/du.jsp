@@ -41,7 +41,7 @@ $(function () {
     
 });
 function initChart(datas){
-	console.log(datas);
+// 	console.log(datas);
 	var ydata=[];//纵坐标值
 	var xdata=[];//横坐标值
 	for(var m=0;m<datas.length;m++){
