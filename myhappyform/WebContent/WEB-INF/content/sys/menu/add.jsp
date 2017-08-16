@@ -58,7 +58,7 @@ function openChoosePicture(){
 //关闭该窗口
 function closethisWin(){
 	var index = parent.layer.getFrameIndex(window.name);
-	console.log(parent);
+// 	console.log(parent);
 	parent.toRefreshTree();
 	parent.layer.close(index);
 }

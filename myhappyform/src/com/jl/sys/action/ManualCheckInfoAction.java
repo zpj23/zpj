@@ -64,12 +64,14 @@ public class ManualCheckInfoAction extends IAction{
 			@Result(name="error",location="/login.jsp")
 	})
 	public String toAdd(){
+		user = (UserInfo)request.getSession().getAttribute("jluserinfo");
 		String id=request.getParameter("id");
 		if(id!=null&&!id.equalsIgnoreCase("")){
 			cinfo=mService.findById(id);
 		}else{
 			cinfo=new CheckInfo();
 			cinfo.setId(UUID.randomUUID().toString());
+			cinfo.setDepartmentcode(user.getDepartmentcode());
 		}
 		return "success";
 	}

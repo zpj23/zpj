@@ -74,7 +74,7 @@ $(function(){
 			
 		},
 		callback:function(data){
-			console.log(data);
+// 			console.log(data);
 			if(data.map.status=="y"){
 				$.Hidemsg();
 	  			layer.msg('保存成功!',{icon: 1,time:1000});
@@ -89,7 +89,7 @@ $(function(){
 function closethisWin(){
 	var index = parent.layer.getFrameIndex(window.name);
 //	parent.$('.btn-refresh').click();
-	console.log(parent);
+// 	console.log(parent);
 	parent.tolist();
 	parent.layer.close(index);
 }
