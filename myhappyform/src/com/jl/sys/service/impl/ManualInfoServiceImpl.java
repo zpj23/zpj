@@ -92,7 +92,7 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 		
 		for(int m=0;m<title.length;m++){
 			if(title[m].equalsIgnoreCase(""))
-			sheet1.setColumnWidth(m, 60 * 256);
+			sheet1.setColumnWidth(m, 150 * 256);
 			HSSFCell cell0 = row1.createCell((short) m);		
 			cell0.setCellStyle(cellStyle);
 			cell0.setCellValue(title[m]);
