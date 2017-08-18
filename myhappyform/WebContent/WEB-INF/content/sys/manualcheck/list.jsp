@@ -22,12 +22,12 @@
 <script type="text/javascript" src="newUI/lib/My97DatePicker/WdatePicker.js"></script> 
 <script type="text/javascript" src="newUI/js/H-ui.js"></script> 
 <script type="text/javascript" src="newUI/js/H-ui.admin.js"></script> 
-
+<script type="text/javascript" src="js/judge.js" ></script>
 <!--[if IE 6]>
 <script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
 <script>DD_belatedPNG.fix('*');</script>
 <![endif]-->
-<title>微信考勤</title>
+<title>考勤管理</title>
 <script type="text/javascript">
 
 $(document).ready(function(){
@@ -46,6 +46,10 @@ $(document).ready(function(){
 */
 /*增加*/
 function admin_add(title,url,w,h){
+	if(ISPHONE){
+		w=document.body.clientWidth;
+		h=document.body.clientHeight;
+	}
 	layer_show(title,url,w,h);
 }
 /*删除*/
