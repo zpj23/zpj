@@ -112,6 +112,9 @@ public class ManualInfoDaoImpl extends BaseDao<CheckInfo> implements ManualInfoD
 		if(null!=param.get("departmentid")&&!"".equalsIgnoreCase(param.get("departmentid").toString())){
 			sql.append(" and departmentcode = ").append("'"+param.get("departmentid")+"'");
 		}
+		if(null!=param.get("shenhe")&&!"".equalsIgnoreCase(param.get("shenhe").toString())){
+			sql.append(" and  shenhe =").append("'"+param.get("shenhe")+"'  ");
+		}
 		//判断是否是管理员用户
 		if(!user.getIsAdmin().equalsIgnoreCase("1")){
 			//不是管理员
