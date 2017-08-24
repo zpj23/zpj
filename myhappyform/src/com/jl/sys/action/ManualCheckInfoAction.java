@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.goldenweb.fxpg.frame.tools.StringFormat;
 import com.goldenweb.sys.pojo.SysUserinfo;
 import com.goldenweb.sys.util.IAction;
 import com.jl.sys.pojo.CheckInfo;
@@ -73,6 +74,8 @@ public class ManualCheckInfoAction extends IAction{
 			cinfo.setId(UUID.randomUUID().toString());
 			cinfo.setDepartmentcode(user.getDepartmentcode());
 		}
+		cinfo.setRemark(StringFormat.StringFilter(cinfo.getRemark()));
+		cinfo.setWorkcontent(StringFormat.StringFilter(cinfo.getWorkcontent()));
 		return "success";
 	}
 	

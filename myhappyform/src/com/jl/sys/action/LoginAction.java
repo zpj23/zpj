@@ -1,5 +1,6 @@
 package com.jl.sys.action;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ import org.springframework.stereotype.Component;
 
 import com.goldenweb.sys.util.IAction;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.jl.material.service.PurchaseService;
 import com.jl.sys.pojo.DepartmentInfo;
 import com.jl.sys.pojo.LogInfo;
@@ -111,6 +113,29 @@ public class LoginAction extends IAction{
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "error";
+		}
+	}
+	@Action(value="jlLoginAction_phoneLogin",
+			results={
+			@Result(type="json", params={"root","jsonData"})})
+	public void jlLoginAction_phoneLogin(){
+		String username=request.getParameter("username");
+		String password=request.getParameter("password");
+		System.out.println(username+";"+password);
+		UserInfo luser=new UserInfo();
+		luser.setLoginname(username);
+		luser.setPassword(password);
+		luser=jlUserInfoService.findLogin(luser,false);
+		Map retMap =new HashMap();
+		retMap.put("msg",false);
+		if(luser.getId()!=0){
+			try {
+				retMap.put("id", luser.getId());
+				retMap.put("msg",true);
+				jsonWrite(retMap);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	/**

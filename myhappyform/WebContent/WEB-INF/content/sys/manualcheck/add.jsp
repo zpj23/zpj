@@ -58,9 +58,10 @@ $(function(){
 // 			  }
 			  
 			  $('#address').val("${cinfo.address}");
-			  $('#workcontent').html("${cinfo.workcontent}");
-			  $('#remark').html("${cinfo.remark}");
 			  $('#workdate').val("${cinfo.workdate}".substring(0,10));
+			  $('#workcontent').html('${cinfo.workcontent}');
+			  $('#remark').html('${cinfo.remark}');
+			  
 		   }
 	});
 	changeDep();
@@ -105,7 +106,15 @@ function closethisWin(){
 <div class="pd-20">
   <form action="jlManualCheckInfoAction_doAdd" name="form1" method="post" class="form form-horizontal" id="form1">
     <input type="hidden" id="id" name="cinfo.id" value="${cinfo.id}" />
-    
+    <div class="row cl">
+      <label class="form-label col-3">施工项目及区域：</label>
+      <div class="formControls col-5">
+      <input type="text" class="input-text" value="${cinfo.address}" placeholder="施工项目及区域" id="address" name="cinfo.address"  nullmsg="">
+<%--         <textarea name="cinfo.address" id="address" value="${cinfo.address}" cols="" rows=""  class="textarea"  placeholder="说点什么..." datatype="*1-500" dragonfly="true" nullmsg="内容不能为空！" onKeyUp="textarealength(this,500)"></textarea> --%>
+<!--         <p class="textarea-numberbar"><em class="textarea-length">0</em>/500</p> -->
+      </div>
+      <div class="col-4"> </div>
+    </div>
     <div class="row cl">
       <label class="form-label col-3"><span class="c-red">*</span>施工人员：</label>
       <div class="formControls col-5">
@@ -148,15 +157,7 @@ function closethisWin(){
         </span> </div>
       <div class="col-4"> </div>
     </div>
-    <div class="row cl">
-      <label class="form-label col-3">施工项目及区域：</label>
-      <div class="formControls col-5">
-      <input type="text" class="input-text" value="${cinfo.address}" placeholder="施工项目及区域" id="address" name="cinfo.address"  nullmsg="">
-<%--         <textarea name="cinfo.address" id="address" value="${cinfo.address}" cols="" rows=""  class="textarea"  placeholder="说点什么..." datatype="*1-500" dragonfly="true" nullmsg="内容不能为空！" onKeyUp="textarealength(this,500)"></textarea> --%>
-<!--         <p class="textarea-numberbar"><em class="textarea-length">0</em>/500</p> -->
-      </div>
-      <div class="col-4"> </div>
-    </div>
+    
     <div class="row cl">
       <label class="form-label col-3">具体内容：</label>
       <div class="formControls col-5">

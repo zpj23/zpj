@@ -56,10 +56,14 @@ public class StringFormat {
 	}
 	
 	public static String StringFilter(String str) throws PatternSyntaxException {
-        String regEx= SystemParamConfigUtil.getParamValueByParam("regString");
-        Pattern p = Pattern.compile(regEx);
-        Matcher m = p.matcher(str);
-        return m.replaceAll("").trim();
+       if(str!=null&&!str.equalsIgnoreCase("")){
+    	   String regEx= SystemParamConfigUtil.getParamValueByParam("regString");
+    	   Pattern p = Pattern.compile(regEx);
+    	   Matcher m = p.matcher(str);
+    	   return m.replaceAll("").trim();
+       }else{
+    	   return "";
+       }
     }
 
 }
