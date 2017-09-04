@@ -74,8 +74,6 @@ public class ManualCheckInfoAction extends IAction{
 			cinfo.setId(UUID.randomUUID().toString());
 			cinfo.setDepartmentcode(user.getDepartmentcode());
 		}
-		cinfo.setRemark(StringFormat.StringFilter(cinfo.getRemark()));
-		cinfo.setWorkcontent(StringFormat.StringFilter(cinfo.getWorkcontent()));
 		return "success";
 	}
 	

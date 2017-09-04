@@ -132,6 +132,7 @@ public class LoginAction extends IAction{
 			try {
 				retMap.put("id", luser.getId());
 				retMap.put("msg",true);
+				System.out.println(retMap);
 				jsonWrite(retMap);
 			} catch (IOException e) {
 				e.printStackTrace();

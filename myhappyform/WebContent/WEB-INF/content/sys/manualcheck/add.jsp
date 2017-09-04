@@ -59,8 +59,7 @@ $(function(){
 			  
 			  $('#address').val("${cinfo.address}");
 			  $('#workdate').val("${cinfo.workdate}".substring(0,10));
-			  $('#workcontent').html('${cinfo.workcontent}');
-			  $('#remark').html('${cinfo.remark}');
+
 			  
 		   }
 	});
@@ -107,6 +106,13 @@ function closethisWin(){
   <form action="jlManualCheckInfoAction_doAdd" name="form1" method="post" class="form form-horizontal" id="form1">
     <input type="hidden" id="id" name="cinfo.id" value="${cinfo.id}" />
     <div class="row cl">
+      <label class="form-label col-3"><span class="c-red">*</span>施工日期：</label>
+      <div class="formControls col-5">
+        <input type="text"  id="workdate" datatype="*" onfocus="WdatePicker()" name="cinfo.workdate" class="input-text Wdate"  style="width:120px;" value="" nullmsg="不能为空">
+      </div>
+      <div class="col-4"> </div>
+    </div>
+    <div class="row cl">
       <label class="form-label col-3">施工项目及区域：</label>
       <div class="formControls col-5">
       <input type="text" class="input-text" value="${cinfo.address}" placeholder="施工项目及区域" id="address" name="cinfo.address"  nullmsg="">
@@ -116,19 +122,21 @@ function closethisWin(){
       <div class="col-4"> </div>
     </div>
     <div class="row cl">
-      <label class="form-label col-3"><span class="c-red">*</span>施工人员：</label>
+      <label class="form-label col-3">具体内容：</label>
       <div class="formControls col-5">
-        <input type="text" class="input-text" value="${cinfo.staffname}" placeholder="多个人用，分隔（中文下的逗号）" id="staffname" name="cinfo.staffname" datatype="*1-40" nullmsg="施工人员不能为空">
+        <textarea name="cinfo.workcontent" id="workcontent"  cols="" rows=""  class="textarea"  placeholder="说点什么..." datatype="*1-500" dragonfly="true" nullmsg="内容不能为空！" onKeyUp="textarealength(this,500)">${cinfo.workcontent}</textarea>
+        <p class="textarea-numberbar"><em class="textarea-length">0</em>/500</p>
       </div>
       <div class="col-4"> </div>
     </div>
     <div class="row cl">
-      <label class="form-label col-3"><span class="c-red">*</span>施工日期：</label>
+      <label class="form-label col-3"><span class="c-red">*</span>施工人员：</label>
       <div class="formControls col-5">
-        <input type="text"  id="workdate" datatype="*" onfocus="WdatePicker()" name="cinfo.workdate" class="input-text Wdate"  style="width:120px;" value="" nullmsg="不能为空">
+        <input type="text" class="input-text" value="${cinfo.staffname}" placeholder="多个人用，分隔（中文下的逗号）" id="staffname" name="cinfo.staffname" datatype="*1-400" nullmsg="施工人员不能为空">
       </div>
       <div class="col-4"> </div>
     </div>
+    
     <div class="row cl">
       <label class="form-label col-3"><span class="c-red">*</span>出勤时间（小时）：</label>
       <div class="formControls col-5">
@@ -158,18 +166,11 @@ function closethisWin(){
       <div class="col-4"> </div>
     </div>
     
-    <div class="row cl">
-      <label class="form-label col-3">具体内容：</label>
-      <div class="formControls col-5">
-        <textarea name="cinfo.workcontent" id="workcontent" value="${cinfo.workcontent}" cols="" rows=""  class="textarea"  placeholder="说点什么..." datatype="*1-500" dragonfly="true" nullmsg="内容不能为空！" onKeyUp="textarealength(this,500)"></textarea>
-        <p class="textarea-numberbar"><em class="textarea-length">0</em>/500</p>
-      </div>
-      <div class="col-4"> </div>
-    </div>
+    
     <div class="row cl">
       <label class="form-label col-3">备注：</label>
       <div class="formControls col-5">
-        <textarea name="cinfo.remark" id="remark" value="${cinfo.remark}" cols="" rows=""  class="textarea"  placeholder="说点什么..."  dragonfly="true" nullmsg="内容不能为空！" onKeyUp="textarealength(this,500)"></textarea>
+        <textarea name="cinfo.remark" id="remark" value="" cols="" rows=""  class="textarea"  placeholder="说点什么..."  dragonfly="true" nullmsg="内容不能为空！" onKeyUp="textarealength(this,500)">${cinfo.remark}</textarea>
         <p class="textarea-numberbar"><em class="textarea-length">0</em>/500</p>
       </div>
       <div class="col-4"> </div>
