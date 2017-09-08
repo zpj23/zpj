@@ -23,12 +23,23 @@
 <link href="newUI/lib/Hui-iconfont/1.0.6/iconfont.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="newUI/lib/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript" src="newUI/js/H-ui.js"></script>
+
+<script type="text/javascript" src="newUI/lib/Highcharts/4.1.7/js/highcharts.js"></script>
+<script type="text/javascript" src="newUI/lib/Highcharts/4.1.7/js/modules/exporting.js"></script>
+<script type="text/javascript" src="newUI/lib/Highcharts/4.1.7/js/highcharts-3d.js"></script>
 <!--[if IE 6]>
 <script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
 <script>DD_belatedPNG.fix('*');</script>
 <![endif]-->
 <script type="text/javascript">
+var hzbArray=new Array();//横坐标
+var zzbArray=new Array();//纵坐标
 $(document).ready(function(){
+	initInfo();
+	
+});
+//初始化信息统计
+function initInfo(){
 	var zs=$.parseJSON('${total_list}');
 	var jt=$.parseJSON('${today_list}');
 	var zt=$.parseJSON('${yesterday_list}');
@@ -46,8 +57,8 @@ $(document).ready(function(){
 		htmlStr+="</tr>";
 	}
 	$("#total_num").html(htmlStr);
-});
-	
+	initDepArea();
+}
 	function compareuid(uid,jt){
 		var htmlStr="";
 		var flag=false;
@@ -63,17 +74,131 @@ $(document).ready(function(){
 		}
 		return htmlStr;
 	}
+	//初始化部门信息
+	function initDepArea(){
+		   $.ajax({
+		     type: "POST",
+		     url: "jlDepartmentInfoAction_getDep",
+		     async:false,
+		     success: function(data1){
+		      //var str="";
+		      var data = $.parseJSON(data1);
+		      var temparr=new Array();
+		      for(var n=0;n<data.length;n++){
+		    	  if(data[n].name=="admin"){
+		    		  continue;
+		    	  }
+		    	  temparr.push(data[n]);
+		      }
+		       inittabArea(temparr);	
+		     }
+		});
+	}
+	//初始化tab
+	function inittabArea(depArr){
+		 var tabCon="";
+		 var tabBarDivHtml="<div class='tabBar clearfix'>";
+		 var tabConDivHtml="";	
+	
+		for(var i=0;i<depArr.length;i++){
+			tabBarDivHtml+="<span>"+depArr[i].name+"</span>";
+			tabConDivHtml+="<div class='tabCon' >";
+			tabConDivHtml+="<div id='container_"+depArr[i].code+"' style='width:100%;height:250px'></div>";
+			tabConDivHtml+="</div>";
+			
+		}
+		tabBarDivHtml+="</div>";
+		$("#tab_demo").html(tabBarDivHtml+tabConDivHtml);
+		$.Huitab("#tab_demo .tabBar span","#tab_demo .tabCon","current","click","0");
+		for(var m=0;m<depArr.length;m++){
+			initData(depArr[m].code,depArr[m].name);
+		}
+	}
+	
+	
+	function initData(code,name){
+		$.ajax({
+	 		type: "POST",
+			   url: "jlManualCheckInfoAction_initChart",
+			   async:true,
+			   data: "departmentid="+code,
+			   success: function(arr){
+				  var datas=$.parseJSON(arr);
+				  initChart(datas,code,name);
+			   }
+	 	});
+	}
+	function initChart(arr,code,name){
+		hzbArray=new Array();//横坐标
+		zzbArray=new Array();//纵坐标
+		var depname="";
+		pictitle="工时分布图";
+		if(arr!=null&&arr.length>0){
+			var wdtArr=new Array();//纵数据 正常
+			var otArr=new Array();// 加班
+			var totalArr =new Array();//  总计
+			for(var i=0;i<arr.length;i++){
+				hzbArray.push(arr[i].yuefen);
+				wdtArr.push(arr[i].wdt);
+				otArr.push(arr[i].ot);
+				totalArr.push(arr[i].wdt+arr[i].ot);
+			}
+			var obj=new Object();
+			obj.name="正常";
+			obj.data=wdtArr;
+			zzbArray.push(obj);
+			var obj1=new Object();
+			obj1.name="加班";
+			obj1.data=otArr;
+			zzbArray.push(obj1);
+			var obj2=new Object();
+			obj2.name="合计";
+			obj2.data=totalArr;
+			zzbArray.push(obj2);
+		}
+		
+		$('#container_'+code).highcharts({
+	        chart: {
+	            type: 'column'
+	        },
+	        title: {
+	            text: pictitle
+	        },
+	        subtitle: {
+	            text: ''
+	        },
+	        xAxis: {
+	            categories: hzbArray
+	        },
+	        yAxis: {
+	            min: 0,
+	            title: {
+	                text: '工时'
+	            }
+	        },
+	        plotOptions: {
+	            column: {
+	                pointPadding: 0.2,
+	                borderWidth: 0,
+	                dataLabels:{
+	                    enabled:true, // dataLabels设为true
+	                    style:{
+	                        color:'#454545'
+	                    }
+	                }
+	            }
+	            
+	        },
+	        series: zzbArray
+	    });
+	}
 </script>
 </head>
 <body style="width: auto;height: auto">
 <div class="pd-20" style="padding-top:20px;height: 100%;">
   <p class="f-20 text-success">企业管理系统 <span class="f-14">v2.3</span>
   </p>
-	  <embed pluginspage="http://www.macromedia.com/go/getflashplayer" 
-	 menu="true" loop="true" play="true" type="application/x-shockwave-flash" 
-	 style="z-index:-1;" id="tim"
-	 src="${pageContext.request.contextPath}/swf/time.swf">
-</embed>
+
 <!--   <p>登录次数：18 </p> -->
   <p>上次登录IP：${jluserinfo.lastloginip}  上次登录时间：<fmt:formatDate value="${jluserinfo.lastlogintime}" type="both"/>  </p>
   <c:if test="${jluserinfo.isAdmin eq '1'}">
@@ -95,14 +220,14 @@ $(document).ready(function(){
     </tbody>
   </table>
   </c:if>
- 	
-  <div style="width: 100%;height: 100%;">
-  <iframe id="testFrame" name="testFrame" src="jlLoginAction_toMainIframe" width="100%" height="400px" frameborder="0" ></iframe>
+  <div style="padd-top:20px">
+ 	<div id="tab_demo" class="HuiTab" style="overflow: hidden" >
+	</div>
   </div>
- 
 </div>
+
 <footer class="footer">
-  <p><a href="http://www.baidu.com" target="_blank" title="">私人</a>提供前端技术支持</p>
+  <p><a href="http://www.baidu.com" target="_blank" title="">朱培军</a>提供前端技术支持</p>
 </footer>
 
 </body>

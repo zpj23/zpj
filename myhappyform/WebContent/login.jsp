@@ -28,9 +28,9 @@
 </head>
 <script>
 $(document).ready(function(){
- $('#username').val("admin");
- $('#pwd').val("666666");
-  checkLogin();
+//  $('#username').val("admin");
+//  $('#pwd').val("666666");
+//   checkLogin();
 });
 function checkLogin() {
 	form1.action = "jlLoginAction_checkLogin";
@@ -76,8 +76,8 @@ function checkLogin() {
     </form>
   </div>
 </div>
-<div class="footer">Copyright @远舟船舶</div>
 
+<div class="footer">备案号：<a href='http://www.miitbeian.gov.cn/' style='text-decoration:none;color:white;'>苏ICP备17053334号</a> &nbsp;&nbsp;&nbsp;Copyright @远舟船舶</div>
 
 </body>
 </html>
