@@ -71,6 +71,8 @@ public class SetCharacterFilter implements Filter{
 			}
 		}else if(str_href.indexOf("/jlLoginAction_checkLogin")>-1){//第一次登录
 			chain.doFilter(servletRequest, servletResponse);
+		}else if(str_href.indexOf("/jlLoginAction_phoneLogin")>-1){//手机登陆
+			chain.doFilter(servletRequest, servletResponse);
 		}else if(str_href.indexOf("loginAction_downloadPrintActive")>-1){
 			chain.doFilter(servletRequest, servletResponse);
 		}else if(str_href.indexOf("Action_")>-1){

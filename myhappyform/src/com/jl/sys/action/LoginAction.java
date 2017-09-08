@@ -121,7 +121,6 @@ public class LoginAction extends IAction{
 	public void jlLoginAction_phoneLogin(){
 		String username=request.getParameter("username");
 		String password=request.getParameter("password");
-		System.out.println(username+";"+password);
 		UserInfo luser=new UserInfo();
 		luser.setLoginname(username);
 		luser.setPassword(password);
@@ -130,7 +129,7 @@ public class LoginAction extends IAction{
 		retMap.put("msg",false);
 		if(luser.getId()!=0){
 			try {
-				retMap.put("id", luser.getId());
+				retMap.put("data", luser);
 				retMap.put("msg",true);
 				System.out.println(retMap);
 				jsonWrite(retMap);
