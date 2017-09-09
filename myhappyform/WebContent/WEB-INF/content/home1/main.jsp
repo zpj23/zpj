@@ -34,6 +34,7 @@
 <script type="text/javascript">
 var hzbArray=new Array();//横坐标
 var zzbArray=new Array();//纵坐标
+var SETTIMEFLAG=0;
 $(document).ready(function(){
 	initInfo();
 	
@@ -110,11 +111,11 @@ function initInfo(){
 		tabBarDivHtml+="</div>";
 		$("#tab_demo").html(tabBarDivHtml+tabConDivHtml);
 		$.Huitab("#tab_demo .tabBar span","#tab_demo .tabCon","current","click","0");
-		for(var m=0;m<depArr.length;m++){
-			initData(depArr[m].code,depArr[m].name);
+		for(SETTIMEFLAG=0;SETTIMEFLAG<depArr.length;SETTIMEFLAG++){
+			initData(depArr[SETTIMEFLAG].code,depArr[SETTIMEFLAG].name);
+			
 		}
 	}
-	
 	
 	function initData(code,name){
 		$.ajax({

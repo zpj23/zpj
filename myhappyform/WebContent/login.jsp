@@ -23,7 +23,7 @@
 <script type="text/javascript" src="http://lib.h-ui.net/DD_belatedPNG_0.0.8a-min.js" ></script>
 <script>DD_belatedPNG.fix('*');</script>
 <![endif]-->
-<title>企业系统</title>
+<title>考勤管理系统</title>
 
 </head>
 <script>
@@ -77,7 +77,7 @@ function checkLogin() {
   </div>
 </div>
 
-<div class="footer">备案号：<a href='http://www.miitbeian.gov.cn/' style='text-decoration:none;color:white;'>苏ICP备17053334号</a> &nbsp;&nbsp;&nbsp;Copyright @远舟船舶</div>
+<div class="footer">备案号：<a href='http://www.miitbeian.gov.cn/' style='text-decoration:none;color:white;'>苏ICP备17053334号</a> &nbsp;&nbsp;&nbsp;Copyright &copy @远舟船舶</div>
 
 </body>
 </html>
