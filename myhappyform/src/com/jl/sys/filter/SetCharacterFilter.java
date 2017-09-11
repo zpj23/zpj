@@ -69,6 +69,8 @@ public class SetCharacterFilter implements Filter{
 			}else{
 				chain.doFilter(req, servletResponse);
 			}
+		}else if(str_href.indexOf("/myhappyform")>-1){
+			req.getRequestDispatcher("/login.jsp").forward(req, servletResponse);
 		}else if(str_href.indexOf("/jlLoginAction_checkLogin")>-1){//第一次登录
 			chain.doFilter(servletRequest, servletResponse);
 		}else if(str_href.indexOf("/jlLoginAction_phoneLogin")>-1){//手机登陆

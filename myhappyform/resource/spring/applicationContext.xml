@@ -70,7 +70,7 @@
 				validate :  每次加载hibernate时，验证创建数据库表结构，只会和数据库中的表进行比较，不会创建新表，但是会插入新值。
 				none ：什么都不处理
 				-->
-				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.hbm2ddl.auto">none</prop>
 				
 				<prop key="javax.persistence.validation.mode">none</prop>
 				<prop key="hibernate.archive.autodetection">none</prop>

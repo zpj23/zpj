@@ -28,7 +28,8 @@ public class CheckInfo implements java.io.Serializable{
 	private int createuserid;//创建人id
 	private String remark;//备注
 	private String shenhe;//审核功能 0待审核，1已审核
-	
+	private String sgxm;//address字段分出来的施工项目
+	private String sgqy;//address字段分出来的施工区域
 	@Id
 	@Column(name = "id", nullable = false, length=50)
 	public String getId() {
@@ -133,6 +134,22 @@ public class CheckInfo implements java.io.Serializable{
 	public void setShenhe(String shenhe) {
 		this.shenhe = shenhe;
 	}
+	
+	@Column(name = "sgxm",  length=100)
+	public String getSgxm() {
+		return sgxm;
+	}
+	public void setSgxm(String sgxm) {
+		this.sgxm = sgxm;
+	}
+	@Column(name = "sgqy",  length=100)
+	public String getSgqy() {
+		return sgqy;
+	}
+	public void setSgqy(String sgqy) {
+		this.sgqy = sgqy;
+	}
+	
 	
 	
 	

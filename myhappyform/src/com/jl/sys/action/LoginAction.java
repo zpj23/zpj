@@ -85,10 +85,16 @@ public class LoginAction extends IAction{
 
 	@Action(value="jlLoginAction_toMain",results={
 			@Result(name="success",location="home1/main.jsp"),//fashionHome.jsp
+			@Result(name="success1",location="home1/main_back.jsp"),//fashionHome.jsp
 			@Result(name="error",location="/login.jsp")
 	})
 	public String jlLoginAction_toMain(){
-		return "success";
+		user = (UserInfo)request.getSession().getAttribute("jluserinfo");
+		if(user.getIsAdmin().equalsIgnoreCase("1")){
+			return "success";
+		}else{
+			return "success1";
+		}
 	}
 	
 	@Action(value="jlLoginAction_toMainIframe",results={

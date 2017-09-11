@@ -103,6 +103,8 @@ public class ManualCheckInfoAction extends IAction{
 					tmpci.setOvertime(cinfo.getOvertime());	
 					tmpci.setRemark(cinfo.getRemark());
 					tmpci.setCreateuserid(user.getId());
+					tmpci.setSgxm(cinfo.getSgxm());
+					tmpci.setSgqy(cinfo.getSgqy());
 					if(user.getIsAdmin().equalsIgnoreCase("1")){
 						//管理员  审核状态改成已审核
 						tmpci.setShenhe("1");
@@ -194,7 +196,8 @@ public class ManualCheckInfoAction extends IAction{
 		String datemax=request.getParameter("datemax");//结束时间
 		String username=request.getParameter("username");//用户名称
 		String departmentid=request.getParameter("departmentid");//部门id
-		String address = request.getParameter("address");//施工项目及区域
+		String sgxm = request.getParameter("sgxm");//施工项目
+		String sgqy=request.getParameter("sgqy");//施工区域
 		String workcontent =request.getParameter("workcontent");//工作内容
 		String shenhe=request.getParameter("shenhe");//审核状态
 		String tpage=request.getParameter("page");
@@ -210,7 +213,8 @@ public class ManualCheckInfoAction extends IAction{
 		param.put("datemax", datemax);
 		param.put("username", username);
 		param.put("departmentid", departmentid);
-		param.put("address", address);
+		param.put("sgxm", sgxm);
+		param.put("sgqy", sgqy);
 		param.put("workcontent", workcontent);
 		param.put("shenhe", shenhe);
 		Map map=mService.findList(user,page,rows,param);

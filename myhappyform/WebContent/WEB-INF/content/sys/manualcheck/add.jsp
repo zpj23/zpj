@@ -101,10 +101,11 @@ function closethisWin(){
 }
 </script>
 </head>
-<body>
-<div class="pd-20">
+<body style="overflow: hidden">
+<div >
   <form action="jlManualCheckInfoAction_doAdd" name="form1" method="post" class="form form-horizontal" id="form1">
     <input type="hidden" id="id" name="cinfo.id" value="${cinfo.id}" />
+    <input type="hidden"  value="${cinfo.address}" id="address" name="cinfo.address"  />
     <div class="row cl">
       <label class="form-label col-3"><span class="c-red">*</span>施工日期：</label>
       <div class="formControls col-5">
@@ -113,14 +114,20 @@ function closethisWin(){
       <div class="col-4"> </div>
     </div>
     <div class="row cl">
-      <label class="form-label col-3">施工项目及区域：</label>
+      <label class="form-label col-3">施工项目：</label>
       <div class="formControls col-5">
-      <input type="text" class="input-text" value="${cinfo.address}" placeholder="施工项目及区域" id="address" name="cinfo.address"  nullmsg="">
-<%--         <textarea name="cinfo.address" id="address" value="${cinfo.address}" cols="" rows=""  class="textarea"  placeholder="说点什么..." datatype="*1-500" dragonfly="true" nullmsg="内容不能为空！" onKeyUp="textarealength(this,500)"></textarea> --%>
-<!--         <p class="textarea-numberbar"><em class="textarea-length">0</em>/500</p> -->
+      	<input type="text" class="input-text" value="${cinfo.sgxm}" placeholder="示例：636/688;多个项目用/分割" id="sgxm" name="cinfo.sgxm" />
       </div>
       <div class="col-4"> </div>
     </div>
+    <div class="row cl">
+      <label class="form-label col-3">施工区域：</label>
+      <div class="formControls col-5">
+      	<input type="text" class="input-text" value="${cinfo.sgqy}" placeholder="示例：609/集控室，多个区域用/分割，/与施工项目一一对应" id="sgqy" name="cinfo.sgqy" />
+      </div>
+      <div class="col-4"> </div>
+    </div>
+
     <div class="row cl">
       <label class="form-label col-3">具体内容：</label>
       <div class="formControls col-5">

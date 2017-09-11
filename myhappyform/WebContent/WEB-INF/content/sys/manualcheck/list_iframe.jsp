@@ -52,9 +52,13 @@ $(document).ready(function(){
 			title : '施工人员',
 			width : 20
 		},{
-			field : 'address',
-			title : '施工项目及区域',
-			width : 50
+			field : 'sgxm',
+			title : '施工项目',
+			width : 30
+		},{
+			field : 'sgqy',
+			title : '施工区域',
+			width : 40
 		},{
 			field : 'workcontent',
 			title : '工作内容',
@@ -150,13 +154,14 @@ function selectOneData(){
 
 
 
-function load(datemin,datemax,username,departmentid,address,workcontent,shenhe){
+function load(datemin,datemax,username,departmentid,sgxm,sgqy,workcontent,shenhe){
 	datagrid.datagrid("load", { 
 		datemin:datemin,
 		datemax:datemax,
 		username:username,
 		departmentid:departmentid,
-		address:address,
+		sgxm:sgxm,
+		sgqy:sgqy,
 		workcontent:workcontent,
 		shenhe:shenhe
 	});
