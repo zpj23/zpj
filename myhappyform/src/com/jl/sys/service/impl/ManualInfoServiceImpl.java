@@ -78,7 +78,7 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 	}
 	@MethodLog2(remark="导出考勤",type="导出")
 	public void exportExcel(Map<String,String> param,HttpServletRequest request, HttpServletResponse response,UserInfo user){
-		String str="所属区域,施工项目及区域,工作内容,施工人员,施工日期,出勤时间,加班时间,备注";
+		String str="所属区域,施工项目,施工区域,工作内容,施工人员,施工日期,出勤时间,加班时间,备注";
 		List list=mDao.findListObjectArray(user,param);
 		HSSFWorkbook wb = new HSSFWorkbook();
 		// 生成Excel的sheet
@@ -92,7 +92,9 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 		
 		for(int m=0;m<title.length;m++){
 			if(title[m].equalsIgnoreCase(""))
-			sheet1.setColumnWidth(m, 150 * 256);
+				sheet1.setColumnWidth(m,10* 512);
+			sheet1.setDefaultColumnWidth(15);  
+			sheet1.setDefaultRowHeight((short) (2 * 256)); //设置默认行高，表示2个字符的高度
 			HSSFCell cell0 = row1.createCell((short) m);		
 			cell0.setCellStyle(cellStyle);
 			cell0.setCellValue(title[m]);

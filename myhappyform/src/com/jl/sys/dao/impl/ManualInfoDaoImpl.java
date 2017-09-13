@@ -133,9 +133,9 @@ public class ManualInfoDaoImpl extends BaseDao<CheckInfo> implements ManualInfoD
 	
 	public List findListObjectArray(UserInfo user,Map<String,String> param){
 		StringBuffer sql = new StringBuffer();
-		String str="所属区域,施工项目及区域,工作内容,施工人员,施工日期,出勤时间,加班时间,备注";
+		String str="所属区域,施工项目,施工区域,工作内容,施工人员,施工日期,出勤时间,加班时间,备注";
 		
-		sql.append(" select a.departmentname,a.address,a.workcontent,a.staffname,DATE_FORMAT(a.workdate, '%Y-%m-%d') as workdate,a.workduringtime,a.overtime,a.remark from jl_check_info a where 1=1  ");
+		sql.append(" select a.departmentname,a.sgxm,a.sgqy,a.workcontent,a.staffname,DATE_FORMAT(a.workdate, '%Y-%m-%d') as workdate,a.workduringtime,a.overtime,a.remark from jl_check_info a where 1=1  ");
 		if(null!=param.get("datemin")&&!"".equalsIgnoreCase(param.get("datemin").toString())){
 			sql.append(" and workdate >= ").append("'"+param.get("datemin")+"'");
 		}
@@ -145,8 +145,14 @@ public class ManualInfoDaoImpl extends BaseDao<CheckInfo> implements ManualInfoD
 		if(null!=param.get("username")&&!"".equalsIgnoreCase(param.get("username").toString())){
 			sql.append(" and  staffname like ").append("'%"+param.get("username")+"%'  ");
 		}
-		if(null!=param.get("address")&&!"".equalsIgnoreCase(param.get("address").toString())){
-			sql.append(" and  address like ").append("'%"+param.get("address")+"%'  ");
+//		if(null!=param.get("address")&&!"".equalsIgnoreCase(param.get("address").toString())){
+//			sql.append(" and  address like ").append("'%"+param.get("address")+"%'  ");
+//		}
+		if(null!=param.get("sgxm")&&!"".equalsIgnoreCase(param.get("sgxm").toString())){
+			sql.append(" and  sgxm like ").append("'%"+param.get("sgxm")+"%'  ");
+		}
+		if(null!=param.get("sgqy")&&!"".equalsIgnoreCase(param.get("sgqy").toString())){
+			sql.append(" and  sgqy like ").append("'%"+param.get("sgqy")+"%'  ");
 		}
 		if(null!=param.get("workcontent")&&!"".equalsIgnoreCase(param.get("workcontent").toString())){
 			sql.append(" and  workcontent like ").append("'%"+param.get("workcontent")+"%'  ");
@@ -188,8 +194,14 @@ public class ManualInfoDaoImpl extends BaseDao<CheckInfo> implements ManualInfoD
 		if(param.get("username")!=null&&!((String)param.get("username")).equalsIgnoreCase("")){
 			sql.append(" and staffname ='"+(String)param.get("username")+"' ");
 		}
-		if(null!=param.get("address")&&!"".equalsIgnoreCase(param.get("address").toString())){
-			sql.append(" and  address like ").append("'%"+param.get("address")+"%'  ");
+//		if(null!=param.get("address")&&!"".equalsIgnoreCase(param.get("address").toString())){
+//			sql.append(" and  address like ").append("'%"+param.get("address")+"%'  ");
+//		}
+		if(null!=param.get("sgxm")&&!"".equalsIgnoreCase(param.get("sgxm").toString())){
+			sql.append(" and  sgxm like ").append("'%"+param.get("sgxm")+"%'  ");
+		}
+		if(null!=param.get("sgqy")&&!"".equalsIgnoreCase(param.get("sgqy").toString())){
+			sql.append(" and  sgqy like ").append("'%"+param.get("sgqy")+"%'  ");
 		}
 		if(null!=param.get("workcontent")&&!"".equalsIgnoreCase(param.get("workcontent").toString())){
 			sql.append(" and  workcontent like ").append("'%"+param.get("workcontent")+"%'  ");

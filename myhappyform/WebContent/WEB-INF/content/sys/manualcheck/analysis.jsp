@@ -29,7 +29,7 @@ function initData(){
  		type: "POST",
 		   url: "jlManualCheckInfoAction_initChart",
 		   async:false,
-		   data: "datemin="+$("#datemin").val()+"&username="+$("#username").val()+"&address="+$("#address").val()+"&workcontent="+$("#workcontent").val()+"&departmentid="+$("#departmentid").val(),
+		   data: "datemin="+$("#datemin").val()+"&username="+$("#username").val()+"&sgxm="+$("#sgxm").val()+"&sgqy="+$("#sgqy").val()+"&workcontent="+$("#workcontent").val()+"&departmentid="+$("#departmentid").val(),
 		   success: function(arr){
 			  var datas=$.parseJSON(arr);
 			  initChart(datas);
@@ -61,7 +61,7 @@ function initChart(arr){
 	if($("#departmentid").find("option:selected").text()!="请选择"){
 		depname=$("#departmentid").find("option:selected").text();
 	}
-	pictitle=$("#datemin").val()+" "+depname+" "+$("#address").val()+" "+$("#username").val()+" "+"工时分布图";
+	pictitle=$("#datemin").val()+" "+depname+" "+$("#sgxm").val()+" "+$("#sgqy").val()+" "+$("#username").val()+" "+"工时分布图";
 	if(arr!=null&&arr.length>0){
 		var wdtArr=new Array();//纵数据 正常
 		var otArr=new Array();// 加班
@@ -154,7 +154,9 @@ function initChart(arr){
 <div class="pd-20">
 <div class="text-c"> 
 		<input type="text" placeholder="选择年份" onfocus="WdatePicker({dateFmt:'yyyy',minDate:'2016',maxDate:'2020'})" id="datemin" name="datemin" class="input-text Wdate" style="width:120px;">
-		<input type="text" class="input-text" style="width:170px" placeholder="输入施工项目及施工区域" id="address" name="address" />
+		<input type="text" class="input-text" style="width:170px" placeholder="输入施工项目" id="sgxm" name="sgxm" />
+		<input type="text" class="input-text" style="width:170px" placeholder="输入施工区域" id="sgqy" name="sgqy" />
+		
 		<input type="text" class="input-text" style="width:150px" placeholder="输入施工人员名称" id="username" name="username" />
 		<input type="text" class="input-text" style="width:150px" placeholder="输入工作内容" id="workcontent" name="workcontent" />
 		<span class="select-box inline">
