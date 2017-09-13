@@ -121,7 +121,7 @@ public class LoginAction extends IAction{
 			return "error";
 		}
 	}
-	@Action(value="jlLoginAction_phoneLogin",
+	@Action(value="jlLoginAction_loginByPhone",
 			results={
 			@Result(type="json", params={"root","jsonData"})})
 	public void jlLoginAction_phoneLogin(){
@@ -131,6 +131,7 @@ public class LoginAction extends IAction{
 		luser.setLoginname(username);
 		luser.setPassword(password);
 		luser=jlUserInfoService.findLogin(luser,false);
+		luser.setPassword(password);
 		Map retMap =new HashMap();
 		retMap.put("msg",false);
 		if(luser.getId()!=0){

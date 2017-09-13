@@ -73,7 +73,7 @@ public class SetCharacterFilter implements Filter{
 			req.getRequestDispatcher("/login.jsp").forward(req, servletResponse);
 		}else if(str_href.indexOf("/jlLoginAction_checkLogin")>-1){//第一次登录
 			chain.doFilter(servletRequest, servletResponse);
-		}else if(str_href.indexOf("/jlLoginAction_phoneLogin")>-1){//手机登陆
+		}else if(str_href.indexOf("ByPhone")>-1){//手机上的请求
 			chain.doFilter(servletRequest, servletResponse);
 		}else if(str_href.indexOf("loginAction_downloadPrintActive")>-1){
 			chain.doFilter(servletRequest, servletResponse);

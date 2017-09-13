@@ -304,4 +304,28 @@ public class ManualCheckInfoAction extends IAction{
 			e.printStackTrace();
 		}
 	}
+	@Action(value="jlManualCheckInfoAction_saveInfoByPhone",
+			results={
+			@Result(type="json", params={"root","jsonData"})})
+	public void saveInfoByPhone(){
+		String sgxm=request.getParameter("sgxm");
+		String sgqy=request.getParameter("sgqy");
+		String workdate=request.getParameter("workdate");
+		String staffname=request.getParameter("staffname");
+		String workduringtime=request.getParameter("workduringtime");
+		String overtime=request.getParameter("overtime");
+		String workcontent=request.getParameter("workcontent");
+		String remark=request.getParameter("remark");
+		String dempartmentname=request.getParameter("departmentname");
+		System.out.println(sgxm);
+		Map retMap =new HashMap();
+		
+		try {
+			retMap.put("msg",true);
+			jsonWrite(retMap);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }
