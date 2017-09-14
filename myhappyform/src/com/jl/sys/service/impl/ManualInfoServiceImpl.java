@@ -3,8 +3,10 @@ package com.jl.sys.service.impl;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -39,16 +41,14 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 	}
 	
 	public Map findList(UserInfo user,int page,int rows,Map<String,String> param){
-		List list=mDao.findList(user,page,rows,param);
+		List<Map> list=mDao.findList(user,page,rows,param);
 		double zgs=0;
-//		double zs=mDao.findListSum(user,page,rows,param);
-//		System.out.println(zs+">>>>>>>数据库查询");
-//		System.out.println(System.currentTimeMillis());
 		double workduringtime=0;
 		double overtime=0;
 		for(int i=0,length=list.size();i<length;i++){
 			workduringtime=0;
 			overtime=0;
+			list.get(i).put("workdate", ((Map)(list.get(i))).get("workdate").toString().substring(0, 10));
 			Object str=((Map)(list.get(i))).get("workduringtime");
 			workduringtime=Double.valueOf(str.toString());
 			overtime=Double.valueOf(((Map)(list.get(i))).get("overtime").toString());

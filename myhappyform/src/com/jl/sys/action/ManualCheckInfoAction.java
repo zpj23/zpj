@@ -1,12 +1,13 @@
 package com.jl.sys.action;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+
 
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
@@ -17,13 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.goldenweb.fxpg.frame.tools.StringFormat;
-import com.goldenweb.sys.pojo.SysUserinfo;
 import com.goldenweb.sys.util.IAction;
 import com.jl.sys.pojo.CheckInfo;
 import com.jl.sys.pojo.UserInfo;
 import com.jl.sys.service.ManualInfoService;
-import com.jl.util.DateHelper;
+import com.jl.sys.service.UserInfoService;
 
 /**
  * @Description:微信考勤导入
@@ -37,7 +36,9 @@ import com.jl.util.DateHelper;
 @Component("jlManualCheckInfoAction")
 @ParentPackage("json-default")
 public class ManualCheckInfoAction extends IAction{
-
+	@Autowired
+	private UserInfoService jlUserInfoService;
+	
 	private CheckInfo cinfo;
 	
 	private UserInfo user;
@@ -304,6 +305,12 @@ public class ManualCheckInfoAction extends IAction{
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * 手机保存考勤信息
+	 * @Title saveInfoByPhone
+	 * @author zpj
+	 * @time 2017-9-14 上午11:46:41
+	 */
 	@Action(value="jlManualCheckInfoAction_saveInfoByPhone",
 			results={
 			@Result(type="json", params={"root","jsonData"})})
@@ -328,4 +335,36 @@ public class ManualCheckInfoAction extends IAction{
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * 手机查询考勤信息
+	 * @Title findInfoByPhone
+	 * @author zpj
+	 * @time 2017-9-14 上午11:47:32
+	 */
+	@Action(value="jlManualCheckInfoAction_findInfoByPhone",
+			results={
+			@Result(type="json", params={"root","jsonData"})})
+	public void findInfoByPhone(){
+		user = (UserInfo)request.getSession().getAttribute("jluserinfo");
+		if(user==null){
+			String id= request.getParameter("id");
+			user=jlUserInfoService.findById(Integer.parseInt(id));
+			user.setIsAdmin("1");
+		}
+		String datemin=request.getParameter("datemin");//开始时间
+		String datemax=request.getParameter("datemax");//结束时间
+		Map<String,String> param=new HashMap<String,String>();
+		param.put("datemin", datemin);
+		param.put("datemax", datemax);
+		
+		Map map=mService.findList(user,1,100,param);
+		List<UserInfo> list=(List<UserInfo>)map.get("list");
+		try {
+			this.jsonWrite(map);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 }
