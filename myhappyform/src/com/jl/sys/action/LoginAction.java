@@ -131,11 +131,41 @@ public class LoginAction extends IAction{
 		luser.setLoginname(username);
 		luser.setPassword(password);
 		luser=jlUserInfoService.findLogin(luser,false);
-		luser.setPassword(password);
+		
 		Map retMap =new HashMap();
 		retMap.put("msg",false);
+		
 		if(luser.getId()!=0){
 			try {
+				luser.setPassword(password);
+				//根据登陆用户信息查询 根据user id信息查询用户所有的角色和部门所有的角色查询关联表对应角色
+				//如果用户角色和部门角色相同，则取一个，再以及角色对应的菜单信息，以及菜单对应的操作信息
+				// role的 id、rolecode、rolename   
+				//用户的授权角色
+				List<Object[]> ulist =jlRoleInfoService.findRoleIdByUserId(luser.getId());
+				//部门的授权角色
+				DepartmentInfo dp=jlDepartmentInfoService.findDeptByDeptCode(luser.getDepartmentcode());
+				// role的 id、rolecode、rolename   
+				List<Object[]> dlist=jlRoleInfoService.findRoleIdByDepartmentId(dp.getId());
+				Set roleidSet=new HashSet();
+				Set rolecodeSet=new HashSet();
+				for(int i=0;i<ulist.size();i++){
+					roleidSet.add(ulist.get(i)[0]);
+					rolecodeSet.add(ulist.get(i)[1]);
+				}
+				for(int j=0;j<dlist.size();j++){
+					if(roleidSet.contains(dlist.get(j)[0])){
+						continue;
+					}else{
+						roleidSet.add(dlist.get(j)[0]);
+						rolecodeSet.add(dlist.get(j)[1]);
+					}
+				}
+				if(rolecodeSet.contains("ROLE_1462257894696")){//是管理员角色
+					luser.setIsAdmin("1");
+				}else{
+					luser.setIsAdmin("0");
+				}
 				retMap.put("data", luser);
 				retMap.put("msg",true);
 				System.out.println(retMap);

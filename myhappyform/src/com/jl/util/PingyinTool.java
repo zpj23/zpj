@@ -39,7 +39,7 @@ public class PingyinTool {
      * 获取汉字串拼音，英文字符不变 
      * 
      * @param chinese 汉字串 
-     * @return 汉语拼音 
+     * @return 汉语拼音全拼 
      */
     public static String cn2Spell(String chinese) { 
             StringBuffer pybf = new StringBuffer(); 
