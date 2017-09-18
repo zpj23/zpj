@@ -417,10 +417,10 @@ public class ManualCheckInfoAction extends IAction{
 	 * @author zpj
 	 * @time 2017-9-14 上午11:47:32
 	 */
-	@Action(value="jlManualCheckInfoAction_findInfoByPhone",
+	@Action(value="jlManualCheckInfoAction_findListInfoByPhone",
 			results={
 			@Result(type="json", params={"root","jsonData"})})
-	public void findInfoByPhone(){
+	public void findListInfoByPhone(){
 		user = getCurrentUser(request);
 		
 		String datemin=request.getParameter("datemin");//开始时间
@@ -438,6 +438,37 @@ public class ManualCheckInfoAction extends IAction{
 		}
 		
 	}
+	
+	
+	@Action(value="jlManualCheckInfoAction_findInfoByIdByPhone",
+			results={
+			@Result(type="json", params={"root","jsonData"})})
+	public void findInfoByIdByPhone(){
+		user = getCurrentUser(request);
+		
+		String id=request.getParameter("id");//主键id
+		CheckInfo c=mService.findById(id);
+		Map map =new HashMap();
+		if(c!=null){
+			map.put("msg", true);
+			map.put("data", c);
+		}
+		try {
+			this.jsonWrite(map);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	/**
+	 * 获取手机当前登录对象信息
+	 * @Title getCurrentUser
+	 * @param request
+	 * @return
+	 * @author zpj
+	 * @time 2017-9-18 下午3:33:38
+	 */
 	public UserInfo getCurrentUser(HttpServletRequest request){
 		UserInfo user = (UserInfo)request.getSession().getAttribute("jluserinfo");
 		if(user==null){
