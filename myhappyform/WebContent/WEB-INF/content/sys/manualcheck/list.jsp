@@ -50,6 +50,12 @@ function admin_add(title,url,w,h){
 		w=document.body.clientWidth;
 		h=document.body.clientHeight;
 	}
+	
+	layer_show(title,url,w,h);
+}
+function manager_add(title,url,w,h){
+	w=document.body.clientWidth-100;
+	h=document.body.clientHeight-100;
 	layer_show(title,url,w,h);
 }
 /*删除*/
@@ -178,6 +184,7 @@ function analysis(){
 	  	<a href="javascript:;" style="color: white" onclick="analysis()" class="btn btn-secondary radius"><i class="Hui-iconfont">&#xe618;</i>数据分析</a>
 	  </c:if> 
 	  <a href="javascript:;" style="color: white" onclick="admin_add('添加信息','jlManualCheckInfoAction_toAdd','800','650')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加信息</a>
+	  <a href="javascript:;" style="color: white" onclick="manager_add('添加信息','jlManualCheckInfoAction_toManagerAdd','800','650')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i>批量添加</a>
 	  </span>
 	</div>
 	</form>

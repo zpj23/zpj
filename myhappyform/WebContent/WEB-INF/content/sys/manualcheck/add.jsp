@@ -52,13 +52,12 @@ $(function(){
 			  $("#departmentcode").html(str);
 			  $('#departmentcode').val("${cinfo.departmentcode}");
 			  $('#address').val("${cinfo.address}");
-// 				console.log("${cinfo.workduringtime}");
-// 			  if("${cinfo.workduringtime}"=="0.0"||"${cinfo.workduringtime}"==null){
-// 				    ('#workduringtime').val(8.0);
-// 			  }
-			  
-			  $('#address').val("${cinfo.address}");
-			  $('#workdate').val("${cinfo.workdate}".substring(0,10));
+ 			  if("${cinfo.workdate}"!=""){
+				  $('#workdate').val("${cinfo.workdate}".substring(0,10));
+ 			  }else{
+ 				 var rq=getNowFormatDate();
+ 				 $('#workdate').val(rq);
+ 			  }
 
 			  
 		   }
@@ -66,18 +65,10 @@ $(function(){
 	changeDep();
 });
 
-function judgeDate(obj){
-	
-	var workdate=$(obj).val();
-	var currentdate=getNowFormatDate();
-	if(workdate>currentdate){
-		$(obj).attr("nullmsg","已超出当前日期");
-	}
-}
+//获取当前时间
 function getNowFormatDate() {
     var date = new Date();
     var seperator1 = "-";
-    var seperator2 = ":";
     var month = date.getMonth() + 1;
     var strDate = date.getDate();
     if (month >= 1 && month <= 9) {
@@ -87,10 +78,18 @@ function getNowFormatDate() {
         strDate = "0" + strDate;
     }
     var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate;
-//             + " " + date.getHours() + seperator2 + date.getMinutes()
-//             + seperator2 + date.getSeconds();
     return currentdate;
 }
+
+function judgeDate(obj){
+	
+	var workdate=$(obj).val();
+	var currentdate=getNowFormatDate();
+	if(workdate>currentdate){
+		$(obj).attr("nullmsg","已超出当前日期");
+	}
+}
+
 //关闭该窗口
 function closethisWin(){
 	var index = parent.layer.getFrameIndex(window.name);

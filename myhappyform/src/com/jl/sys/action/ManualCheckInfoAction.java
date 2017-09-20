@@ -11,10 +11,13 @@ import javax.servlet.http.HttpServletRequest;
 
 
 
+import net.sf.json.JSONArray;
+
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -81,6 +84,59 @@ public class ManualCheckInfoAction extends IAction{
 		}
 		return "success";
 	}
+	/**
+	 * 批量插入
+	 * @Title doManageAdd
+	 * @author zpj
+	 * @time 2017-9-20 下午2:33:19
+	 */
+	@Action(value="jlManualCheckInfoAction_doManageAdd",
+			results={
+			@Result(type="json", params={"root","jsonData"})})
+	public void doManageAdd(){
+		user = (UserInfo)request.getSession().getAttribute("jluserinfo");
+		String detailfields=request.getParameter("detailfileds");
+		String workdate=request.getParameter("workdate");
+		String departmentcode=request.getParameter("departmentcode");
+		String departmentname=request.getParameter("departmentname");
+		JSONArray jsonArr = JSONArray.fromObject(detailfields); 
+		for(int m=0;m<jsonArr.size();m++){
+			net.sf.json.JSONObject job=(net.sf.json.JSONObject)jsonArr.get(m);
+			CheckInfo tmpci=new CheckInfo();
+			tmpci.setId(UUID.randomUUID().toString());
+			tmpci.setStaffname(job.getString("staffname"));
+			tmpci.setWorkdate(DateHelper.getDateFromString(workdate, "yyyy-MM-dd"));
+			tmpci.setWorkduringtime(job.getDouble("workduringtime"));
+			tmpci.setDepartmentname(departmentname);
+			tmpci.setDepartmentcode(departmentcode);
+			tmpci.setWorkcontent(job.getString("workcontent"));
+			tmpci.setAdddate(new Date());
+			tmpci.setOvertime(job.getDouble("overtime"));	
+			tmpci.setRemark(job.getString("remark"));
+			tmpci.setCreateuserid(user.getId());
+			tmpci.setSgxm(job.getString("sgxm"));
+			tmpci.setSgqy(job.getString("sgqy"));
+			if(user.getIsAdmin().equalsIgnoreCase("1")){
+				//管理员  审核状态改成已审核
+				tmpci.setShenhe("1");
+			}else{
+				//普通人 录入的状态是未审核
+				tmpci.setShenhe("0");
+			}
+			mService.saveInfo(tmpci);
+		}
+		try {
+			JSONObject job=new JSONObject();
+			job.put("status","y");
+			job.put("statusText", "保存成功");
+			job.put("readyState", "true");
+			job.put("responseText", "true");
+			this.jsonWrite(job);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	
 	@Action(value="jlManualCheckInfoAction_doAdd",
 			results={
@@ -191,6 +247,21 @@ public class ManualCheckInfoAction extends IAction{
 	public String toiframe(){
 		return "success";
 	}
+	@Action(value="jlManualCheckInfoAction_managerIframe",results={
+			@Result(name="success",location="sys/manualcheck/manager_iframe.jsp"),
+			@Result(name="error",location="/login.jsp")
+	})
+	public String managerIframe(){
+		return "success";
+	}
+	@Action(value="jlManualCheckInfoAction_toManagerAdd",results={
+			@Result(name="success",location="sys/manualcheck/manager_add.jsp"),
+			@Result(name="error",location="/login.jsp")
+	})
+	public String toManagerAdd(){
+		return "success";
+	}
+	
 	
 	@Action(value="jlManualCheckInfoAction_getListJson",
 			results={
