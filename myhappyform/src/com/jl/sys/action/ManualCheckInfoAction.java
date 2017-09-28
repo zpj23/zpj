@@ -101,29 +101,43 @@ public class ManualCheckInfoAction extends IAction{
 		String departmentname=request.getParameter("departmentname");
 		JSONArray jsonArr = JSONArray.fromObject(detailfields); 
 		for(int m=0;m<jsonArr.size();m++){
-			net.sf.json.JSONObject job=(net.sf.json.JSONObject)jsonArr.get(m);
-			CheckInfo tmpci=new CheckInfo();
-			tmpci.setId(UUID.randomUUID().toString());
-			tmpci.setStaffname(job.getString("staffname"));
-			tmpci.setWorkdate(DateHelper.getDateFromString(workdate, "yyyy-MM-dd"));
-			tmpci.setWorkduringtime(job.getDouble("workduringtime"));
-			tmpci.setDepartmentname(departmentname);
-			tmpci.setDepartmentcode(departmentcode);
-			tmpci.setWorkcontent(job.getString("workcontent"));
-			tmpci.setAdddate(new Date());
-			tmpci.setOvertime(job.getDouble("overtime"));	
-			tmpci.setRemark(job.getString("remark"));
-			tmpci.setCreateuserid(user.getId());
-			tmpci.setSgxm(job.getString("sgxm"));
-			tmpci.setSgqy(job.getString("sgqy"));
-			if(user.getIsAdmin().equalsIgnoreCase("1")){
-				//管理员  审核状态改成已审核
-				tmpci.setShenhe("1");
-			}else{
-				//普通人 录入的状态是未审核
-				tmpci.setShenhe("0");
+			try{
+				net.sf.json.JSONObject job=(net.sf.json.JSONObject)jsonArr.get(m);
+				CheckInfo tmpci=new CheckInfo();
+				tmpci.setId(UUID.randomUUID().toString());
+				tmpci.setStaffname(job.getString("staffname"));
+				tmpci.setWorkdate(DateHelper.getDateFromString(workdate, "yyyy-MM-dd"));
+				if(((String)job.get("workduringtime")).equalsIgnoreCase("")){
+					tmpci.setWorkduringtime(0);	
+				}else{
+					tmpci.setWorkduringtime(job.getDouble("workduringtime"));
+				}
+				tmpci.setDepartmentname(departmentname);
+				tmpci.setDepartmentcode(departmentcode);
+				tmpci.setWorkcontent(job.getString("workcontent"));
+				tmpci.setAdddate(new Date());
+				if(((String)job.get("overtime")).equalsIgnoreCase("")){
+					tmpci.setOvertime(0);	
+				}else{
+					tmpci.setOvertime(job.getDouble("overtime"));
+				}
+				tmpci.setRemark(job.getString("remark"));
+				tmpci.setCreateuserid(user.getId());
+				tmpci.setSgxm(job.getString("sgxm"));
+				tmpci.setSgqy(job.getString("sgqy"));
+				if(user.getIsAdmin().equalsIgnoreCase("1")){
+					//管理员  审核状态改成已审核
+					tmpci.setShenhe("1");
+				}else{
+					//普通人 录入的状态是未审核
+					tmpci.setShenhe("0");
+				}
+				mService.saveInfo(tmpci);
+			}catch (Exception e) {
+				e.printStackTrace();
+				continue;
 			}
-			mService.saveInfo(tmpci);
+			
 		}
 		try {
 			JSONObject job=new JSONObject();
@@ -471,13 +485,20 @@ public class ManualCheckInfoAction extends IAction{
 					//普通人 录入的状态是未审核
 					tmpci.setShenhe("0");
 				}
-				mService.saveInfo(cinfo);
+				mService.saveInfo(tmpci);
 			}
 			
-			JSONObject job=new JSONObject();
+			Map job=new HashMap();
 			job.put("msg",true);
 			this.jsonWrite(job);
 		} catch (Exception e) {
+			Map job=new HashMap();
+			try {
+				job.put("msg",false);
+				this.jsonWrite(job);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 			e.printStackTrace();
 		}
 	}

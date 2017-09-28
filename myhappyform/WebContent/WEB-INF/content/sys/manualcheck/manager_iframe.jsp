@@ -93,7 +93,7 @@ $(document).ready(function(){
                 datagrid.datagrid("insertRow", {
                     index: 0, // index start with 0
                     row: {
-
+                    	workduringtime:8
                     }
                 });
                 //将新插入的那一行开户编辑状态
@@ -153,7 +153,7 @@ $(document).ready(function(){
          onAfterEdit: function (rowIndex, rowData, changes) {
              //endEdit该方法触发此事件
             try{
-             console.info(rowData);
+//              console.info(rowData);
             }catch (e) {
  			}
              editRow = undefined;
