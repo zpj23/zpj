@@ -553,6 +553,25 @@ public class ManualCheckInfoAction extends IAction{
 		
 	}
 	
+	
+	@Action(value="jlManualCheckInfoAction_delInfoByIdByPhone",
+	results={
+	@Result(type="json", params={"root","jsonData"})})
+	public void delInfoByIdByPhone(){
+		user = getCurrentUser(request);
+		String id = request.getParameter("delId");
+		if(null!=id&&!id.equalsIgnoreCase("")){
+			mService.delInfo(id);
+			try {
+				Map map =new HashMap();
+				map.put("msg", true);
+				this.jsonWrite(map);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	/**
 	 * 获取手机当前登录对象信息
 	 * @Title getCurrentUser
@@ -568,6 +587,7 @@ public class ManualCheckInfoAction extends IAction{
 			user=jlUserInfoService.findById(Integer.parseInt(id));
 			String isAdmin=request.getParameter("isAdmin");
 			user.setIsAdmin(isAdmin);
+			request.getSession().setAttribute("jluserinfo",user);
 		}
 		return user;
 	}

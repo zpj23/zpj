@@ -166,9 +166,10 @@ public class LoginAction extends IAction{
 				}else{
 					luser.setIsAdmin("0");
 				}
+				request.getSession().setAttribute("jluserinfo",luser);
 				retMap.put("data", luser);
 				retMap.put("msg",true);
-				System.out.println(retMap);
+//				System.out.println(retMap);
 				jsonWrite(retMap);
 			} catch (IOException e) {
 				e.printStackTrace();
