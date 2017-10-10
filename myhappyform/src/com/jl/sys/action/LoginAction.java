@@ -135,8 +135,7 @@ public class LoginAction extends IAction{
 		Map retMap =new HashMap();
 		retMap.put("msg",false);
 		
-		if(luser.getId()!=0){
-			try {
+		if(luser!=null){
 				luser.setPassword(password);
 				//根据登陆用户信息查询 根据user id信息查询用户所有的角色和部门所有的角色查询关联表对应角色
 				//如果用户角色和部门角色相同，则取一个，再以及角色对应的菜单信息，以及菜单对应的操作信息
@@ -169,11 +168,12 @@ public class LoginAction extends IAction{
 				request.getSession().setAttribute("jluserinfo",luser);
 				retMap.put("data", luser);
 				retMap.put("msg",true);
-//				System.out.println(retMap);
-				jsonWrite(retMap);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		}
+		
+		try {
+			jsonWrite(retMap);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 	/**
