@@ -46,7 +46,7 @@ var FileUpload = {
     	 $("#FileList_"+uploadifyID).html("");
     	str = "";
         $.ajax({
-            url: '/sdww/uploadfileAction_getFiles',
+            url: '/uploadfileAction_getFiles',
             type: 'POST',
             async: false,
             dataType : 'json',

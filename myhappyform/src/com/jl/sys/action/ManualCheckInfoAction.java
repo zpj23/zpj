@@ -107,20 +107,20 @@ public class ManualCheckInfoAction extends IAction{
 				tmpci.setId(UUID.randomUUID().toString());
 				tmpci.setStaffname(job.getString("staffname"));
 				tmpci.setWorkdate(DateHelper.getDateFromString(workdate, "yyyy-MM-dd"));
-				if(((String)job.get("workduringtime")).equalsIgnoreCase("")){
-					tmpci.setWorkduringtime(0);	
-				}else{
+//				if(((Integer)job.get("workduringtime"))!=0){
+//					tmpci.setWorkduringtime(0);	
+//				}else{
 					tmpci.setWorkduringtime(job.getDouble("workduringtime"));
-				}
+//				}
 				tmpci.setDepartmentname(departmentname);
 				tmpci.setDepartmentcode(departmentcode);
 				tmpci.setWorkcontent(job.getString("workcontent"));
 				tmpci.setAdddate(new Date());
-				if(((String)job.get("overtime")).equalsIgnoreCase("")){
-					tmpci.setOvertime(0);	
-				}else{
+//				if(((String)job.get("overtime")).equalsIgnoreCase("")){
+//					tmpci.setOvertime(0);	
+//				}else{
 					tmpci.setOvertime(job.getDouble("overtime"));
-				}
+//				}
 				tmpci.setRemark(job.getString("remark"));
 				tmpci.setCreateuserid(user.getId());
 				tmpci.setSgxm(job.getString("sgxm"));

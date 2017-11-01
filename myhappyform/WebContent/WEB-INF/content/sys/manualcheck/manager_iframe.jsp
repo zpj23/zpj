@@ -93,7 +93,8 @@ $(document).ready(function(){
                 datagrid.datagrid("insertRow", {
                     index: 0, // index start with 0
                     row: {
-                    	workduringtime:8
+                    	workduringtime:8,
+                    	overtime:0
                     }
                 });
                 //将新插入的那一行开户编辑状态

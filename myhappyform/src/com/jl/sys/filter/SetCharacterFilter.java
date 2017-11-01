@@ -50,40 +50,49 @@ public class SetCharacterFilter implements Filter{
 		servletRequest.setCharacterEncoding(endcoding);
 		HttpServletRequest req = (HttpServletRequest) servletRequest;
 		String str_href = this.getCurrentURL(req); 
-		boolean isLogin = false;
-		// 获取session中用户信息jluserinfo
-		UserInfo user = (UserInfo) req.getSession().getAttribute("jluserinfo");		
-		if (user != null) {
-			isLogin = true;
-		}
-		if(isLogin){
-			if(str_href.indexOf("Action_")!=-1){
-				// 判断是否有访问权限
-				boolean b = true;//this.checkLimit(str_href);
-				if (b == true) {
-					chain.doFilter(servletRequest, servletResponse);
-				} else {
-					req.setAttribute("msg", "您没有权限访问该URL链接地址!");
-					req.getRequestDispatcher("/error.jsp").forward(req, servletResponse);
-				}
-			}else{
-				chain.doFilter(req, servletResponse);
+		try{
+			
+			boolean isLogin = false;
+			System.out.println("tomcat "+req.getSession().getId());
+			System.out.println("执行时间："+System.currentTimeMillis());
+			// 获取session中用户信息jluserinfo
+			UserInfo user = (UserInfo) req.getSession().getAttribute("jluserinfo");		
+			if (user != null) {
+				isLogin = true;
 			}
-		}else if(str_href.indexOf("/myhappyform")>-1){
-			req.getRequestDispatcher("/login.jsp").forward(req, servletResponse);
-		}else if(str_href.indexOf("/jlLoginAction_checkLogin")>-1){//第一次登录
-			chain.doFilter(servletRequest, servletResponse);
-		}else if(str_href.indexOf("ByPhone")>-1){//手机上的请求
-			chain.doFilter(servletRequest, servletResponse);
-		}else if(str_href.indexOf("loginAction_downloadPrintActive")>-1){
-			chain.doFilter(servletRequest, servletResponse);
-		}else if(str_href.indexOf("Action_")>-1){
-			req.getRequestDispatcher("/login.jsp").forward(req, servletResponse);
-		}else if(str_href.indexOf("druid")!=-1){
-			chain.doFilter(servletRequest, servletResponse);
-		}else{
-			chain.doFilter(servletRequest, servletResponse);
+			if(isLogin){
+				if(str_href.indexOf("Action_")!=-1){
+					// 判断是否有访问权限
+					boolean b = true;//this.checkLimit(str_href);
+					if (b == true) {
+						chain.doFilter(servletRequest, servletResponse);
+					} else {
+						req.setAttribute("msg", "您没有权限访问该URL链接地址!");
+						req.getRequestDispatcher("/error.jsp").forward(req, servletResponse);
+					}
+				}else{
+					chain.doFilter(req, servletResponse);
+				}
+			}else if(str_href.indexOf("/myhappyform")>-1){
+				req.getRequestDispatcher("/login.jsp").forward(req, servletResponse);
+			}else if(str_href.indexOf("/jlLoginAction_checkLogin")>-1){//第一次登录
+				chain.doFilter(servletRequest, servletResponse);
+			}else if(str_href.indexOf("ByPhone")>-1){//手机上的请求
+				chain.doFilter(servletRequest, servletResponse);
+			}else if(str_href.indexOf("loginAction_downloadPrintActive")>-1){
+				chain.doFilter(servletRequest, servletResponse);
+			}else if(str_href.indexOf("Action_")>-1){
+				req.getRequestDispatcher("/login.jsp").forward(req, servletResponse);
+			}else if(str_href.indexOf("druid")!=-1){
+				chain.doFilter(servletRequest, servletResponse);
+			}else{
+				chain.doFilter(servletRequest, servletResponse);
+			}
+		}catch (Exception e) {
+			System.out.println("错误请求链接："+str_href);
+			throw e;
 		}
+		
 	}
 
 

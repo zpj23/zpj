@@ -2,6 +2,9 @@ package com.jl.sys.action;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.apache.struts2.convention.annotation.Action;
@@ -53,4 +56,23 @@ public class LoactionAction extends IAction{
 			e.printStackTrace();
 		}
 	}
+	@Action(value="jlLocationAction_showByName",
+			results={
+			@Result(type="json", params={"root","jsonData"})})
+	public void showByName(){
+		String datemin=request.getParameter("datemin");
+		String datemax=request.getParameter("datemax");
+		String username=request.getParameter("username");
+		Map param=new HashMap();
+		param.put("datemin", datemin);
+		param.put("datemax", datemax);
+		param.put("username", username);
+		List list=locationService.findJson(param);
+		try {
+			jsonWrite(list);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 }
