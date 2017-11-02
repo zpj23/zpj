@@ -24,6 +24,7 @@ import org.springframework.stereotype.Component;
 
 import com.goldenweb.sys.pojo.SysUploadfile;
 import com.goldenweb.sys.service.UploadfileService;
+import com.goldenweb.sys.util.ArgsUtil;
 import com.goldenweb.sys.util.FileHelper;
 import com.goldenweb.sys.util.IAction;
 import com.google.gson.Gson;
@@ -297,8 +298,8 @@ public class UploadfileAction extends IAction{
 		//request.setAttribute("uploadfile", uploadfile);
 		String id = request.getParameter("id");
 		SysUploadfile file = uploadfileService.getFile(Integer.parseInt(id.trim()));
-		//String path = ArgsUtil.getUploadPath()+ file.getFileUrl();
-		String path = getFileBasePath()+ file.getFileUrl();
+		String path = ArgsUtil.getUploadPath()+ file.getFileUrl();
+//		String path = getFileBasePath()+ file.getFileUrl();
 		
 		//path = path.replaceAll("", "/");
 		FileHelper.downloadFile(path, file.getOriginalName(), response);

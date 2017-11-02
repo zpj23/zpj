@@ -7,13 +7,19 @@ import com.baidu.ueditor.hunter.FileManager;
 import com.baidu.ueditor.hunter.ImageHunter;
 import com.baidu.ueditor.upload.Uploader;
 import com.goldenweb.fxpg.frame.tools.DBManager;
+import com.goldenweb.fxpg.frame.tools.UUIDGenerator;
 import com.goldenweb.sys.dao.UploadfileHibernate;
+import com.goldenweb.sys.service.impl.UploadfileServiceImpl;
+import com.goldenweb.sys.util.ArgsUtil;
 import com.goldenweb.sys.util.DateHelper;
 
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.ResultSet;
+import java.util.Date;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -27,12 +33,12 @@ public class ActionEnter
   private String actionType = null;
 
   private ConfigManager configManager = null;
-  
+   
   @Autowired
   private UploadfileHibernate uploadfileDao;
   
   private DBManager DbaObj;
-
+    
   public ActionEnter(HttpServletRequest request, String rootPath)
   {
     this.request = request;
@@ -86,37 +92,21 @@ public class ActionEnter
     case 2:
     case 3:
     case 4:
-      conf = this.configManager.getConfig(actionCode);
+		try {
+			conf = this.configManager.getConfig(actionCode);
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
       state = new Uploader(this.request, conf).doExec();
       //插入数据库
       
       try {
-    	  JSONObject a = new JSONObject(state.toString());
-    	  /*System.out.println("title:"+a.get("title"));
-    	  System.out.println("url:"+a.get("url"));*/
-    	  
+    	  JSONObject a = new JSONObject(state.toString());    	  
     	  String tableid = request.getParameter("fileid");  //关联表主键
-    	  //保存数据到数据库
-    	 /* SysUploadfile fi = new SysUploadfile();
-	  		fi.setOriginalName(a.get("original").toString()); //文件原始名称  		
-	  		fi.setFileUrl(a.get("url").toString());
-	  		fi.setFileSize(Integer.parseInt(a.get("size").toString()));
-	  		fi.setFileType(a.get("type").toString()); //文件类型
-	  		fi.setUploadTime(new Date());
-	  		fi.setTableUuid(tableid);
-	  		uploadfileDao.save(fi);*/
-    	 /* new UploadfileServiceImpl().saveFile(a.get("title").toString(), a.get("original").toString(), 
-    			  a.get("type").toString(), a.get("url").toString(), Integer.parseInt(a.get("size").toString()), tableid);*/
+    	  //保存数据到数据库    	 
     	  DbaObj = new DBManager();    	 
-    	  if(DbaObj.OpenConnection()){
-    		  /*int index = 0;
-    		    //String sql = "select SQ_SYSUPLOADFILE.nextval from dual";
-    		    String sql = "select max(id)+1  from SYS_UPLOADFILE";
-    		    PreparedStatement statement = DbaObj.Conn.prepareStatement(sql);
-    		    ResultSet rs = statement.executeQuery();
-    		    while(rs.next()){
-    		        index = rs.getInt(1);
-    		    }*/
+    	  if(DbaObj.OpenConnection()){    		 
     	  String Sql = "insert into sys_uploadfile (FILE_NAME,ORIGINAL_NAME,FILE_TYPE,FILE_URL,FILE_SIZE,UPLOAD_TIME,TABLE_UUID) values (?,?,?,?,?,?,?)";
     	  PreparedStatement prestmt = null;
     	  prestmt = DbaObj.Conn.prepareStatement(Sql);
@@ -135,30 +125,31 @@ public class ActionEnter
     	  }
     	 
 		} catch (Exception e) {
-			if(DbaObj.Conn!=null){  
-	               try {  
-	            	   DbaObj.Conn.rollback();  
-	               } catch (SQLException e1) {  
-	                   e1.printStackTrace();  
-	               }  
-	        }  
-			throw new RuntimeException(e); 
+			e.printStackTrace();
 		}
          finally {
-        	 if(DbaObj.Conn!=null){
-        		 DbaObj.CloseConnection();
-        	 }
-	     }
+	        DbaObj.CloseConnection();
+	      }
       
       break;
     case 5:
-      conf = this.configManager.getConfig(actionCode);
+		try {
+			conf = this.configManager.getConfig(actionCode);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
       String[] list = this.request.getParameterValues((String)conf.get("fieldName"));
       state = new ImageHunter(conf).capture(list);
       break;
     case 6:
     case 7:
-      conf = this.configManager.getConfig(actionCode);
+		try {
+			conf = this.configManager.getConfig(actionCode);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
       int start = getStartIndex();
       state = new FileManager(conf).listFile(start);
     }
