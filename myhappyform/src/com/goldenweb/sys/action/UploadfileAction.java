@@ -82,7 +82,7 @@ public class UploadfileAction extends IAction{
 	public void setHtmlValue(String htmlValue) {
 		this.htmlValue = htmlValue;
 	}	
-
+	
 	/*********************************************************************************/
     /**
      * 上传页面
@@ -413,8 +413,8 @@ public class UploadfileAction extends IAction{
 	public String viewImages() {
 		String id = request.getParameter("id");
 		SysUploadfile file = uploadfileService.getFile(Integer.parseInt(id.trim()));
-		//String path = ArgsUtil.getUploadPath()+ file.getFileUrl();
-		String path = getFileBasePath()+ file.getFileUrl();
+		String path = ArgsUtil.getUploadPath()+ file.getFileUrl();
+//		String path = getFileBasePath()+ file.getFileUrl();
 		
         HttpServletResponse response = null;
         ServletOutputStream out = null;

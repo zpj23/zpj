@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="/common/h-ui_header.jsp"%>  
+<%@ include file="/common/h-ui_header.jsp"%>
+<%@ include file="/common/h-ui_ueditor.jsp"%>    
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -10,11 +11,28 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 <meta http-equiv="Cache-Control" content="no-siteapp" />
-
+<!-- <link rel="stylesheet" href="ueditor1_4_3-utf8-jsp/themes/default/css/ueditor.css" type="text/css"> -->
+<!-- 	<script type="text/javascript" charset="utf-8" src="ueditor1_4_3-utf8-jsp/ueditor.config.js"></script> -->
+<!-- 	<script type="text/javascript" charset="utf-8" src="ueditor1_4_3-utf8-jsp/ueditor.all.js"></script> -->
+<!-- 	<script type="text/javascript" charset="utf-8" src="ueditor1_4_3-utf8-jsp/lang/zh-cn/zh-cn.js"></script> -->
+<!-- 	<script type="text/javascript" charset="utf-8" src="ueditor1_4_3-utf8-jsp/lang/en/en.js"></script> -->
 <script type="text/javascript">
 $(function(){
 	
+	setTimeout('init()',0);
+       
+       
 });
+function init(){
+	var BBSeditor = new baidu.editor.ui.Editor({
+    	textarea:'mailinfo.content',					//表单提交的name
+	});
+    BBSeditor.render("myEditor");
+    BBSeditor.addListener("ready", function () {
+        // editor准备好之后才可以使用
+        BBSeditor.setContent('');
+    });
+}
 //导入考勤
 function dataimport(){
   
@@ -47,10 +65,17 @@ function dataimport(){
 			<a href="javascript:;" style="color:white;" onclick="dataimport()" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 导入考勤</a>
    
       	 </div>
+      	 <div class="row cl">
+	      	 <div id="myEditor" style="width:100%;height: 200px;"></div> 
+      	 </div>
   </form>
   			附件： <mf:FileUpload id="wj" mode="edit" moduleID="123" moduleType="wj"></mf:FileUpload>
+  			
+  			   
+  			
+  			
 </div>
-</div>
+
 
 </body>
 </html>

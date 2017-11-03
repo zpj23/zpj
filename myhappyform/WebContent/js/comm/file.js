@@ -24,7 +24,6 @@ var baidufile = {
 	
    //显示数据 
   bindDate:function (mode,moduleID,uploadifyID){
-	  console.log("1111111111");
 	var moduleType ="";	
 	 $("#FileList_"+uploadifyID).html("");
  	str = "";
