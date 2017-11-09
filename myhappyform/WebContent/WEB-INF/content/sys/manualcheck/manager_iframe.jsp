@@ -104,6 +104,37 @@ $(document).ready(function(){
             }
         }
         }, '-',
+        { text: '复制/添加', iconCls: 'icon-cut', handler: function () {//复制新增
+            //添加时先判断是否有开启编辑的行，如果有则把开户编辑的那行结束编辑
+            if (editRow != undefined) {
+                datagrid.datagrid("endEdit", editRow);
+            }
+        	//获取当前选中行，准备复制数据
+            var rows = datagrid.datagrid("getSelections");
+            if (rows.length == 1) {
+            	//添加时如果没有正在编辑的行，则在datagrid的第一行插入一行
+                if (editRow == undefined) {
+                    datagrid.datagrid("insertRow", {
+                        index: 0, // index start with 0
+                        row: {
+                            sgxm:rows[0].sgxm,
+                            sgqy:rows[0].sgqy,
+                            staffname:rows[0].staffname,
+                            workcontent:rows[0].workcontent,
+                            workduringtime:rows[0].workduringtime,
+                            overtime:rows[0].overtime,
+                            remark:rows[0].remark
+                        }
+                    });
+                    //将新插入的那一行开户编辑状态
+                    datagrid.datagrid("beginEdit", 0);
+                    //给当前编辑的行赋值
+                    editRow = 0;
+                }
+            }
+            
+        }
+        }, '-',
          { text: '删除', iconCls: 'icon-remove', handler: function () {
              //删除时先获取选择行
              var selectedRow = datagrid.datagrid('getSelected');  //获取选中行
