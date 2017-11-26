@@ -77,23 +77,34 @@ function initInfo(){
 	}
 	//初始化部门信息
 	function initDepArea(){
-		   $.ajax({
-		     type: "POST",
-		     url: "jlDepartmentInfoAction_getDep",
-		     async:false,
-		     success: function(data1){
-		      //var str="";
-		      var data = $.parseJSON(data1);
-		      var temparr=new Array();
-		      for(var n=0;n<data.length;n++){
-		    	  if(data[n].name=="admin"){
-		    		  continue;
-		    	  }
-		    	  temparr.push(data[n]);
-		      }
-		       inittabArea(temparr);	
-		     }
-		});
+		if("${jluserinfo.isAdmin}"=="1"){
+			$.ajax({
+			     type: "POST",
+			     url: "jlDepartmentInfoAction_getDep",
+			     async:false,
+			     success: function(data1){
+			      //var str="";
+			      var data = $.parseJSON(data1);
+			      var temparr=new Array();
+			      
+			    	  for(var n=0;n<data.length;n++){
+				    	  if(data[n].name=="admin"){
+				    		  continue;
+				    	  }
+				    	  temparr.push(data[n]);
+				      }
+				       inittabArea(temparr); 
+			     }
+			});
+		}else{
+			var temparr=new Array();
+			var data=new Object();
+			data.code="${jluserinfo.departmentcode}";
+			data.name="${jluserinfo.departmentname}";
+			temparr.push(data);
+			inittabArea(temparr); 
+		}	
+		   
 	}
 	//初始化tab
 	function inittabArea(depArr){
