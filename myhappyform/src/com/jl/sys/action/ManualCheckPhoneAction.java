@@ -102,6 +102,26 @@ public class ManualCheckPhoneAction extends IAction {
 		
 	}
 
+	@Action(value="jlManualCheckPhoneAction_findInfoByIdByPhone",
+			results={
+			@Result(type="json", params={"root","jsonData"})})
+	public void findInfoByIdByPhone(){
+		user = getCurrentUser(request);
+		
+		String id=request.getParameter("id");//主键id
+		CheckInfo c=mService.findById(id);
+		Map map =new HashMap();
+		if(c!=null){
+			map.put("msg", true);
+			map.put("data", c);
+		}
+		try {
+			this.jsonWrite(map);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
 
 	@Action(value="jlManualCheckPhoneAction_saveInfoByPhone",
 			results={
@@ -123,7 +143,7 @@ public class ManualCheckPhoneAction extends IAction {
 		String workcontent=request.getParameter("workcontent");
 		String remark=request.getParameter("remark");
 		String departmentname=request.getParameter("departmentname");
-		String departmentcode=request.getParameter("departmentid");
+		String departmentcode=request.getParameter("departmentcode");
 		
 		try {
 			boolean flagcn=staffnames.contains("，");
