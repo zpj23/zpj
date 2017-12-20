@@ -53,8 +53,8 @@ public class SetCharacterFilter implements Filter{
 		try{
 			
 			boolean isLogin = false;
-			System.out.println("tomcat "+req.getSession().getId());
-			System.out.println("执行时间："+System.currentTimeMillis());
+//			System.out.println("tomcat "+req.getSession().getId());
+//			System.out.println("执行时间："+System.currentTimeMillis());
 			// 获取session中用户信息jluserinfo
 			UserInfo user = (UserInfo) req.getSession().getAttribute("jluserinfo");		
 			if (user != null) {

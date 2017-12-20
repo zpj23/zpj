@@ -47,7 +47,7 @@ import com.jl.sys.pojo.UserInfo;
 import com.jl.sys.service.ManualInfoService;
 import com.jl.sys.service.UserInfoService;
 import com.jl.util.DateHelper;
-import com.jl.util.PingyinTool;
+
 
 /**
  * @ClassName ManualCheckPhoneAction
@@ -123,7 +123,8 @@ public class ManualCheckPhoneAction extends IAction {
 		String workcontent=request.getParameter("workcontent");
 		String remark=request.getParameter("remark");
 		String departmentname=request.getParameter("departmentname");
-		String departmentcode=PingyinTool.cn2FirstSpell(departmentname);
+		String departmentcode=request.getParameter("departmentid");
+		
 		try {
 			boolean flagcn=staffnames.contains("，");
 			boolean flagen=staffnames.contains(",");
