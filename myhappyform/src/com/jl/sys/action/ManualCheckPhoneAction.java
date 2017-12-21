@@ -92,7 +92,7 @@ public class ManualCheckPhoneAction extends IAction {
 		param.put("datemin", datemin);
 		param.put("datemax", datemax);
 		
-		Map map=mService.findList(user,1,500,param);
+		Map map=mService.findList(user,1,30,param);
 		List<UserInfo> list=(List<UserInfo>)map.get("list");
 		try {
 			this.jsonWrite(map);
@@ -122,7 +122,33 @@ public class ManualCheckPhoneAction extends IAction {
 		}
 		
 	}
-
+	@Action(value="jlManualCheckPhoneAction_delInfoByIdByPhone",
+			results={
+			@Result(type="json", params={"root","jsonData"})})
+	public void delInfoByIdByPhone(){
+		user = getCurrentUser(request);
+		String id = request.getParameter("delId");
+		if(null!=id&&!id.equalsIgnoreCase("")){
+			try {
+				mService.delInfo(id);
+				Map map =new HashMap();
+				map.put("msg", true);
+				this.jsonWrite(map);
+			} catch (IOException e) {
+				e.printStackTrace();
+				Map map =new HashMap();
+				map.put("msg", false);
+				try {
+					this.jsonWrite(map);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	
+	
 	@Action(value="jlManualCheckPhoneAction_saveInfoByPhone",
 			results={
 			@Result(type="json", params={"root","jsonData"})})
