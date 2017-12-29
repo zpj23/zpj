@@ -88,12 +88,17 @@ public class ManualCheckPhoneAction extends IAction {
 		String staffname=request.getParameter("staffname");
 		String datemin=request.getParameter("datemin");//开始时间
 		String datemax=request.getParameter("datemax");//结束时间
+		String departmentcode=request.getParameter("departmentcode");//部门编码
+		String cpage=request.getParameter("cpage");
 		Map<String,String> param=new HashMap<String,String>();
 		param.put("datemin", datemin);
 		param.put("datemax", datemax);
-		
-		Map map=mService.findList(user,1,30,param);
-		List<UserInfo> list=(List<UserInfo>)map.get("list");
+		param.put("username", staffname);
+		param.put("departmentid", departmentcode);
+		page=Integer.parseInt(cpage);
+		Map map=mService.findList(user,page,10,param);
+		double totalPage=Math.ceil((Integer)map.get("count")/10);
+		map.put("totalpage",totalPage );
 		try {
 			this.jsonWrite(map);
 		} catch (IOException e) {
