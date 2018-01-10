@@ -78,7 +78,7 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 	}
 	@MethodLog2(remark="导出考勤",type="导出")
 	public void exportExcel(Map<String,String> param,HttpServletRequest request, HttpServletResponse response,UserInfo user){
-		String str="所属区域,施工项目,施工区域,工作内容,施工人员,施工日期,出勤时间,加班时间,备注";
+		String str="施工日期,施工人员,所属区域,施工项目,施工区域,工作内容,出勤时间,加班时间,备注";
 		List list=mDao.findListObjectArray(user,param);
 		HSSFWorkbook wb = new HSSFWorkbook();
 		// 生成Excel的sheet
