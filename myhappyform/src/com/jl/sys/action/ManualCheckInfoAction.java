@@ -394,6 +394,45 @@ public class ManualCheckInfoAction extends IAction{
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * 初始化首页柱状图
+	 * @Title initChartByArr
+	 * @author zpj
+	 * @time 2018-1-23 下午4:28:55
+	 */
+	@Action(value="jlManualCheckInfoAction_initChartByArr",
+			results={
+			@Result(type="json", params={"root","jsonData"})})
+	public void  initChartByArr(){
+		String datemin=request.getParameter("datemin");//开始时间
+		String username=request.getParameter("username");//用户名称
+		String departmentid=request.getParameter("departmentid");//部门id
+		String departmentname=request.getParameter("departmentname");//部门名称
+		String sgxm = request.getParameter("sgxm");//施工项目
+		String sgqy = request.getParameter("sgqy");//施工区域
+		String workcontent=request.getParameter("workcontent");//工作内容
+		Map<String,String> param=new HashMap<String,String>();
+		param.put("datemin", datemin);
+		param.put("username", username);
+		//param.put("departmentid", departmentid);
+		param.put("sgxm", sgxm);
+		param.put("sgqy", sgqy);
+		param.put("workcontent", workcontent);
+		String[] arr=departmentid.split(",");
+		String[] names=departmentname.split(",");
+		Map retMap=new HashMap();
+		for(int i=0;i<arr.length;i++){
+			param.put("departmentid", arr[i]);
+			retMap.put(arr[i]+"|"+names[i], mService.findChartByUser(param));
+		}
+		try {
+			this.jsonWrite(retMap);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * 手机保存考勤信息
 	 * @Title saveInfoByPhone

@@ -122,24 +122,35 @@ function initInfo(){
 		tabBarDivHtml+="</div>";
 		$("#tab_demo").html(tabBarDivHtml+tabConDivHtml);
 		$.Huitab("#tab_demo .tabBar span","#tab_demo .tabCon","current","click","0");
-		for(SETTIMEFLAG=0;SETTIMEFLAG<depArr.length;SETTIMEFLAG++){
-			initData(depArr[SETTIMEFLAG].code,depArr[SETTIMEFLAG].name);
-			
-		}
+		initDataOne(depArr);
 	}
-	
-	function initData(code,name){
+	function initDataOne(tempArr){
+		var code="";
+		var name="";
+		for(SETTIMEFLAG=0;SETTIMEFLAG<tempArr.length;SETTIMEFLAG++){
+			if(SETTIMEFLAG>0){
+				code+=",";
+				name+=",";
+			}
+			code+=tempArr[SETTIMEFLAG].code;
+			name+=tempArr[SETTIMEFLAG].name;
+		}
 		$.ajax({
 	 		type: "POST",
-			   url: "jlManualCheckInfoAction_initChart",
+			   url: "jlManualCheckInfoAction_initChartByArr",
 			   async:true,
-			   data: "departmentid="+code,
+			   data: "departmentid="+code+"&departmentname="+name,
 			   success: function(arr){
 				  var datas=$.parseJSON(arr);
-				  initChart(datas,code,name);
+				  for(var str in datas){
+					  initChart(datas[str],str.split("|")[0],str.split("|")[1]);
+				  }
+				  
 			   }
 	 	});
 	}
+	
+	
 	function initChart(arr,code,name){
 		hzbArray=new Array();//横坐标
 		zzbArray=new Array();//纵坐标
