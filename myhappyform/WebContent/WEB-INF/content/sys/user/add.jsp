@@ -183,7 +183,7 @@ function closethisWin(){
     <div class="row cl">
       <label class="form-label col-3">备注：</label>
       <div class="formControls col-5">
-        <textarea name="user.remark" id="remark" value="${user.remark}" cols="" rows=""  class="textarea"  placeholder="说点什么..." datatype="*1-100" dragonfly="true" nullmsg="备注不能为空！" onKeyUp="textarealength(this,100)"></textarea>
+        <textarea name="user.remark" id="remark" value="${user.remark}" cols="" rows=""  class="textarea"  placeholder="说点什么..."  dragonfly="true" nullmsg="备注不能为空！" onKeyUp="textarealength(this,100)"></textarea>
         <p class="textarea-numberbar"><em class="textarea-length">0</em>/100</p>
       </div>
       <div class="col-4"> </div>

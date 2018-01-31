@@ -82,7 +82,10 @@ function admin_del(id){
 			});
 	});
 }
-
+//批量审核
+function shenhe(){
+	list_iframe.contentWindow.shenhe();
+}
 function admin_shenhe(id){
 	layer.confirm('确认要审核吗？',function(index){
 		//此处请求后台程序，下方是成功后的前台处理……
@@ -94,10 +97,13 @@ function admin_shenhe(id){
 			   success: function(data){
 				   if(data==1){
 						layer.msg('已审核!',{icon:1,time:1000});
+						//list_iframe.src='jlManualCheckInfoAction_toiframe';
+						list_iframe.contentWindow.clearSelection();
+						tolist();
 				   }else{
 					   layer.msg('审核失败!',{icon: 5,time:1000});
 				   }
-				   tolist();
+				   
 			   }
 			});
 	});
@@ -182,6 +188,7 @@ function analysis(){
 	  <c:if test="${jluserinfo.isAdmin=='1'}">
 	  	<a href="javascript:;" style="color: white" onclick="dataoutput()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe644;</i>导出数据</a>
 	  	<a href="javascript:;" style="color: white" onclick="analysis()" class="btn btn-secondary radius"><i class="Hui-iconfont">&#xe618;</i>数据分析</a>
+	  	<a href="javascript:;" style="color: white" onclick="shenhe()" class="btn btn-success radius"><i class="Hui-iconfont">&#xe618;</i>批量审核</a>
 	  </c:if> 
 	  <a href="javascript:;" style="color: white" onclick="admin_add('添加信息','jlManualCheckInfoAction_toAdd','800','650')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加信息</a>
 	  <a href="javascript:;" style="color: white" onclick="manager_add('添加信息','jlManualCheckInfoAction_toManagerAdd','800','650')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i>批量添加</a>

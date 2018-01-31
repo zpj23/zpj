@@ -227,12 +227,10 @@ public class ManualCheckInfoAction extends IAction{
 			@Result(type="json", params={"root","jsonData"})})
 	public void shenhe(){
 		String id=request.getParameter("id");
-		CheckInfo cInfo1=mService.findById(id);
-		cInfo1.setShenhe("1");
-		mService.saveInfo(cInfo1);
+		int r=mService.saveShenhe(id);
 		try {
-			this.jsonWrite(1);
-		} catch (IOException e) {
+			this.jsonWrite(r);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

@@ -65,4 +65,15 @@ public interface ManualInfoService {
 	 * @time 2017-7-10 下午4:35:45
 	 */
 	public List findChartByUser(Map username);
+	
+	
+	/**
+	 * 批量审核
+	 * @Title saveShenhe
+	 * @param ids
+	 * @return
+	 * @author zpj
+	 * @time 2018-1-30 上午9:21:07
+	 */
+	public int saveShenhe(String ids);
 }

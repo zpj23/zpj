@@ -132,4 +132,8 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 	public List findChartByUser(Map param){
 		return mDao.findChartByUser(param);
 	}
+	
+	public int saveShenhe(String ids){
+		return mDao.saveShenhe(ids);
+	}
 }

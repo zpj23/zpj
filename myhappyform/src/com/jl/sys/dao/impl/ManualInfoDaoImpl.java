@@ -213,4 +213,22 @@ public class ManualInfoDaoImpl extends BaseDao<CheckInfo> implements ManualInfoD
 		List list=this.findMapObjBySql(sql.toString(), null, 1, 20);
 		return list;
 	}
+	
+	public int saveShenhe(String ids){
+		String[] ids1=ids.split(",");
+		StringBuilder str=new StringBuilder(500);
+		for(int m=0;m<ids1.length;m++){
+			if(m>0){
+				str.append(",");
+			}
+			str.append("'"+ids1[m]+"'");
+		}
+		try{
+			this.executeSql("update jl_check_info set shenhe='1' where id in ("+str+")");
+			return 1;
+		}catch (Exception e) {
+			return 0;
+		}
+		
+	}
 }

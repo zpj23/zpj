@@ -16,7 +16,7 @@ public interface ManualInfoDao {
 	 */
 	public void saveInfo(CheckInfo cInfo) throws Exception;
 	
-	
+	public int saveShenhe(String ids);
 	/**
 	 * 列表查询
 	 * @Title findList

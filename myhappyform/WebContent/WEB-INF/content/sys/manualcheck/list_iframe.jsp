@@ -92,9 +92,9 @@ $(document).ready(function(){
 					//判断是否是管理员
 					if("${jluserinfo.isAdmin}"=="1"){
 						str= '<a title="编辑" href="javascript:;" onclick="edit(\''+rowData.id+'\')"  style="text-decoration:none">编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a title="删除" href="javascript:;" onclick="del(\''+rowData.id+'\')"  style="text-decoration:none">删除</a>';
-						if(rowData.shenhe=="0"){
-							str+='&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a title="审核" href="javascript:;" onclick="shenhe(\''+rowData.id+'\')"  style="text-decoration:none">审核</a>';
-						}
+// 						if(rowData.shenhe=="0"){
+// 							str+='&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a title="审核" href="javascript:;" onclick="shenhe(\''+rowData.id+'\')"  style="text-decoration:none">审核</a>';
+// 						}
 						return str;
 					}else{
 						if(rowData.shenhe=="0"){
@@ -139,8 +139,28 @@ function del(id){
 	parent.admin_del(id);
 }
 function shenhe(id){
-	parent.admin_shenhe(id);
+	
+	var rowData=$("#datagrid").datagrid("getSelections");
+	console.log(rowData);
+	var ids="";
+	if(rowData!=null&&rowData.length>0){
+		for(var i=0;i<rowData.length;i++){
+			if(i>0){
+				ids+=",";
+			}
+			ids+=rowData[i].id;
+		}	
+		parent.admin_shenhe(ids);
+		
+	}else{
+		parent.layer.msg('请勾选一条数据!',{icon: 5,time:3000});
+	}
+	
 }
+function clearSelection(){
+	$("#datagrid").datagrid("clearSelections");
+}
+
 
 function selectOneData(){
 	var rowData=$("#datagrid").datagrid("getSelected");
@@ -177,7 +197,7 @@ function load(datemin,datemax,username,departmentid,sgxm,sgqy,workcontent,shenhe
 				style="height: auto; width: auto;" toolbar="" title=""
 				pageSize="${ipagesize}" pageList="${ipagelist}"
 				queryParams="" idField="id" border="false"
-				rownumbers="true" singleSelect="true" pagination="true" >
+				rownumbers="true" singleSelect="false" pagination="true" >
 			</table>
 </body>
 </html>

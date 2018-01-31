@@ -26,6 +26,7 @@ package com.jl.sys.action;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -270,6 +271,14 @@ public class ManualCheckPhoneAction extends IAction {
 	 */
 	public UserInfo getCurrentUser(HttpServletRequest request){
 		UserInfo user = (UserInfo)request.getSession().getAttribute("jluserinfo");
+//		Enumeration enumeration =request.getSession().getAttributeNames();//获取session中所有的键值对
+//		while(enumeration.hasMoreElements()){
+//            String AddFileName=enumeration.nextElement().toString();//获取session中的键值
+//            UserInfo value=(UserInfo)request.getSession().getAttribute(AddFileName);//根据键值取出session中的值
+//            System.out.println(AddFileName);
+//            System.out.println(value.getLoginname());
+//            //String FileName= (String)session.getAttribute("AddFileName");
+//        }
 		if(user==null){
 			String id= request.getParameter("loginId");
 			user=jlUserInfoService.findById(Integer.parseInt(id));
