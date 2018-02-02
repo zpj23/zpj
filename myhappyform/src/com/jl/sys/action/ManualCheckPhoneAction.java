@@ -101,6 +101,9 @@ public class ManualCheckPhoneAction extends IAction {
 		page=Integer.parseInt(cpage);
 		Map map=mService.findList(user,page,10,param);
 		double totalPage=Math.ceil((Integer)map.get("count")/10);
+		if(totalPage==0){
+			totalPage=1;
+		}
 		map.put("totalpage",totalPage );
 		try {
 			this.jsonWrite(map);

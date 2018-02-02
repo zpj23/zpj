@@ -115,7 +115,7 @@ function initInfo(){
 		for(var i=0;i<depArr.length;i++){
 			tabBarDivHtml+="<span>"+depArr[i].name+"</span>";
 			tabConDivHtml+="<div class='tabCon' >";
-			tabConDivHtml+="<div id='container_"+depArr[i].code+"' style='width:100%;height:250px'></div>";
+			tabConDivHtml+="<div id='container_"+depArr[i].code+"' style='width:100%;height:450px'></div>";
 			tabConDivHtml+="</div>";
 			
 		}
