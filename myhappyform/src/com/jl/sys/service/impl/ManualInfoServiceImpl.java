@@ -130,7 +130,16 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 	}
 	
 	public List findChartByUser(Map param){
-		return mDao.findChartByUser(param);
+		boolean isYF=false;
+		if(null!=param.get("yuefen")&&!"".equalsIgnoreCase(param.get("yuefen").toString())){
+			isYF=true;
+		}
+		if(isYF){
+			return mDao.findChartByDay(param);
+		}else{
+			return mDao.findChartByUser(param);
+		}
+		
 	}
 	
 	public int saveShenhe(String ids){

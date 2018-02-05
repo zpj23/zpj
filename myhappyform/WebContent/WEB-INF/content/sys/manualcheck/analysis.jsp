@@ -25,11 +25,17 @@ $(function () {
 function initData(){
 	hzbArray=new Array();//横坐标
 	zzbArray=new Array();//纵坐标
+	
+	if($("#datemin").val()==""&&$("#yuefen").val()!=""){
+		layer.msg('如果需要选择月份，请先选择年份!',{icon: 5,time:3000});
+		return;
+	}
+	
 	$.ajax({
  		type: "POST",
 		   url: "jlManualCheckInfoAction_initChart",
 		   async:false,
-		   data: "datemin="+$("#datemin").val()+"&username="+$("#username").val()+"&sgxm="+$("#sgxm").val()+"&sgqy="+$("#sgqy").val()+"&workcontent="+$("#workcontent").val()+"&departmentid="+$("#departmentid").val(),
+		   data: "datemin="+$("#datemin").val()+"&yuefen="+$("#yuefen").val()+"&username="+$("#username").val()+"&sgxm="+$("#sgxm").val()+"&sgqy="+$("#sgqy").val()+"&workcontent="+$("#workcontent").val()+"&departmentid="+$("#departmentid").val(),
 		   success: function(arr){
 			  var datas=$.parseJSON(arr);
 			  initChart(datas);
@@ -153,7 +159,8 @@ function initChart(arr){
 <!-- <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 统计管理 <span class="c-gray en">&gt;</span> 柱状图统计 <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav> -->
 <div class="pd-20">
 <div class="text-c"> 
-		<input type="text" placeholder="选择年份" onfocus="WdatePicker({dateFmt:'yyyy',minDate:'2016',maxDate:'2020'})" id="datemin" name="datemin" class="input-text Wdate" style="width:120px;">
+		<input type="text" placeholder="选择年份" onfocus="WdatePicker({dateFmt:'yyyy',minDate:'2016',maxDate:'2020'})" id="datemin" name="datemin" class="input-text Wdate" style="width:80px;">
+		<input type="text" placeholder="选择月份" onfocus="WdatePicker({dateFmt:'MM'})" id="yuefen" name="yuefen" class="input-text Wdate" style="width:80px;">
 		<input type="text" class="input-text" style="width:170px" placeholder="输入施工项目" id="sgxm" name="sgxm" />
 		<input type="text" class="input-text" style="width:170px" placeholder="输入施工区域" id="sgqy" name="sgqy" />
 		

@@ -372,19 +372,21 @@ public class ManualCheckInfoAction extends IAction{
 			results={
 			@Result(type="json", params={"root","jsonData"})})
 	public void  jlDepartmentInfoAction_initDu(){
-		String datemin=request.getParameter("datemin");//开始时间
+		String year=request.getParameter("datemin");//年份
+		String yuefen=request.getParameter("yuefen");//月份
 		String username=request.getParameter("username");//用户名称
 		String departmentid=request.getParameter("departmentid");//部门id
 		String sgxm = request.getParameter("sgxm");//施工项目
 		String sgqy = request.getParameter("sgqy");//施工区域
 		String workcontent=request.getParameter("workcontent");//工作内容
 		Map<String,String> param=new HashMap<String,String>();
-		param.put("datemin", datemin);
+		param.put("datemin", year);
 		param.put("username", username);
 		param.put("departmentid", departmentid);
 		param.put("sgxm", sgxm);
 		param.put("sgqy", sgqy);
 		param.put("workcontent", workcontent);
+		param.put("yuefen", yuefen);
 		List list=mService.findChartByUser(param);
 		try {
 			this.jsonWrite(list);

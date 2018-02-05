@@ -180,11 +180,36 @@ public class ManualInfoDaoImpl extends BaseDao<CheckInfo> implements ManualInfoD
 		if(c!=null)
 			this.delete(c);
 	}
+	public List findChartByDay(Map param){
+		StringBuffer sql=new  StringBuffer(1000);
+		sql.append("SELECT DATE_FORMAT(workdate, '%Y-%m-%d') AS yuefen,workduringtime wdt, overtime ot FROM jl_check_info where shenhe ='1' ");
+		if(null!=param.get("datemin")&&!"".equalsIgnoreCase(param.get("datemin").toString())){
+			sql.append(" and workdate like ").append("'"+param.get("datemin")+"-"+param.get("yuefen")+"%'");
+		}
+		if(param.get("username")!=null&&!((String)param.get("username")).equalsIgnoreCase("")){
+			sql.append(" and staffname ='"+(String)param.get("username")+"' ");
+		}
+		if(null!=param.get("sgxm")&&!"".equalsIgnoreCase(param.get("sgxm").toString())){
+			sql.append(" and  sgxm like ").append("'%"+param.get("sgxm")+"%'  ");
+		}
+		if(null!=param.get("sgqy")&&!"".equalsIgnoreCase(param.get("sgqy").toString())){
+			sql.append(" and  sgqy like ").append("'%"+param.get("sgqy")+"%'  ");
+		}
+		if(null!=param.get("workcontent")&&!"".equalsIgnoreCase(param.get("workcontent").toString())){
+			sql.append(" and  workcontent like ").append("'%"+param.get("workcontent")+"%'  ");
+		}
+		if(null!=param.get("departmentid")&&!"".equalsIgnoreCase(param.get("departmentid").toString())){
+			sql.append(" and departmentcode = ").append("'"+param.get("departmentid")+"'");
+		}
+		sql.append(" GROUP BY DATE_FORMAT( workdate, '%Y-%m-%d' ) ORDER BY yuefen asc ");
+		List list=this.findMapObjBySql(sql.toString(), null, 1, 100);
+		return list;
+	}
 	
 	public List findChartByUser(Map param){
 		StringBuffer sql=new  StringBuffer(1000);
-		sql.append("SELECT DATE_FORMAT( workdate, '%Y-%m' ) as yuefen , SUM(workduringtime) as wdt , SUM(overtime) ot FROM jl_check_info where  ");
-		sql.append(" shenhe ='1' ");
+		sql.append("SELECT DATE_FORMAT( workdate, '%Y-%m' ) as yuefen , SUM(workduringtime) as wdt , SUM(overtime) ot FROM jl_check_info where shenhe ='1' ");
+		sql.append("  ");
 		if(null!=param.get("datemin")&&!"".equalsIgnoreCase(param.get("datemin").toString())){
 			sql.append(" and workdate like ").append("'"+param.get("datemin")+"%'");
 		}

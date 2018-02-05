@@ -80,4 +80,15 @@ public interface ManualInfoDao {
 	
 	public List findChartByUser(Map param);
 	
+	/**
+	 * 根据月份查图表
+	 * @Title findChartByDay
+	 * @param param
+	 * @return
+	 * @author zpj
+	 * @time 2018-2-5 下午4:26:07
+	 */
+	public List findChartByDay(Map param);
+	
+	
 }
