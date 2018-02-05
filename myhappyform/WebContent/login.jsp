@@ -25,34 +25,81 @@
 <![endif]-->
 <title>考勤管理系统</title>
 
+
+<%  
+String username = "";  
+String password = "";  
+Cookie[] c = request.getCookies();  
+if (c != null) {  
+    for (int i = 0; i < c.length; i++) {  
+        if ("username".equals(c[i].getName())) {  
+            username = c[i].getValue();  
+        } else if ("pwd".equals(c[i].getName())) {  
+            password = c[i].getValue();  
+        }  
+    }  
+} else {  
+    username = "";  
+    password = "";  
+}
+%> 
 </head>
 <script>
 $(document).ready(function(){
- $('#username').val("admin");
- $('#pwd').val("666666");
-  checkLogin();
+	 window.setTimeout(function () {
+		 if("${loginDefault}"=="1"){//用户名或密码错误
+			 delCookie("username");
+			 delCookie("pwd");
+		 }
+		 var username=$("#username").val();
+		 var pwd=$("#pwd").val();
+	     if(username!=""&&pwd!=""){
+	    	 $("#online").prop("checked",true);
+	    	 $("#rember").val("1");	
+	     }
+	 }, 0);
 });
 function checkLogin() {
+	var flag=$("#online").is(":checked");//选中，返回true，没选中，返回false  
+	if(flag){
+		$("#rember").val("1");	
+	}else{
+		$("#rember").val("0");	
+		delCookie("username");
+		delCookie("pwd");
+	}
 	form1.action = "jlLoginAction_checkLogin";
 	form1.submit();
 }
+
+function delCookie(name)
+{
+	var exp = new Date();
+	exp.setTime(exp.getTime() - 1);
+	var cval=getCookie(name);
+	if(cval!=null)
+	document.cookie= name + "="+cval+";expires="+exp.toGMTString();
+	}
+
 </script>
 <body>
+
 <input type="hidden" id="TenantId" name="TenantId" value="" />
 <div class="header"></div>
 <div class="loginWraper">
   <div id="loginform" class="loginBox">
     <form id="form1" name="form1" class="form form-horizontal" action="" method="post">
+    
       <div class="row cl">
         <label class="form-label col-3"><i class="Hui-iconfont">&#xe60d;</i></label>
         <div class="formControls col-8">
-          <input value="${loginname}" id="username" name="username"  type="text" placeholder="用户名" class="input-text size-L">
+          <input value="<%=username%>" id="username" name="username"  type="text" placeholder="用户名" class="input-text size-L">
         </div>
       </div>
       <div class="row cl">
         <label class="form-label col-3"><i class="Hui-iconfont">&#xe60e;</i></label>
         <div class="formControls col-8">
-          <input value="" id="pwd" name="pwd" type="password" placeholder="密码" class="input-text size-L">
+          <input value="<%=password%>" id="pwd" name="pwd" type="password" placeholder="密码" class="input-text size-L">
         </div>
       </div>
 <!--       <div class="row cl"> -->
@@ -62,9 +109,11 @@ function checkLogin() {
 <!--       </div> -->
       <div class="row">
         <div class="formControls col-8 col-offset-3">
+        <input type="hidden" name="rember" id="rember" value=""/>
           <label for="online">
             <input type="checkbox" name="online" id="online" value="">
-            使我保持登录状态</label>
+            
+           记住密码</label>
         </div>
       </div>
       <div class="row">

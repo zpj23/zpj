@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
@@ -187,10 +188,11 @@ public class LoginAction extends IAction{
 		boolean islogined=false;
 		try {
 			user = (UserInfo)request.getSession().getAttribute("jluserinfo");
-			String loginname,pwd;
+			String loginname,pwd,rember;
 			//首次登陆
 			 loginname = request.getParameter("username");
 			 pwd = request.getParameter("pwd");
+			 rember=request.getParameter("rember");
 			 if(loginname==null&&user==null){
 				 //服务器重启后页面非正常情况访问
 				 return "error";
@@ -218,9 +220,7 @@ public class LoginAction extends IAction{
 			}
 			if(luser==null){			
 				//不存在该用户，或密码有误
-				request.setAttribute("msg", "用户名或密码错误");
-				request.setAttribute("loginerror","1");
-				request.setAttribute("loginname", loginname);
+				request.setAttribute("loginDefault","1");
 				return "error";
 			}else{		
 				//记录本次的登陆时间和ip地址供下次使用
@@ -305,6 +305,17 @@ public class LoginAction extends IAction{
 				}
 				//排名查询
 				initRank(luser);
+				
+				
+				if(null!=rember&&rember.equalsIgnoreCase("1")){
+					Cookie c1 = new Cookie("username", loginname);  
+					Cookie c2 = new Cookie("pwd", pwd);  
+					c1.setMaxAge(60*60*24*7);  
+					c2.setMaxAge(60*60*24*7);//这里设置保存这条Cookie的时间   一个星期7天
+					response.addCookie(c1);//添加Cookie  
+					response.addCookie(c2);  
+				}
+				
 				return "success";
 			}
 		} catch (Exception e) {
@@ -381,8 +392,16 @@ public class LoginAction extends IAction{
 	}
 	 
 //	 public static void main(String[] args) {
-//		 getWeekDay();
-//		 getMonthDate();
+//		 String temp=null;
+//		 try{
+//			 if(temp!=null){
+//				 System.out.println("111");
+//			 }else if(temp==null){
+//				 System.out.println("222");
+//			 }
+//		 }catch (Exception e) {
+//			e.printStackTrace();
+//		}
 //	}
 		 
 	 public String  findWeather(List<String> list, String address){
@@ -434,4 +453,5 @@ public class LoginAction extends IAction{
         }
         return request.getRemoteAddr();
     }
+	
 }
