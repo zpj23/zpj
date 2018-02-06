@@ -182,7 +182,10 @@ public class ManualInfoDaoImpl extends BaseDao<CheckInfo> implements ManualInfoD
 	}
 	public List findChartByDay(Map param){
 		StringBuffer sql=new  StringBuffer(1000);
-		sql.append("SELECT DATE_FORMAT(workdate, '%Y-%m-%d') AS yuefen,workduringtime wdt, overtime ot FROM jl_check_info where shenhe ='1' ");
+		//sql.append("SELECT DATE_FORMAT(workdate, '%Y-%m-%d') AS yuefen,workduringtime wdt, overtime ot FROM jl_check_info where shenhe ='1' ");
+		sql.append("SELECT DATE_FORMAT(workdate, '%Y-%m-%d') AS yuefen,SUM(workduringtime) as wdt , SUM(overtime) ot FROM jl_check_info where shenhe ='1' ");
+		
+		
 		if(null!=param.get("datemin")&&!"".equalsIgnoreCase(param.get("datemin").toString())){
 			sql.append(" and workdate like ").append("'"+param.get("datemin")+"-"+param.get("yuefen")+"%'");
 		}

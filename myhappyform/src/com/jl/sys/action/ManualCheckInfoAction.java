@@ -157,29 +157,38 @@ public class ManualCheckInfoAction extends IAction{
 			@Result(type="json", params={"root","jsonData"})})
 	public void doAdd(){
 		user = (UserInfo)request.getSession().getAttribute("jluserinfo");
-		try {
-			String staffnames=cinfo.getStaffname();
-			cinfo.setAdddate(new Date());
-			
-			//判断是否是多人同时输入的
-			if(staffnames.contains("，")){
-				String[] nameArr=staffnames.split("，");
-				for(int i=0;i<nameArr.length;i++){
-					CheckInfo tmpci=new CheckInfo();
-					tmpci.setId(UUID.randomUUID().toString());
-					tmpci.setStaffname(nameArr[i]);
-					tmpci.setWorkdate(cinfo.getWorkdate());
-					tmpci.setWorkduringtime(cinfo.getWorkduringtime());
-					tmpci.setDepartmentname(cinfo.getDepartmentname());
-					tmpci.setDepartmentcode(cinfo.getDepartmentcode());
-					tmpci.setWorkcontent(cinfo.getWorkcontent());
-					tmpci.setAdddate(cinfo.getAdddate());
-					tmpci.setAddress(cinfo.getAddress());
-					tmpci.setOvertime(cinfo.getOvertime());	
-					tmpci.setRemark(cinfo.getRemark());
+		String staffnames=cinfo.getStaffname();
+		cinfo.setAdddate(new Date());
+		CheckInfo temp=mService.findById(cinfo.getId());
+		boolean editFlag=false;
+		if(null!=temp){
+			//编辑状态
+			editFlag=true;
+		}
+		CheckInfo tmpci=null;
+		//判断是否是多人同时输入的
+		if(staffnames.contains("，")){
+			String[] nameArr=staffnames.split("，");
+			for(int i=0;i<nameArr.length;i++){
+				tmpci=new CheckInfo();
+				tmpci.setId(UUID.randomUUID().toString());
+				tmpci.setStaffname(nameArr[i]);
+				tmpci.setWorkdate(cinfo.getWorkdate());
+				tmpci.setWorkduringtime(cinfo.getWorkduringtime());
+				tmpci.setDepartmentname(cinfo.getDepartmentname());
+				tmpci.setDepartmentcode(cinfo.getDepartmentcode());
+				tmpci.setWorkcontent(cinfo.getWorkcontent());
+				tmpci.setAdddate(cinfo.getAdddate());
+				tmpci.setAddress(cinfo.getAddress());
+				tmpci.setOvertime(cinfo.getOvertime());	
+				tmpci.setRemark(cinfo.getRemark());
+				tmpci.setSgxm(cinfo.getSgxm());
+				tmpci.setSgqy(cinfo.getSgqy());
+				if(editFlag){
+					tmpci.setCreateuserid(temp.getCreateuserid());
+					tmpci.setShenhe(temp.getShenhe());
+				}else{
 					tmpci.setCreateuserid(user.getId());
-					tmpci.setSgxm(cinfo.getSgxm());
-					tmpci.setSgqy(cinfo.getSgqy());
 					if(user.getIsAdmin().equalsIgnoreCase("1")){
 						//管理员  审核状态改成已审核
 						tmpci.setShenhe("1");
@@ -187,13 +196,19 @@ public class ManualCheckInfoAction extends IAction{
 						//普通人 录入的状态是未审核
 						tmpci.setShenhe("0");
 					}
-					mService.saveInfo(tmpci);
 				}
-				CheckInfo temp=mService.findById(cinfo.getId());
-				if(temp!=null){
-					//编辑的时候 如果是有分隔符 说明是需要分割这条数据  ，在分割保存完这些数据以后要删除之前未分割的数据
-					mService.delInfo(temp.getId());
-				}
+				
+				mService.saveInfo(tmpci);
+			}
+			if(editFlag){
+				//编辑的时候 如果是有分隔符 说明是需要分割这条数据  ，在分割保存完这些数据以后要删除之前未分割的数据
+				mService.delInfo(temp.getId());
+			}
+		}else{
+			
+			if(editFlag){
+				cinfo.setCreateuserid(temp.getCreateuserid());
+				cinfo.setShenhe(temp.getShenhe());
 			}else{
 				cinfo.setCreateuserid(user.getId());
 				if(user.getIsAdmin().equalsIgnoreCase("1")){
@@ -203,9 +218,10 @@ public class ManualCheckInfoAction extends IAction{
 					//普通人 录入的状态是未审核
 					cinfo.setShenhe("0");
 				}
-				mService.saveInfo(cinfo);
 			}
-			
+			mService.saveInfo(cinfo);
+		}
+		try {
 			JSONObject job=new JSONObject();
 			job.put("status","y");
 			job.put("statusText", "保存成功");

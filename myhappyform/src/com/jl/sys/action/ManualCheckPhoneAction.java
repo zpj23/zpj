@@ -166,10 +166,11 @@ public class ManualCheckPhoneAction extends IAction {
 	public void saveInfoByPhone(){
 		user =getCurrentUser(request);
 		String id=request.getParameter("id");
-		if(id!=null&&!id.equalsIgnoreCase("")){
-			
-		}else{
-			id=UUID.randomUUID().toString();
+		CheckInfo temp=mService.findById(id);
+		boolean editFlag=false;
+		if(null!=temp){
+			//编辑状态
+			editFlag=true;
 		}
 		String sgxm=request.getParameter("sgxm");
 		String sgqy=request.getParameter("sgqy");
@@ -185,6 +186,7 @@ public class ManualCheckPhoneAction extends IAction {
 		try {
 			boolean flagcn=staffnames.contains("，");
 			boolean flagen=staffnames.contains(",");
+			CheckInfo tmpci=null;
 			//判断是否是多人同时输入的
 			if(flagcn||flagen){
 				String[] nameArr=null;
@@ -195,7 +197,7 @@ public class ManualCheckPhoneAction extends IAction {
 					nameArr=staffnames.split(",");
 				}
 				for(int i=0;i<nameArr.length;i++){
-					CheckInfo tmpci=new CheckInfo();
+					tmpci=new CheckInfo();
 					tmpci.setId(UUID.randomUUID().toString());
 					tmpci.setStaffname(nameArr[i]);
 					tmpci.setWorkdate(DateHelper.getDateFromString(workdate, "yyyy-MM-dd"));
@@ -207,9 +209,37 @@ public class ManualCheckPhoneAction extends IAction {
 //					tmpci.setAddress(cinfo.getAddress());
 					tmpci.setOvertime(Double.valueOf(overtime));	
 					tmpci.setRemark(remark);
-					tmpci.setCreateuserid(user.getId());
 					tmpci.setSgxm(sgxm);
 					tmpci.setSgqy(sgqy);
+					if(editFlag){
+						tmpci.setCreateuserid(temp.getCreateuserid());
+						tmpci.setShenhe(temp.getShenhe());
+					}else{
+						tmpci.setCreateuserid(user.getId());
+						if(user.getIsAdmin().equalsIgnoreCase("1")){
+							//管理员  审核状态改成已审核
+							tmpci.setShenhe("1");
+						}else{
+							//普通人 录入的状态是未审核
+							tmpci.setShenhe("0");
+						}
+					}
+					mService.saveInfo(tmpci);
+				}
+				
+				if(editFlag){
+					//编辑的时候 如果是有分隔符 说明是需要分割这条数据  ，在分割保存完这些数据以后要删除之前未分割的数据
+					mService.delInfo(temp.getId());
+				}
+			}else{
+				tmpci=new CheckInfo();
+					
+				if(editFlag){
+					tmpci.setCreateuserid(temp.getCreateuserid());
+					tmpci.setShenhe(temp.getShenhe());
+				}else{
+					id=UUID.randomUUID().toString();
+					tmpci.setCreateuserid(user.getId());
 					if(user.getIsAdmin().equalsIgnoreCase("1")){
 						//管理员  审核状态改成已审核
 						tmpci.setShenhe("1");
@@ -217,15 +247,7 @@ public class ManualCheckPhoneAction extends IAction {
 						//普通人 录入的状态是未审核
 						tmpci.setShenhe("0");
 					}
-					mService.saveInfo(tmpci);
 				}
-				CheckInfo temp=mService.findById(id);
-				if(temp!=null){
-					//编辑的时候 如果是有分隔符 说明是需要分割这条数据  ，在分割保存完这些数据以后要删除之前未分割的数据
-					mService.delInfo(temp.getId());
-				}
-			}else{
-				CheckInfo tmpci=new CheckInfo();
 				tmpci.setId(id);
 				tmpci.setStaffname(staffnames);
 				tmpci.setWorkdate(DateHelper.getDateFromString(workdate, "yyyy-MM-dd"));
@@ -236,16 +258,9 @@ public class ManualCheckPhoneAction extends IAction {
 				tmpci.setAdddate(new Date());
 				tmpci.setOvertime(Double.valueOf(overtime));	
 				tmpci.setRemark(remark);
-				tmpci.setCreateuserid(user.getId());
 				tmpci.setSgxm(sgxm);
 				tmpci.setSgqy(sgqy);
-				if(user.getIsAdmin().equalsIgnoreCase("1")){
-					//管理员  审核状态改成已审核
-					tmpci.setShenhe("1");
-				}else{
-					//普通人 录入的状态是未审核
-					tmpci.setShenhe("0");
-				}
+				
 				mService.saveInfo(tmpci);
 			}
 			
