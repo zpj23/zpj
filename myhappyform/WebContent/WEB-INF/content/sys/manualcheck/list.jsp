@@ -186,10 +186,10 @@ function analysis(){
 	<div class="cl pd-5 bg-1 bk-gray mt-20">
 	 <span class="l">
 	  <c:if test="${jluserinfo.isAdmin=='1'}">
-	  	<a href="javascript:;" style="color: white" onclick="dataoutput()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe644;</i>导出数据</a>
 	  	<a href="javascript:;" style="color: white" onclick="analysis()" class="btn btn-secondary radius"><i class="Hui-iconfont">&#xe618;</i>数据分析</a>
 	  	<a href="javascript:;" style="color: white" onclick="shenhe()" class="btn btn-success radius"><i class="Hui-iconfont">&#xe618;</i>批量审核</a>
 	  </c:if> 
+	  <a href="javascript:;" style="color: white" onclick="dataoutput()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe644;</i>导出数据</a>
 	  <a href="javascript:;" style="color: white" onclick="admin_add('添加信息','jlManualCheckInfoAction_toAdd','800','650')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加信息</a>
 	  <a href="javascript:;" style="color: white" onclick="manager_add('添加信息','jlManualCheckInfoAction_toManagerAdd','800','650')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i>批量添加</a>
 	  </span>

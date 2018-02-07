@@ -67,7 +67,7 @@ function initChart(arr){
 	if($("#departmentid").find("option:selected").text()!="请选择"){
 		depname=$("#departmentid").find("option:selected").text();
 	}
-	pictitle=$("#datemin").val()+" "+depname+" "+$("#sgxm").val()+" "+$("#sgqy").val()+" "+$("#username").val()+" "+"工时分布图";
+	pictitle=$("#datemin").val()+" "+$("#yuefen").val()+" "+depname+" "+$("#sgxm").val()+" "+$("#sgqy").val()+" "+$("#username").val()+" "+"工时分布图";
 	if(arr!=null&&arr.length>0){
 		var wdtArr=new Array();//纵数据 正常
 		var otArr=new Array();// 加班

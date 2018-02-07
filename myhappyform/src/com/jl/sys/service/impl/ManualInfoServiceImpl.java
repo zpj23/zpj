@@ -42,7 +42,8 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 	
 	public Map findList(UserInfo user,int page,int rows,Map<String,String> param){
 		List<Map> list=mDao.findList(user,page,rows,param);
-		double zgs=0;
+		double wzgs=0;
+		double ozgs=0;
 		double workduringtime=0;
 		double overtime=0;
 		for(int i=0,length=list.size();i<length;i++){
@@ -52,7 +53,8 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 			Object str=((Map)(list.get(i))).get("workduringtime");
 			workduringtime=Double.valueOf(str.toString());
 			overtime=Double.valueOf(((Map)(list.get(i))).get("overtime").toString());
-			zgs+=workduringtime+overtime;
+			wzgs+=workduringtime;
+			ozgs+=overtime;
 		}
 //		System.out.println(zgs+">>>>>>>循环数组");
 //		System.out.println(System.currentTimeMillis());
@@ -60,7 +62,9 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 		Map map=new HashMap();
 		map.put("list", list);
 		map.put("count", count);
-		map.put("zgs", zgs);
+		map.put("wzgs", wzgs);
+		map.put("ozgs", ozgs);
+		map.put("zgs", wzgs+ozgs);
 		return map;
 	}
 	

@@ -331,9 +331,9 @@ public class ManualCheckInfoAction extends IAction{
 //			  JSONArray jsonArray = JSONArray.fromObject(list);
 			  String lstr=gson.toJson(list);
 			  str.append(lstr);
-			  if(user.getIsAdmin().equalsIgnoreCase("1")){
-				  str.append(",\"footer\":[{\"id\":\"1\",\"departmentname\":\"\",\"workdate\":\"\",\"workduringtime\":\""+(Double)map.get("zgs")+"\",\"workcontent\":\"合计\",\"overtime\":\"\",\"staffname\":\"\"}]");
-			  }
+//			  if(user.getIsAdmin().equalsIgnoreCase("1")){
+			  str.append(",\"footer\":[{\"id\":\"1\",\"departmentname\":\""+(Double)map.get("zgs")+"\",\"workdate\":\"\",\"workduringtime\":\""+(Double)map.get("wzgs")+"\",\"workcontent\":\"合计\",\"overtime\":\""+(Double)map.get("ozgs")+"\",\"staffname\":\"\"}]");
+//			  }
 			  str.append("}");
 			  jsonData= str.toString();
 		}else{
