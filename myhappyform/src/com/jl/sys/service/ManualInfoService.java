@@ -68,6 +68,16 @@ public interface ManualInfoService {
 	
 	
 	/**
+	 * 获取待审核数量
+	 * @Title getWshNum
+	 * @param user
+	 * @return
+	 * @author zpj
+	 * @time 2018-2-10 上午10:16:09
+	 */
+	public int getWshNum(UserInfo user);
+	
+	/**
 	 * 批量审核
 	 * @Title saveShenhe
 	 * @param ids

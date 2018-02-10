@@ -110,7 +110,65 @@ public class ManualCheckPhoneAction extends IAction {
 		}
 		
 	}
-
+	
+	/**
+	 * 手机审核
+	 * @Title shenhe
+	 * @author zpj
+	 * @time 2018-2-10 上午11:04:16
+	 */
+	@Action(value="jlManualCheckPhoneAction_doshenhe",
+			results={
+			@Result(type="json", params={"root","jsonData"})})
+	public void shenhe(){
+		user = getCurrentUser(request);
+		String id=request.getParameter("id");
+		Map map =new HashMap();
+		try {
+			int r=mService.saveShenhe(id);
+			if(r==1){
+				map.put("msg", true);
+			}else{
+				map.put("msg", false);
+			}
+			this.jsonWrite(map);
+		} catch (Exception e) {
+			map.put("msg", false);
+			try {
+				this.jsonWrite(map);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	/**
+	 * 获取待审核数量
+	 * @Title getShNum
+	 * @author zpj
+	 * @time 2018-2-10 上午10:12:43
+	 */
+	@Action(value="jlManualCheckPhoneAction_getShNum",
+	results={
+	@Result(type="json", params={"root","jsonData"})})
+	public void getShNum(){
+		user = getCurrentUser(request);
+		int count=mService.getWshNum(user);//获取待审核的数量
+		Map map =new HashMap();
+		map.put("msg", true);
+		map.put("data", count);
+		try {
+			this.jsonWrite(map);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	
+	}
+	
+	
 	@Action(value="jlManualCheckPhoneAction_findInfoByIdByPhone",
 			results={
 			@Result(type="json", params={"root","jsonData"})})

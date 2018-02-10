@@ -130,7 +130,17 @@ public class ManualInfoDaoImpl extends BaseDao<CheckInfo> implements ManualInfoD
 		return count;
 		
 	}
-	
+	public int getWshNum(UserInfo user){
+		StringBuffer sql = new StringBuffer();
+		sql.append(" select count(id) from CheckInfo where shenhe='0' ");
+		//判断是否是管理员用户
+		if(!user.getIsAdmin().equalsIgnoreCase("1")){
+			//不是管理员
+			sql.append(" and  createuserid="+user.getId());
+		}
+		int count=this.findListCount(sql.toString(), null);
+		return count;
+	}
 	public List findListObjectArray(UserInfo user,Map<String,String> param){
 		StringBuffer sql = new StringBuffer();
 		String str="施工日期,施工人员,所属区域,施工项目,施工区域,工作内容,出勤时间,加班时间,备注";

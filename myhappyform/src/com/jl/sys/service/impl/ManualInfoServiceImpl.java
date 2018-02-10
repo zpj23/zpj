@@ -146,6 +146,10 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 		
 	}
 	
+	public int getWshNum(UserInfo user){
+		return mDao.getWshNum(user);
+	}
+	@MethodLog2(remark="审核考勤",type="审核")
 	public int saveShenhe(String ids){
 		return mDao.saveShenhe(ids);
 	}

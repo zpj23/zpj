@@ -91,4 +91,6 @@ public interface ManualInfoDao {
 	public List findChartByDay(Map param);
 	
 	
+	public int getWshNum(UserInfo user);
+	
 }
