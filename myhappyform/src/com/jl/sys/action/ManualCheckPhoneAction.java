@@ -113,6 +113,45 @@ public class ManualCheckPhoneAction extends IAction {
 		
 	}
 	
+	
+	
+	@Action(value="jlManualCheckPhoneAction_docopy",
+	results={
+	@Result(type="json", params={"root","jsonData"})})
+	public void doCopy(){
+		user = getCurrentUser(request);
+		String id=request.getParameter("id");
+		CheckInfo copyInfo=mService.findById(id);
+		Map map =new HashMap();
+		try {
+			CheckInfo tmpci=new CheckInfo();
+			tmpci.setId(UUID.randomUUID().toString());
+			tmpci.setStaffname(copyInfo.getStaffname()+"_复制");
+			tmpci.setWorkdate(copyInfo.getWorkdate());
+			tmpci.setWorkduringtime(copyInfo.getWorkduringtime());
+			tmpci.setDepartmentname(copyInfo.getDepartmentname());
+			tmpci.setDepartmentcode(copyInfo.getDepartmentcode());
+			tmpci.setWorkcontent(copyInfo.getWorkcontent());
+			tmpci.setAdddate(new Date());
+			tmpci.setOvertime(copyInfo.getOvertime());	
+			tmpci.setRemark(copyInfo.getRemark());
+			tmpci.setSgxm(copyInfo.getSgxm());
+			tmpci.setSgqy(copyInfo.getSgqy());
+			tmpci.setCreateuserid(copyInfo.getCreateuserid());
+			tmpci.setShenhe("0");
+			mService.saveInfo(tmpci);
+			map.put("msg", true);
+			this.jsonWrite(map);
+		} catch (Exception e) {
+			map.put("msg", false);
+			try {
+				this.jsonWrite(map);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		}
+	}
 	/**
 	 * 手机审核
 	 * @Title shenhe
