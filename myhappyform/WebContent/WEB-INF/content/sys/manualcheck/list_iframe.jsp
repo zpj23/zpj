@@ -79,6 +79,10 @@ $(document).ready(function(){
 			field : 'remark',
 			title : '备注',
 			width : 50
+		},{
+			field : 'username',
+			title : '录入人',
+			width : 50
 		}
 		,{
 			field : 'caoz',
