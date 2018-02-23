@@ -115,6 +115,12 @@ public class ManualCheckPhoneAction extends IAction {
 	
 	
 	
+	/**
+	 * 手机复制一条记录
+	 * @Title doCopy
+	 * @author zpj
+	 * @time 2018-2-23 上午8:40:50
+	 */
 	@Action(value="jlManualCheckPhoneAction_docopy",
 	results={
 	@Result(type="json", params={"root","jsonData"})})

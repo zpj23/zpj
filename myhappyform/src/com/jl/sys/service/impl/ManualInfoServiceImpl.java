@@ -93,20 +93,25 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 		String[] title=str.split(",");
 		// Create a row and put some cells in it. Rows are 0 based.
 		HSSFRow row1 = sheet1.createRow((short) 0);
-		
+		HSSFCell cell0=null;
 		for(int m=0;m<title.length;m++){
 			if(title[m].equalsIgnoreCase(""))
 				sheet1.setColumnWidth(m,10* 512);
 			sheet1.setDefaultColumnWidth(15);  
 			sheet1.setDefaultRowHeight((short) (2 * 256)); //设置默认行高，表示2个字符的高度
-			HSSFCell cell0 = row1.createCell((short) m);		
+			cell0=null;
+			cell0 = row1.createCell((short) m);		
 			cell0.setCellStyle(cellStyle);
 			cell0.setCellValue(title[m]);
 		}
+		HSSFRow row2=null;
+		HSSFCell cell=null;
 		for (int j = 1; j <= list.size(); j++) {
-		    HSSFRow row2 = sheet1.createRow((short) j);
+			row2=null;
+		    row2 = sheet1.createRow((short) j);
 		    for (int i = 0; i < title.length; i++) {
-		    	HSSFCell cell = row2.createCell((short) i);	
+		    	cell=null;
+		    	cell = row2.createCell((short) i);	
 //		    	if(title[i].equalsIgnoreCase("性别")||title[i].equalsIgnoreCase("民族")||title[i].equalsIgnoreCase("政治面貌")||title[i].equalsIgnoreCase("专家类别")){
 //		    		cell.setCellValue(String.valueOf(((Object[])list.get(j-1))[i].toString()));
 //		    	}else{

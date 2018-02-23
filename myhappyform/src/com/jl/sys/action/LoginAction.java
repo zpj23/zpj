@@ -23,6 +23,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -31,6 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.goldenweb.sys.util.FileHelper;
 import com.goldenweb.sys.util.IAction;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -454,4 +456,44 @@ public class LoginAction extends IAction{
         return request.getRemoteAddr();
     }
 	
+	
+//	@Action(value="jlLoginAction_downloadByPhone",results={
+//			@Result(type="json", params={"root","jsonData"})
+//       })
+//	public void  downloadApp() throws Exception {		
+//		String path = ServletActionContext.getServletContext().getRealPath("/download") + 
+//				"/考勤管理升级包.wgt";
+//		FileHelper.downloadFile(path, "考勤管理升级包.wgt", response);
+//		jsonData=path;		
+//	}
+//	
+//	
+//	/**
+//	 * 查看是否更新
+//	 * @Title checkUpdate
+//	 * @author zpj
+//	 * @time 2018-2-23 上午10:00:01
+//	 */
+//	@Action(value="jlLoginAction_checkUpdateByPhone",results={
+//			@Result(type="json", params={"root","jsonData"})
+//       })
+//	public void  checkUpdate(){
+//		Map retMap =new HashMap();
+//		double CurrentVersion=1.2;
+//		String version=request.getParameter("ver");
+//		if(CurrentVersion>Double.parseDouble(version)){
+//			//有更新
+//			retMap.put("msg",true);
+//			retMap.put("url",ServletActionContext.getServletContext().getRealPath("/download")+"/考勤管理升级包.wgt");
+//		}else{
+//			retMap.put("msg",false);
+//			retMap.put("url", "");
+//		}
+//		
+//		try {
+//			jsonWrite(retMap);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//	}
 }
