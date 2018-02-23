@@ -1,5 +1,7 @@
 package com.jl.sys.service.impl;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -123,18 +125,27 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 //		    	}
 		    }
 		}
+		OutputStream  output=null;
 		try {
 		    response.reset();
 		    response.setContentType("application/vnd.ms-excel;charset=utf-8");
 		    response.setHeader("Content-Disposition", "attachment;filename="
 			    + new String(("考勤信息表"+".xls").getBytes(), "iso-8859-1"));
-		    OutputStream  output = response.getOutputStream();
+		    output = response.getOutputStream();
 		    wb.write(output);
 		    output.flush();
-		    output.close();
+		    
 		} catch (Exception e) {
 		    e.printStackTrace();
 
+		}finally{
+			if(output!=null){
+				try {
+					output.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 	

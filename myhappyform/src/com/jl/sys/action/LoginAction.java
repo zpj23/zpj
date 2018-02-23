@@ -457,15 +457,15 @@ public class LoginAction extends IAction{
     }
 	
 	
-//	@Action(value="jlLoginAction_downloadByPhone",results={
-//			@Result(type="json", params={"root","jsonData"})
-//       })
-//	public void  downloadApp() throws Exception {		
-//		String path = ServletActionContext.getServletContext().getRealPath("/download") + 
-//				"/考勤管理升级包.wgt";
-//		FileHelper.downloadFile(path, "考勤管理升级包.wgt", response);
-//		jsonData=path;		
-//	}
+	@Action(value="jlLoginAction_downloadByPhone",results={
+			@Result(type="json", params={"root","jsonData"})
+       })
+	public void  downloadApp() throws Exception {		
+		String path = ServletActionContext.getServletContext().getRealPath("/download") + 
+				"/考勤管理.apk";
+		FileHelper.downloadFile(path, "考勤管理.apk", response);
+		jsonData=path;		
+	}
 //	
 //	
 //	/**
