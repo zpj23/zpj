@@ -6,7 +6,7 @@
 
     request.setCharacterEncoding( "utf-8" );
 	response.setHeader("Content-Type" , "text/html");
-	System.out.println("初始化----------");
+//	System.out.println("初始化----------");
 	String rootPath = application.getRealPath( "/" );
 // 	out.write( new MyActionEnter( request, rootPath ).exec() );
  	out.write( new ActionEnter( request, rootPath ).exec() );
