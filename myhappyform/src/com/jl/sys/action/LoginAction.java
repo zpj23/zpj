@@ -465,24 +465,10 @@ public class LoginAction extends IAction{
 			@Result(type="json", params={"root","jsonData"})
        })
 	public void  downloadApp() throws Exception {		
-		//request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()
 		String path = ServletActionContext.getServletContext().getRealPath("/download") + 
 				"/考勤管理.apk";
-//		String path=request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+"/download/考勤管理.apk";
 		FileHelper.downloadFile(path, "考勤管理.apk", response);
 		jsonData=path;
-////		String realPath = this.getServletContext().getRealPath("/download/张家界国家森林公园.JPG");//获取要下载的文件的绝对路径  
-////        String fileName = path.substring(path.lastIndexOf("\\")+1);//获取要下载的文件名  
-//        //设置content-disposition响应头控制浏览器以下载的形式打开文件，中文文件名要使用URLEncoder.encode方法进行编码，否则会出现文件名乱码  
-//        response.setHeader("content-disposition", "attachment;filename="+URLEncoder.encode("考勤管理.apk", "UTF-8"));  
-//        InputStream in = new FileInputStream("http://192.168.11.96:8080/download/考勤管理.apk");//获取文件输入流  
-//        int len = 0;  
-//        byte[] buffer = new byte[1024];  
-//        OutputStream out = response.getOutputStream();  
-//        while ((len = in.read(buffer)) > 0) {  
-//            out.write(buffer,0,len);//将缓冲区的数据输出到客户端浏览器  
-//        }  
-//        in.close();  
 	}
 	/**
 	 * 查看是否更新
@@ -495,9 +481,8 @@ public class LoginAction extends IAction{
        })
 	public void  checkUpdate(){
 		Map retMap =new HashMap();
-		double CurrentVersion=1.2;
 		String version=request.getParameter("ver");
-		if(!"1.2".equalsIgnoreCase(version)){
+		if(!"1.1".equalsIgnoreCase(version)){
 			
 //		if(CurrentVersion>Double.parseDouble(version)){
 			//有更新
