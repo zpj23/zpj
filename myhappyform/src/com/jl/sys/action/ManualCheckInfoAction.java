@@ -306,6 +306,7 @@ public class ManualCheckInfoAction extends IAction{
 		String shenhe=request.getParameter("shenhe");//审核状态
 		String tpage=request.getParameter("page");
 		String trows=request.getParameter("rows");
+		String lrrname=request.getParameter("lrrname");//录入人
 		if(null!=tpage&&!"".equalsIgnoreCase(tpage)){
 			page=Integer.parseInt(tpage);
 		}
@@ -321,6 +322,7 @@ public class ManualCheckInfoAction extends IAction{
 		param.put("sgqy", sgqy);
 		param.put("workcontent", workcontent);
 		param.put("shenhe", shenhe);
+		param.put("lrrname", lrrname);
 		Map map=mService.findList(user,page,rows,param);
 		List<UserInfo> list=(List<UserInfo>)map.get("list");
 		int countNumber=(Integer)map.get("count");

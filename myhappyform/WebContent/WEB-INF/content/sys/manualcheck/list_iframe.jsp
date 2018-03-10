@@ -178,7 +178,7 @@ function selectOneData(){
 
 
 
-function load(datemin,datemax,username,departmentid,sgxm,sgqy,workcontent,shenhe){
+function load(datemin,datemax,username,departmentid,sgxm,sgqy,workcontent,shenhe,lrrname){
 	datagrid.datagrid("load", { 
 		datemin:datemin,
 		datemax:datemax,
@@ -187,7 +187,8 @@ function load(datemin,datemax,username,departmentid,sgxm,sgqy,workcontent,shenhe
 		sgxm:sgxm,
 		sgqy:sgqy,
 		workcontent:workcontent,
-		shenhe:shenhe
+		shenhe:shenhe,
+		lrrname:lrrname
 	});
 }
 

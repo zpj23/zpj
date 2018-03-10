@@ -84,6 +84,9 @@ public class ManualInfoDaoImpl extends BaseDao<CheckInfo> implements ManualInfoD
 		if(null!=param.get("shenhe")&&!"".equalsIgnoreCase(param.get("shenhe").toString())){
 			sql.append(" and  a.shenhe =").append("'"+param.get("shenhe")+"'  ");
 		}
+		if(null!=param.get("lrrname")&&!"".equalsIgnoreCase(param.get("lrrname").toString())){
+			sql.append(" and  u.username like ").append("'"+param.get("lrrname")+"%'  ");
+		}
 		//判断是否是管理员用户
 		if(!user.getIsAdmin().equalsIgnoreCase("1")){
 			//不是管理员
@@ -96,7 +99,7 @@ public class ManualInfoDaoImpl extends BaseDao<CheckInfo> implements ManualInfoD
 	
 	public int findCount(UserInfo user,Map<String,String> param){
 		StringBuffer sql = new StringBuffer();
-		sql.append(" select count(id) from CheckInfo where 1=1  ");
+		sql.append(" select count(a.id) from jl_check_info a left join jl_user_info u on a.createuserid=u.id where 1=1  ");
 		if(null!=param.get("datemin")&&!"".equalsIgnoreCase(param.get("datemin").toString())){
 			sql.append(" and workdate >= ").append("'"+param.get("datemin")+"'");
 		}
@@ -121,12 +124,15 @@ public class ManualInfoDaoImpl extends BaseDao<CheckInfo> implements ManualInfoD
 		if(null!=param.get("shenhe")&&!"".equalsIgnoreCase(param.get("shenhe").toString())){
 			sql.append(" and  shenhe =").append("'"+param.get("shenhe")+"'  ");
 		}
+		if(null!=param.get("lrrname")&&!"".equalsIgnoreCase(param.get("lrrname").toString())){
+			sql.append(" and  u.username like ").append("'"+param.get("lrrname")+"%'  ");
+		}
 		//判断是否是管理员用户
 		if(!user.getIsAdmin().equalsIgnoreCase("1")){
 			//不是管理员
 			sql.append(" and  createuserid="+user.getId());
 		}
-		int count=this.findListCount(sql.toString(), null);
+		int count=this.findListCountBySql(sql.toString(), null);
 		return count;
 		
 	}

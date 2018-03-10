@@ -110,10 +110,10 @@ function admin_shenhe(id){
 }
 
 function searchInfo(){
-	list_iframe.contentWindow.load($('#datemin').val(),$('#datemax').val(),$('#username').val(),$('#departmentid').val(),$('#sgxm').val(),$('#sgqy').val(),$("#workcontent").val(),$("#shenhe").val());
+	list_iframe.contentWindow.load($('#datemin').val(),$('#datemax').val(),$('#username').val(),$('#departmentid').val(),$('#sgxm').val(),$('#sgqy').val(),$("#workcontent").val(),$("#shenhe").val(),$("#lrrname").val());
 }
 function tolist(){
-	list_iframe.contentWindow.load($('#datemin').val(),$('#datemax').val(),$('#username').val(),$('#departmentid').val(),$('#sgxm').val(),$('#sgqy').val(),$("#workcontent").val(),$("#shenhe").val());
+	list_iframe.contentWindow.load($('#datemin').val(),$('#datemax').val(),$('#username').val(),$('#departmentid').val(),$('#sgxm').val(),$('#sgqy').val(),$("#workcontent").val(),$("#shenhe").val(),$("#lrrname").val());
 }
 
 function dataimport(){
@@ -165,10 +165,11 @@ function analysis(){
 		<input type="text" placeholder="施工日期开始" onfocus="WdatePicker({maxDate:'#F{$dp.$D(\'datemax\')}'})" id="datemin" name="datemin" class="input-text Wdate" style="width:120px;">
 		-
 		<input type="text" placeholder="施工日期结束" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'datemin\')}'})" id="datemax" name="datemax" class="input-text Wdate" style="width:120px;">
-		<input type="text" class="input-text" style="width:150px" placeholder="施工人员名称" id="username" name="username" />
-		<input type="text" class="input-text" style="width:170px" placeholder="施工项目" id="sgxm" name="sgxm" />
-		<input type="text" class="input-text" style="width:170px" placeholder="施工区域" id="sgqy" name="sgqy" />
-		<input type="text" class="input-text" style="width:150px" placeholder="工作内容" id="workcontent" name="workcontent" />
+		<input type="text" class="input-text" style="width:120px" placeholder="施工人员名称" id="username" name="username" />
+		<input type="text" class="input-text" style="width:120px" placeholder="施工项目" id="sgxm" name="sgxm" />
+		<input type="text" class="input-text" style="width:120px" placeholder="施工区域" id="sgqy" name="sgqy" />
+		<input type="text" class="input-text" style="width:120px" placeholder="工作内容" id="workcontent" name="workcontent" />
+		<input type="text" class="input-text" style="width:120px" placeholder="录入人" id="lrrname" name="lrrname" />
 		<span class="select-box inline">
 			<select class="select" size="1" name="departmentid" id="departmentid" value="" onchange="" datatype="*" nullmsg="请选择所属部门！">
 	          <option value="" selected>所属区域</option>
