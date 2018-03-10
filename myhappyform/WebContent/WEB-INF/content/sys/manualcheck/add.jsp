@@ -98,6 +98,12 @@ function closethisWin(){
 	parent.tolist();
 	parent.layer.close(index);
 }
+
+function closeWin(){
+	var index = parent.layer.getFrameIndex(window.name);
+	parent.layer.close(index);
+}
+
 </script>
 </head>
 <body style="overflow: hidden">
@@ -183,8 +189,8 @@ function closethisWin(){
     </div>
     <div class="row cl">
       <div class="col-9 col-offset-3">
-<!--       	<input class="btn btn-primary radius"  type="button" value="提 交" id="tijiao"  /> -->
-        <input class="btn btn-primary radius" type="submit" id="tijiao"  value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+        <input class="btn btn-primary radius" type="submit" id="tijiao"  value="&nbsp;&nbsp;提&nbsp;&nbsp;交&nbsp;&nbsp;">
+      	<input class="btn btn-danger radius"  type="button" value="&nbsp;&nbsp;关   闭&nbsp;&nbsp;" id="backButton" onclick="closeWin()" />
       </div>
     </div>
   </form>
