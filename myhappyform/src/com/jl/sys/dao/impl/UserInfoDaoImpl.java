@@ -18,11 +18,11 @@ public class UserInfoDaoImpl extends BaseDao<UserInfo> implements UserInfoDao{
 	public List<Object[]> findLogin(String loginname,String pwd,boolean flag){		
 		try {
 				if(flag){
-					String sql =" select a.id,a.username from jl_user_info a where a.loginname=? and  a.password = ?";
+					String sql =" select a.id,a.username from jl_user_info a where a.loginname=? and  a.password = ? and a.isdel=0 ";
 					return this.findBySql(sql, loginname,pwd);
 				}else{
 					pwd = MD5.md5s(loginname+"{"+pwd+"}");//加密 规则      用户名{密码}
-					String sql =" select a.id,a.username from jl_user_info a where a.loginname=? and  a.password = ?";
+					String sql =" select a.id,a.username from jl_user_info a where a.loginname=? and  a.password = ? and a.isdel=0 ";
 					return this.findBySql(sql, loginname,pwd);
 				}
 			} catch (Exception e) {

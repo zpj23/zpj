@@ -139,7 +139,7 @@ function initInfo(){
 	 		type: "POST",
 			   url: "jlManualCheckInfoAction_initChartByArr",
 			   async:true,
-			   data: "departmentid="+code+"&departmentname="+name,
+			   data: "departmentid="+code+"&departmentname="+name+"&datemin=2018",
 			   success: function(arr){
 				  var datas=$.parseJSON(arr);
 				  for(var str in datas){
