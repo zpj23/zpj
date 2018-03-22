@@ -28,7 +28,11 @@ $(document).ready(function(){
 		columns : [ [ {
 			field : 'name',
 			title : '物资名称',
-			width : 200
+			width : 100
+		},{
+			field : 'suppliername',
+			title : '供应商名称',
+			width : 100
 		},{
 			field : 'type',
 			title : '规格型号',

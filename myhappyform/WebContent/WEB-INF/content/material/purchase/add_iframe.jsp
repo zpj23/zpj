@@ -43,9 +43,14 @@ function initGoods(){
 				return str;
 			}
 		},{
+			field : 'suppliername',
+			title : '供应商',
+			width : 50
+			
+		},{
 			field : 'price',
 			title : '单价',
-			width : 150,
+			width : 80,
 			formatter: function(value, rowData, rowIndex){
 				
 				var str=rowData.price+"元/"+rowData.unit;
@@ -58,15 +63,8 @@ function initGoods(){
 			editor:{
 				type:'text'	
 			}
-		},{
-			field : 'unit',
-			title : '单位',
-			width : 50,
-			formatter: function(value, rowData, rowIndex){
-				var str="/"+rowData.unit;
-				return str;
-			}
-		},{
+		},
+		{
 			field : 'supplierid',
 			title : '提供商id',
 			hidden:true,
@@ -75,7 +73,7 @@ function initGoods(){
 		},{
 			field : 'caoz',
 			title : '操作',
-			width : 100,
+			width : 50,
 			formatter: function(value, rowData, rowIndex){
 				
 				var str= ' <a title="选择" href="javascript:;" onclick="addGoods('+rowData.id+')"  style="text-decoration:none">选择</a>';

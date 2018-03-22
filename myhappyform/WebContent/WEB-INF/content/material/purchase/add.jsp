@@ -30,7 +30,6 @@
 function saveSuccess(){
 	layer.msg('保存成功!',{icon: 1,time:3000});
 	//list_frame.src="jlPurchaseInfoAction_toiframe";
-	alert("保存成功");
 	location.replace(location.href);
 }
 function savefail(){

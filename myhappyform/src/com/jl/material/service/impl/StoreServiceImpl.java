@@ -72,7 +72,11 @@ public class StoreServiceImpl implements StoreService {
 		List list=storeDao.findInOutDetail(user,page,rows,param);
 		Map map=new HashMap();
 		map.put("list", list);
-		map.put("count", list.size());
+		if(null!=list){
+			map.put("count", list.size());
+		}else{
+			map.put("count", 0);
+		}
 		return map;
 	}
 

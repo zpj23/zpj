@@ -16,7 +16,10 @@ $(document).ready(function(){
 			
 		},
 		rowStyler:function(rowIndex,rowData){  
-            return 'height:55px;';  
+			if(rowData.state=="1"){
+				return 'color:red';
+			}
+            
         },
 		idField : 'id',
 		frozenColumns : [ [ {
