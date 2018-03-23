@@ -175,7 +175,7 @@ function addGoods(id){
 	row.name=rowData.name;
 	row.price=rowData.price+"元/"+rowData.unit;
 	row.num=rowData.num+""+rowData.unit;
-	row.jine=(rowData.price*rowData.num)+"元";
+	row.jine=(rowData.price*rowData.num).toFixed(2)+"元";
 	row.supplierid=rowData.supplierid;
 	row.caoz='<a title="移除" href="javascript:;" onclick="removeGoods('+rowData+')"  style="text-decoration:none">移除</a>';
 	var datas=$('#choosedgrid').datagrid('getData').rows;
@@ -196,8 +196,9 @@ function totalSummary(){
 	for(var i=0;i<datas.length;i++){
 		var jine=datas[i].jine;
 		jine =jine.substring(0,jine.length-1);
-		total+=parseFloat(jine);
+		total+=(parseFloat(jine));
 	}
+	
 	try{
 		purchase_deal.setJine(total);
 	}catch(e){

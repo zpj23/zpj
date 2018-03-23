@@ -54,9 +54,9 @@
     </div>
    
     <div class="row cl">
-      <label class="form-label col-3"><span class="c-red">*</span>联系电话：</label>
+      <label class="form-label col-3"><span class="c-red"></span>联系电话：</label>
       <div class="formControls col-5">
-        <input type="text" class="input-text" value="${supper.phone}" placeholder="" id="phone" name="supper.phone"  datatype="m" nullmsg="联系电话不能为空">
+        <input type="text" class="input-text" value="${supper.phone}" placeholder="" id="phone" name="supper.phone"  nullmsg="">
       </div>
       <div class="col-4"> </div>
     </div>
@@ -74,7 +74,7 @@
     <div class="row cl">
       <label class="form-label col-3">备注：</label>
       <div class="formControls col-5">
-        <textarea name="supper.remark" id="remark" value="${supper.remark}" cols="" rows=""  class="textarea"  placeholder="说点什么...最少输入2个字符" datatype="*1-100" dragonfly="true" nullmsg="备注不能为空！" onKeyUp="textarealength(this,100)"></textarea>
+        <textarea name="supper.remark" id="remark" value="${supper.remark}" cols="" rows=""  class="textarea"  placeholder="说点什么...最少输入2个字符"  dragonfly="true" nullmsg="" onKeyUp="textarealength(this,100)"></textarea>
         <p class="textarea-numberbar"><em class="textarea-length">0</em>/100</p>
       </div>
       <div class="col-4"> </div>
