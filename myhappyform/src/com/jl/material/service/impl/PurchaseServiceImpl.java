@@ -41,14 +41,12 @@ public class PurchaseServiceImpl implements PurchaseService {
 	public void savePurchaseDetail(String id,String data){
 		List<Map<String,String>> list = JsonListTransfer(data);
 		Map temp=new HashMap();
-		DecimalFormat decimalFormat=new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
 		for(int i=0;i<list.size();i++){
 			temp=list.get(i);
 			PurchaseDetail pd = new PurchaseDetail();
 			pd.setGoodsid(Integer.parseInt((String)temp.get("id")));
 			String price=(String)temp.get("price");
-			float p=Float.parseFloat(price.split("元/")[0]);
-			pd.setGoodsprice(p);
+			pd.setGoodsprice(Double.parseDouble(price.split("元/")[0]));
 			pd.setNum(Integer.parseInt(((String)temp.get("num")).replace(price.split("元/")[1], "")));
 			pd.setSupplierid(Integer.parseInt((String)temp.get("supplierid")));
 			pd.setPurchaseid(id);

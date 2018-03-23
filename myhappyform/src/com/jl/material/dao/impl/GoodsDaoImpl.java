@@ -40,7 +40,7 @@ public class GoodsDaoImpl extends BaseDao<Goods> implements GoodsDao{
 			sql.append(" and createtime <= ").append("'"+param.get("datemax")+"'");
 		}
 		if(null!=param.get("username")&&!"".equalsIgnoreCase(param.get("username").toString())){
-			sql.append(" and ( name like ").append("'%"+param.get("username")+"%' or contactname like'%"+param.get("username")+"%' or address like'%"+param.get("username")+"%' or remark like'%"+param.get("username")+"%' ) ");
+			sql.append(" and ( name like ").append("'%"+param.get("username")+"%' or suppliername like'%"+param.get("username")+"%'  ) ");
 		}
 		sql.append(" order by createtime desc");
 		List list=this.findMapObjBySql(sql.toString(), null, page, rows);
@@ -58,7 +58,7 @@ public class GoodsDaoImpl extends BaseDao<Goods> implements GoodsDao{
 			sql.append(" and createtime <= ").append("'"+param.get("datemax")+"'");
 		}
 		if(null!=param.get("username")&&!"".equalsIgnoreCase(param.get("username").toString())){
-			sql.append(" and ( name like ").append("'%"+param.get("username")+"%' or contactname like'%"+param.get("username")+"%' or address like'%"+param.get("username")+"%' or remark like'%"+param.get("username")+"%' ) ");
+			sql.append(" and ( name like ").append("'%"+param.get("username")+"%' or suppliername like'%"+param.get("username")+"%'  ) ");
 		}
 		int count=this.findListCount(sql.toString(), null);
 		return count;

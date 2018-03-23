@@ -60,7 +60,7 @@
     <div class="row cl">
       <label class="form-label col-3"><span class="c-red">*</span>单价（元）：</label>
       <div class="formControls col-5">
-        <input type="text" class="input-text" value="${goods.price}" placeholder="" id="price" name="goods.price"  datatype="*2-5" nullmsg="单价不能为空">
+        <input type="text" class="input-text" value="${goods.price}" placeholder="" id="price" name="goods.price"  datatype="*1-5" nullmsg="单价不能为空">
       </div>
       <div class="col-4"> </div>
     </div>

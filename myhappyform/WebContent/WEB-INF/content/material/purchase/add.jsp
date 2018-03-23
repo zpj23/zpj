@@ -28,7 +28,7 @@
 <title>采购管理</title>
 <script type="text/javascript">
 function saveSuccess(){
-	layer.msg('保存成功!',{icon: 1,time:3000});
+	layer.msg('保存成功!',{icon: 1,time:5000});
 	//list_frame.src="jlPurchaseInfoAction_toiframe";
 	location.replace(location.href);
 }

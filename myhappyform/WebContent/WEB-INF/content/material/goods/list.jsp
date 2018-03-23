@@ -87,8 +87,8 @@ function tolist(){
 		<input type="text" onfocus="WdatePicker({maxDate:'#F{$dp.$D(\'datemax\')}'})" id="datemin" name="datemin" class="input-text Wdate" style="width:120px;">
 		-
 		<input type="text" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'datemin\')}'})" id="datemax" name="datemax" class="input-text Wdate" style="width:120px;">
-		<input type="text" class="input-text" style="width:250px" placeholder="输入供应商" id="username" name="username">
-		<button type="button"  class="btn btn-success" onclick="searchInfo();" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 搜供应商</button>
+		<input type="text" class="input-text" style="width:250px" placeholder="请输入" id="username" name="username">
+		<button type="button"  class="btn btn-success" onclick="searchInfo();" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 搜物资</button>
 	</div>
 	<div class="cl pd-5 bg-1 bk-gray mt-20">
 	 <span class="l"><a style="display:none;" href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a href="javascript:;" style="color:white;" onclick="admin_add('添加物资','jlGoodsInfoAction_toAddGoods','800','650')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加物资</a></span> <!-- <span class="r">共有数据：<strong>${count}</strong> 条</span> -->

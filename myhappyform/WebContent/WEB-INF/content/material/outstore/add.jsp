@@ -46,15 +46,14 @@ $(function(){
 			
 		},
 		callback:function(data){
-			console.log(data);
 // 			$.Showmsg();
 			if(data.map.status=="1"){
 				$.Hidemsg();
-				layer.msg('保存成功!',{icon: 1,time:1000});
-        location.replace(location.href);
+				layer.msg('保存成功!',{icon: 1,stime:5000});
+       			location.replace(location.href);
 // 	  			closethisWin();
 			}else{
-				layer.msg('保存失败!',{icon: 5,time:1000});
+				layer.msg('保存失败!',{icon: 5,time:5000});
 			}
 		//	setTimeout('closethisWin()', 1000); 
 		}
