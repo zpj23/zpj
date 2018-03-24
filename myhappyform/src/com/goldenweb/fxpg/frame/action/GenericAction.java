@@ -317,13 +317,13 @@ public class GenericAction extends IAction {
 	 */
 	@Action("linkchecked")
 	public void linkchecked() throws IOException, SQLException {
-		String curuserid = getCurrentUser().getId().toString();
-		Map map = dynamicFormService.queryForm(tableName_, tableGuid_, blobObjArray_);
-		List<Object[]> list = dynamicFormService.findLinkinfo(tableName_,tableGuid_,curuserid,"guanzhu");
+//		String curuserid = getCurrentUser().getId().toString();
+//		Map map = dynamicFormService.queryForm(tableName_, tableGuid_, blobObjArray_);
+//		List<Object[]> list = dynamicFormService.findLinkinfo(tableName_,tableGuid_,curuserid,"guanzhu");
 		Boolean bool = false;
-		if(list!=null){
-			bool = true;
-		}
+//		if(list!=null){
+//			bool = true;
+//		}
 		
 		ServletActionContext.getResponse().setCharacterEncoding("utf-8");
 		ServletActionContext.getResponse().getWriter().print(bool); 

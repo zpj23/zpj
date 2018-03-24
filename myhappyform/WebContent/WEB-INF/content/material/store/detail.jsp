@@ -64,6 +64,10 @@ $(document).ready(function(){
 					return "出库";
 				}
 			}
+		},{
+			field : 'createtime',
+			title : '操作时间',
+			width : 100
 		}
 		
 		] ]

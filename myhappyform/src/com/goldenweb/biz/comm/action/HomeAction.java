@@ -100,7 +100,7 @@ public class HomeAction extends IAction {
 		
 		
 		//门户配置
-		portalConfig = portalService.getPortalConfig4User(this.getCurrentUser().getId()+"");
+//		portalConfig = portalService.getPortalConfig4User(this.getCurrentUser().getId()+"");
 		//portalConfig = portalService.getPortalConfig4User("1");
 		if(portalConfig == null)
 		{
@@ -182,8 +182,8 @@ public class HomeAction extends IAction {
 		}
 
 		portalConfig = new PortalConfig();
-		portalConfig.setOid(this.getCurrentUser().getId()+"");
-		portalConfig.setObjectType(this.getCurrentUser().getLoginname());
+//		portalConfig.setOid(this.getCurrentUser().getId()+"");
+//		portalConfig.setObjectType(this.getCurrentUser().getLoginname());
 		portalConfig.setColumnNum(configInfo.split(":").length);
 		portalConfig.setObjectInfo(objectInfo);
 		portalConfig.setObjectConfigInfo(configInfo);
@@ -220,8 +220,8 @@ public class HomeAction extends IAction {
 		}
 		
 		portalConfig = new PortalConfig();
-		portalConfig.setOid(this.getCurrentUser().getId()+"");
-		portalConfig.setObjectType(this.getCurrentUser().getLoginname());
+//		portalConfig.setOid(this.getCurrentUser().getId()+"");
+//		portalConfig.setObjectType(this.getCurrentUser().getLoginname());
 		portalConfig.setColumnNum(columnNum_int);
 		portalConfig.setObjectInfo(porlets);
 		portalConfig.setObjectConfigInfo(configInfo);
@@ -252,7 +252,7 @@ public class HomeAction extends IAction {
 		allPorlets = porlets;
 		
 		//门户配置
-		portalConfig = portalService.getPortalConfig4User(this.getCurrentUser().getId()+"");
+//		portalConfig = portalService.getPortalConfig4User(this.getCurrentUser().getId()+"");
 		
 		//portalConfig = portalService.getPortalConfig4User("1");
 		if(portalConfig == null)

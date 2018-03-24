@@ -38,6 +38,10 @@ $(document).ready(function(){
 			title : '数量',
 			width : 50
 		},{
+			field : 'unit',
+			title : '单位',
+			width : 50
+		},{
 			field : 'price',
 			title : '库存金额',
 			width : 50,

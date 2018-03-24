@@ -24,7 +24,7 @@ public class IAction extends ActionSupport implements ServletRequestAware,Servle
 	// 实例GSON
 	public Gson gson = new GsonBuilder().setDateFormat(Constant.TOFULLFORMAT).create();
 	
-	private  SysUserinfo CurrentUser;//当前session用户
+//	private  SysUserinfo CurrentUser;//当前session用户
 	// = (SysUserinfo) request.getSession().getAttribute("iuserinfo");
 	
 	public Integer page = 1; // 当前页数
@@ -94,10 +94,10 @@ public class IAction extends ActionSupport implements ServletRequestAware,Servle
 	public void setJorder(String jorder) {
 		Jorder = jorder;
 	}
-	public SysUserinfo getCurrentUser() {
-		CurrentUser= (SysUserinfo) request.getSession().getAttribute("iuserinfo");
-		return CurrentUser;
-	}
+//	public SysUserinfo getCurrentUser() {
+//		CurrentUser= (SysUserinfo) request.getSession().getAttribute("iuserinfo");
+//		return CurrentUser;
+//	}
 	/*public void setCurrentUser(SysUserinfo currentUser) {
 		CurrentUser = currentUser;
 	}*/

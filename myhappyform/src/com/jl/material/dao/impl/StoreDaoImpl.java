@@ -44,7 +44,7 @@ public class StoreDaoImpl  extends BaseDao<Store> implements StoreDao{
 	
 	public List findInOutDetail(UserInfo user,int page,int rows,Map<String,String> param){
 		StringBuffer sql = new StringBuffer();
-		sql.append("select s.*, g.name as goodsname,g.suppliername,s.type from inoutStore s left join jl_material_goods_info g on g.id=s.goodsid where 1=1 and  ");
+		sql.append("select s.*, g.name as goodsname,g.suppliername,g.type as type1 from inoutStore s left join jl_material_goods_info g on g.id=s.goodsid where 1=1 and  ");
 		if(null!=param.get("goodsid")&&!"".equalsIgnoreCase(param.get("goodsid").toString())){
 			sql.append(" goodsid='"+param.get("goodsid")+"' ");
 		}
@@ -56,7 +56,7 @@ public class StoreDaoImpl  extends BaseDao<Store> implements StoreDao{
 	public List findList(UserInfo user, int page, int rows,
 			Map<String, String> param) {
 		StringBuffer sql = new StringBuffer();
-		sql.append("select s.*,g.name as goodsname,g.suppliername from jl_material_store_info s left join jl_material_goods_info g on s.goodsid=g.id where 1=1  ");
+		sql.append("select s.*,g.name as goodsname,g.suppliername,g.unit from jl_material_store_info s left join jl_material_goods_info g on s.goodsid=g.id where 1=1  ");
 		if(null!=param.get("datemin")&&!"".equalsIgnoreCase(param.get("datemin").toString())){
 			sql.append(" and s.updatetime >= ").append("'"+param.get("datemin")+"'");
 		}

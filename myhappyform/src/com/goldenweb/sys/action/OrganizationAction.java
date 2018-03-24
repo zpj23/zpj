@@ -67,7 +67,7 @@ public class OrganizationAction extends IAction{
 	public void showOrgJson() throws IOException {
 		String id = request.getParameter("id");
 		if("".equals(id) || id==null){
-			id = String.valueOf(this.getCurrentUser().getMainOrgid());
+//			id = String.valueOf(this.getCurrentUser().getMainOrgid());
 		}
 		htmlValue = organizationService.showOrgJson(id);		
 		this.jsonWrite(htmlValue);		
@@ -84,7 +84,7 @@ public class OrganizationAction extends IAction{
 		try {
 			//first 为1级部门数据
 			// request.setAttribute("orgjson", organizationService.findDeptJson("first"));
-			request.setAttribute("orgjson", organizationService.findDeptJson(String.valueOf(this.getCurrentUser().getMainOrgid())));
+//			request.setAttribute("orgjson", organizationService.findDeptJson(String.valueOf(this.getCurrentUser().getMainOrgid())));
 			request.setAttribute("tagnodeid", request.getParameter("openid"));//要展开的节点id
 			return "success";
 		} catch (Exception e) {

@@ -149,6 +149,13 @@ public class StoreAction extends IAction {
 	public String toList(){
 		return "success";
 	}
+	/**
+	 *	库存查询详细
+	 * @Title jlStoreAction_getDetailBygoodsid
+	 * @return
+	 * @author zpj
+	 * @time 2018-3-24 上午9:23:21
+	 */
 	@Action(value="jlStoreAction_getDetailBygoodsid",results={
 			@Result(name="success",location="material/store/detail.jsp"),
 			@Result(name="error",location="/login.jsp")

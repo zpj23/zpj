@@ -45,8 +45,8 @@ public class FashionHomeAction extends IAction {
 		Page pageObject = new Page(page, rows);
 		
 		
-		List<ToDo> swList = dynamicFormService.showHomeWaitList("weiwxx", pageObject, this.getCurrentUser());
-		todoList.addAll(swList);
+//		List<ToDo> swList = dynamicFormService.showHomeWaitList("weiwxx", pageObject, this.getCurrentUser());
+//		todoList.addAll(swList);
 		request.setAttribute("todoList", todoList);
 		
 		return SUCCESS;
