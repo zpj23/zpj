@@ -177,6 +177,11 @@ public class RoleInfoServiceImpl implements RoleInfoService {
 		return roleUserDao.findRoleIdByUserId(userid);
 	}
 	
+	public void deleteRoleUserByUserid(String userid){
+		roleUserDao.deleteRoleUserByUserid(userid);
+		
+	}
+	
 	public List<Object[]> findRoleIdByDepartmentId(int deparmentid){
 		return roleDepartmentDao.findRoleIdByDepartmentId(deparmentid);
 	}

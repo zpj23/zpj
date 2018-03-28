@@ -128,4 +128,14 @@ public interface RoleInfoService {
 	 * @time 2016-5-11 上午10:35:21
 	 */
 	public List<Object[]> findRoleIdByDepartmentId(int deparmentid);
+	
+	
+	/**
+	 * 删除用户时根据用户id删除对应用户关联角色表的数据
+	 * @Title deleteRoleUserByUserid
+	 * @param userid
+	 * @author zpj
+	 * @time 2018-3-27 下午4:04:40
+	 */
+	public void deleteRoleUserByUserid(String userid);
 }

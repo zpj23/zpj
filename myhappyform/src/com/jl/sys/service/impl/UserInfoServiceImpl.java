@@ -14,6 +14,7 @@ import com.goldenweb.fxpg.frame.tools.MD5;
 import com.jl.common.BaseService;
 import com.jl.sys.dao.UserInfoDao;
 import com.jl.sys.pojo.UserInfo;
+import com.jl.sys.service.RoleInfoService;
 import com.jl.sys.service.UserInfoService;
 
 @Service
@@ -22,6 +23,8 @@ public class UserInfoServiceImpl extends BaseService<UserInfo> implements UserIn
 	@Autowired
 	private UserInfoDao jlUserInfoDao;
 	
+	@Autowired
+	private RoleInfoService jlRoleInfoService;
 	
 	public UserInfo findLogin(UserInfo user,boolean flag) {		
 		try {
@@ -70,7 +73,14 @@ public class UserInfoServiceImpl extends BaseService<UserInfo> implements UserIn
 	}
 	@MethodLog2(remark="删除用户信息",type="删除")
 	public void delUser(int id){
-		jlUserInfoDao.delUser(id);
+		try{
+			jlUserInfoDao.delUser(id);
+			//删除用户的同时删除对应用户角色关联表信息
+			jlRoleInfoService.deleteRoleUserByUserid(String.valueOf(id));
+		}catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException();
+		}
 	}
 	
 	@Override

@@ -50,8 +50,7 @@ $(document).ready(function(){
 			title : '总金额',
 			width : 100,
 			formatter: function(value, rowData, rowIndex){
-				console.log(rowData);
-				var str= parseFloat(rowData.goodsprice)*parseInt(rowData.num)+"元";
+				var str= (parseFloat(rowData.goodsprice)*parseInt(rowData.num)).toFixed(2)+"元";
 				return str;
 			}
 		}

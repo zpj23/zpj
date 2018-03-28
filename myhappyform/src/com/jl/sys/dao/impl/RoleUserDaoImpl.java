@@ -31,4 +31,12 @@ public class RoleUserDaoImpl extends  BaseDao<UserRoleInfo> implements RoleUserD
 		String sql="select ro.id,ro.rolecode,ro.rolename from jl_user_role_info ur left join jl_role_info ro on ur.roleid=ro.id where  ur.userid="+userid ;
 		return this.findBySql2(sql);
 	}
+	
+	public void deleteRoleUserByUserid(String userid){
+		String sql="select * from jl_user_role_info where userid='"+userid+"'";
+		List<Object[]> list=this.findBySql2(sql);
+		if(null!=list&&list.size()>0){
+			this.executeSql(" delete from jl_user_role_info where userid='"+userid+"'");
+		}
+	}
 }

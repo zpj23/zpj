@@ -13,4 +13,6 @@ public interface RoleUserDao {
 	
 	
 	List<Object[]> findRoleIdByUserId(int userid);
+	
+	public void deleteRoleUserByUserid(String userid);
 }
