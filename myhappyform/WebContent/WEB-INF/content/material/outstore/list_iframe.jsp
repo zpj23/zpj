@@ -42,7 +42,7 @@ $(document).ready(function(){
 			title : '出库金额',
 			width : 50,
 			formatter: function(value, rowData, rowIndex){
-				var str=parseFloat(rowData.num)*parseFloat(rowData.price)+"元";
+				var str=(parseFloat(rowData.num)*parseFloat(rowData.price)).toFixed(2)+"元";
 				return str;
 			}	
 		}

@@ -62,7 +62,11 @@ $(document).ready(function(){
 		},{
 			field : 'workcontent',
 			title : '工作内容',
-			width : 100
+			width : 100,
+			formatter:function(value,row){  
+		        var content = '<span title="' + value + '" class="easyui-tooltip">' + value + '</span>';  
+		        return content;  
+		    }  
 		},{
 			field : 'workduringtime',
 			title : '出勤时间（小时）',

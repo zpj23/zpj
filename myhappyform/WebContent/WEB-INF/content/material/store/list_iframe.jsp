@@ -46,7 +46,7 @@ $(document).ready(function(){
 			title : '库存金额',
 			width : 50,
 			formatter: function(value, rowData, rowIndex){
-				var str=parseFloat(rowData.num)*parseFloat(rowData.price);
+				var str=(parseFloat(rowData.num)*parseFloat(rowData.price)).toFixed(2)+"元";
 				return str;
 			}	
 		},{
