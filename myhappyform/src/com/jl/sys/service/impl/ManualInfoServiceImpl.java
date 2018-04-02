@@ -35,6 +35,7 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 	@MethodLog2(remark="保存考勤信息",type="新增/编辑")
 	public void saveInfo(CheckInfo cInfo){
 		try{
+			cInfo.setStaffname(cInfo.getStaffname().trim());
 			mDao.saveInfo(cInfo);
 		}catch (Exception e) {
 			e.printStackTrace();
