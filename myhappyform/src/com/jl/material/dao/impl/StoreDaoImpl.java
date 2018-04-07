@@ -66,6 +66,7 @@ public class StoreDaoImpl  extends BaseDao<Store> implements StoreDao{
 		if(null!=param.get("username")&&!"".equalsIgnoreCase(param.get("username").toString())){
 			sql.append(" and ( g.name like ").append("'%"+param.get("username")+"%' or g.suppliername like'%"+param.get("username")+"%' ) ");
 		}
+		sql.append(" order by s.updatetime desc");
 		List list=this.findMapObjBySql(sql.toString(), null, page, rows);
 		return list;
 	}

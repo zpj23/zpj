@@ -110,7 +110,7 @@ public class MaintainAction extends IAction {
 	@Action(value="jlMaintainAction_getMaintainListJson",
 			results={
 			@Result(type="json", params={"root","jsonData"})})
-	public void jlOutStoreAction_getOutStoreListJson(){
+	public void jlMaintainAction_getMaintainListJson(){
 		user = (UserInfo)request.getSession().getAttribute("jluserinfo");
 		String datemin=request.getParameter("datemin");//开始时间
 		String datemax=request.getParameter("datemax");//结束时间
