@@ -16,7 +16,7 @@ $(document).ready(function(){
 			
 		},
 		showFooter:true,
-		rowStyler:function(rowIndex,rowData){  
+		rowStyler:function(rowIndex,rowData){ 
 			if(rowData.shenhe=="0"){
 				return 'color:red';
 			}
@@ -82,11 +82,7 @@ $(document).ready(function(){
 		},{
 			field : 'remark',
 			title : '备注',
-			width : 50,
-			formatter:function(value,row){  
-		        var content = '<span title="' + value + '" class="easyui-tooltip">' + value + '</span>';  
-		        return content;  
-		    }  
+			width : 50 
 		},{
 			field : 'username',
 			title : '录入人',

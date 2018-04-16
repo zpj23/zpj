@@ -15,8 +15,14 @@ $(document).ready(function(){
 		queryParams : {
 			
 		},
-		rowStyler:function(rowIndex,rowData){  
-            return 'height:55px;';  
+		rowStyler:function(rowIndex,rowData){ 
+			var str=""; 
+			if(rowData.examinestate=="1"){
+				str="color:red;";
+			}else if(rowData.examinestate=="2"){
+				str="color:black;";
+			}
+            return str;  
         },
 		idField : 'id',
 		frozenColumns : [ [ {
