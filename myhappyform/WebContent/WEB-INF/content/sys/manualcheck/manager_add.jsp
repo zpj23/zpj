@@ -28,7 +28,6 @@ $(function(){
 				df=manager_iframe.contentWindow.transfer_to_par;
 			} 
 			$("#detailfileds").val(df);
-			console.log(df);
 			return true;
 		},
 		callback:function(data){
