@@ -134,16 +134,16 @@ public class LoginAction extends IAction{
 	public void jlLoginAction_phoneLogin(){
 		String username=request.getParameter("username");
 		String password=request.getParameter("password");
-		UserInfo luser=new UserInfo();
-		luser.setLoginname(username);
-		luser.setPassword(password);
-		luser=jlUserInfoService.findLogin(luser,false);
+		UserInfo tempUser=new UserInfo();
+		tempUser.setLoginname(username);
+		tempUser.setPassword(password);
+		UserInfo luser=jlUserInfoService.findLogin(tempUser,false);
 		
 		Map retMap =new HashMap();
 		retMap.put("msg",false);
 		
 		if(luser!=null){
-				luser.setPassword(password);
+//				luser.setPassword(password);
 				//根据登陆用户信息查询 根据user id信息查询用户所有的角色和部门所有的角色查询关联表对应角色
 				//如果用户角色和部门角色相同，则取一个，再以及角色对应的菜单信息，以及菜单对应的操作信息
 				// role的 id、rolecode、rolename   
@@ -173,6 +173,17 @@ public class LoginAction extends IAction{
 					luser.setIsAdmin("0");
 				}
 				request.getSession().setAttribute("jluserinfo",luser);
+				
+				String loginIP=getIp2(request);
+				LogInfo loginfo=new LogInfo();
+				loginfo.setId(UUID.randomUUID().toString());
+				loginfo.setCreatetime(new Date());
+				loginfo.setType("登陆");
+				loginfo.setDescription(DateHelper.getToday("yyyy-MM-dd HH:mm:ss")+"   "+luser.getUsername()+"  成功登陆系统"+",IP地址"+loginIP);
+				loginfo.setUserid(luser.getId());
+				loginfo.setUsername(luser.getUsername());
+				jlLogInfoService.logInfo(loginfo);
+				
 				retMap.put("data", luser);
 				retMap.put("msg",true);
 		}
