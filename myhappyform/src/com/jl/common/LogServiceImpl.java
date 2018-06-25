@@ -2,6 +2,7 @@ package com.jl.common;
 
 import java.lang.reflect.Method;
 import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
 
 import org.aspectj.lang.JoinPoint;
@@ -9,19 +10,25 @@ import org.aspectj.lang.ProceedingJoinPoint;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.goldenweb.sys.util.IAction;
 import com.jl.common.BaseService.MethodLog2;
 import com.jl.sys.dao.LogInfoDao;
 import com.jl.sys.pojo.LogInfo;
 import com.jl.sys.pojo.UserInfo;
 import com.jl.util.DateHelper;
 
+import org.apache.log4j.Logger;
 import org.apache.struts2.StrutsStatics;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.opensymphony.xwork2.ActionContext;
 
+import net.sf.json.JSONArray;
+
 
 public class LogServiceImpl{
+	
+	Logger logger=Logger.getLogger(LogServiceImpl.class);
 	
 	@Autowired
 	private LogInfoDao logDao;
@@ -34,38 +41,33 @@ public class LogServiceImpl{
     // 记录日志内容
     public Object  log2(ProceedingJoinPoint pjp) throws Throwable{
     	String methodName = pjp.getSignature().getName();
+    	 HttpServletRequest request=null;
     	if(checkMethod(methodName)){
 	        String clazzName = pjp.getTarget().getClass().getSimpleName();  
 	        	       
 	        ActionContext ac = ActionContext.getContext();
 	        UserInfo userinfo=null;
 	        if(ac!=null){
-		        HttpServletRequest request =(HttpServletRequest)ac.get(StrutsStatics.HTTP_REQUEST);
+	        	request=(HttpServletRequest)ac.get(StrutsStatics.HTTP_REQUEST);
 		        if(request!=null){
 			         userinfo = (UserInfo) request.getSession().getAttribute("jluserinfo");
 		        }
 	        }
 	        
-//	        SysLog loginfo = new SysLog();
-//	        loginfo.setId(UUID.randomUUID().toString());
-//	        loginfo.setOperateDate(new Date());
-//	        String type =getMthodType(pjp);
-//	        loginfo.setOperateType(type);
-//	        String remark = getMthodRemark(pjp);
-//	        
-//	        if(userinfo!=null){
-//		        loginfo.setOperateDescription(userinfo.getUsername()+"在"+DateHelper.getToday("yyyy-MM-dd HH:mm:ss")+""+remark);
-//		        loginfo.setOperatorId(userinfo.getId());
-//		        loginfo.setOperator(userinfo.getUsername());
-//	        }
 	        if(userinfo!=null){
+	        	request.getMethod();
+	        	Map map = request.getParameterMap();
+	            String reqType=request.getMethod();
+	            JSONArray json = JSONArray.fromObject(map);
+//	    		logger.error("请求类型"+reqType+",数据："+json.toString());
+	        	
 	        	LogInfo loginfo=new LogInfo();
 	        	loginfo.setId(UUID.randomUUID().toString());
 	        	loginfo.setCreatetime(new Date());
 	        	String type =getMthodType(pjp);
 	        	loginfo.setType(type);
 	        	String remark = getMthodRemark(pjp);
-	        	loginfo.setDescription(DateHelper.getToday("yyyy-MM-dd HH:mm:ss")+"   "+userinfo.getUsername()+"  在"+remark);
+	        	loginfo.setDescription(("操作类型："+remark+", 请求类型："+reqType+", 数据："+json.toString()));
 	        	loginfo.setUserid(userinfo.getId());
 	        	loginfo.setUsername(userinfo.getUsername());
 	        	logDao.saveLog(loginfo);

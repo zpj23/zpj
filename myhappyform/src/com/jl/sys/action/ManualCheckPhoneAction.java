@@ -26,14 +26,13 @@ package com.jl.sys.action;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -49,6 +48,8 @@ import com.jl.sys.service.ManualInfoService;
 import com.jl.sys.service.UserInfoService;
 import com.jl.util.DateHelper;
 
+import net.sf.json.JSONArray;
+
 
 /**
  * @ClassName ManualCheckPhoneAction
@@ -62,6 +63,7 @@ import com.jl.util.DateHelper;
 @Component("jlManualCheckPhoneAction")
 @ParentPackage("json-default")
 public class ManualCheckPhoneAction extends IAction {
+	Logger logger=Logger.getLogger(ManualCheckPhoneAction.class);
 	
 	@Autowired
 	private UserInfoService jlUserInfoService;
@@ -275,6 +277,15 @@ public class ManualCheckPhoneAction extends IAction {
 			//编辑状态
 			editFlag=true;
 		}
+		/************记录数据***开始*******/
+		request.getMethod();
+    	Map map = request.getParameterMap();
+        String reqType=request.getMethod();
+        JSONArray json = JSONArray.fromObject(map);
+		logger.error("请求类型"+reqType+",数据："+json.toString());
+		/************记录数据***结束*******/
+		
+		
 		String sgxm=request.getParameter("sgxm");
 		String sgqy=request.getParameter("sgqy");
 		String workdate=request.getParameter("workdate");

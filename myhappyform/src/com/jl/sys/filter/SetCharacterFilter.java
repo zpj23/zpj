@@ -10,7 +10,10 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
 
+import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -35,7 +38,6 @@ public class SetCharacterFilter implements Filter{
 	protected String endcoding = null;
 	protected FilterConfig filterConfig = null;
 
-
 	@Override
 	public void destroy() {		
 		this.endcoding = null;
@@ -49,7 +51,10 @@ public class SetCharacterFilter implements Filter{
 		//设置字符集  
 		servletRequest.setCharacterEncoding(endcoding);
 		HttpServletRequest req = (HttpServletRequest) servletRequest;
+		HttpServletResponse resp=(HttpServletResponse)servletResponse;
+		resp.setHeader("Access-Control-Allow-Origin", "*"); //解决跨域问题
 		String str_href = this.getCurrentURL(req); 
+		
 		try{
 			
 			boolean isLogin = false;

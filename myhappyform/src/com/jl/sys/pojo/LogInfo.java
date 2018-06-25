@@ -35,7 +35,7 @@ public class LogInfo implements java.io.Serializable{
 	public void setCreatetime(Date createtime) {
 		this.createtime = createtime;
 	}
-	@Column(name = "description",  length=500)
+	@Column(name = "description",  length=4000)
 	public String getDescription() {
 		return description;
 	}
