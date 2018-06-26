@@ -43,7 +43,9 @@ import org.springframework.stereotype.Component;
 
 import com.goldenweb.sys.util.IAction;
 import com.jl.sys.pojo.CheckInfo;
+import com.jl.sys.pojo.LogInfo;
 import com.jl.sys.pojo.UserInfo;
+import com.jl.sys.service.LogInfoService;
 import com.jl.sys.service.ManualInfoService;
 import com.jl.sys.service.UserInfoService;
 import com.jl.util.DateHelper;
@@ -64,6 +66,9 @@ import net.sf.json.JSONArray;
 @ParentPackage("json-default")
 public class ManualCheckPhoneAction extends IAction {
 	Logger logger=Logger.getLogger(ManualCheckPhoneAction.class);
+	
+	@Autowired
+	public LogInfoService jlLogInfoService;
 	
 	@Autowired
 	private UserInfoService jlUserInfoService;
@@ -130,6 +135,25 @@ public class ManualCheckPhoneAction extends IAction {
 		user = getCurrentUser(request);
 		String id=request.getParameter("id");
 		CheckInfo copyInfo=mService.findById(id);
+		/************记录数据***开始*******/
+		try{
+			request.getMethod();
+	    	Map map = request.getParameterMap();
+	        String reqType=request.getMethod();
+	        JSONArray json = JSONArray.fromObject(map);
+			LogInfo loginfo=new LogInfo();
+			loginfo.setId(UUID.randomUUID().toString());
+			loginfo.setCreatetime(new Date());
+			loginfo.setType("jlManualCheckPhoneAction_docopy");
+			loginfo.setDescription(("操作类型：保存考勤信息, 请求类型："+reqType+", 数据："+json.toString()));
+			loginfo.setUserid(user.getId());
+			loginfo.setUsername(user.getUsername());
+			jlLogInfoService.logInfo(loginfo);
+		}catch (Exception e) {
+			System.out.println("日志记录失败");
+			e.printStackTrace();
+		}
+		/************记录数据***结束*******/
 		Map map =new HashMap();
 		try {
 			CheckInfo tmpci=new CheckInfo();
@@ -278,11 +302,23 @@ public class ManualCheckPhoneAction extends IAction {
 			editFlag=true;
 		}
 		/************记录数据***开始*******/
-		request.getMethod();
-    	Map map = request.getParameterMap();
-        String reqType=request.getMethod();
-        JSONArray json = JSONArray.fromObject(map);
-		logger.error("请求类型"+reqType+",数据："+json.toString());
+		try{
+			request.getMethod();
+	    	Map map = request.getParameterMap();
+	        String reqType=request.getMethod();
+	        JSONArray json = JSONArray.fromObject(map);
+			LogInfo loginfo=new LogInfo();
+			loginfo.setId(UUID.randomUUID().toString());
+			loginfo.setCreatetime(new Date());
+			loginfo.setType("jlManualCheckPhoneAction_saveInfoByPhone");
+			loginfo.setDescription(("操作类型：保存考勤信息, 请求类型："+reqType+", 数据："+json.toString()));
+			loginfo.setUserid(user.getId());
+			loginfo.setUsername(user.getUsername());
+			jlLogInfoService.logInfo(loginfo);
+		}catch (Exception e) {
+			System.out.println("日志记录失败");
+			e.printStackTrace();
+		}
 		/************记录数据***结束*******/
 		
 		

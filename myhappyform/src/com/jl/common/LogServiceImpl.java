@@ -55,22 +55,27 @@ public class LogServiceImpl{
 	        }
 	        
 	        if(userinfo!=null){
-	        	request.getMethod();
-	        	Map map = request.getParameterMap();
-	            String reqType=request.getMethod();
-	            JSONArray json = JSONArray.fromObject(map);
-//	    		logger.error("请求类型"+reqType+",数据："+json.toString());
 	        	
-	        	LogInfo loginfo=new LogInfo();
-	        	loginfo.setId(UUID.randomUUID().toString());
-	        	loginfo.setCreatetime(new Date());
-	        	String type =getMthodType(pjp);
-	        	loginfo.setType(type);
-	        	String remark = getMthodRemark(pjp);
-	        	loginfo.setDescription(("操作类型："+remark+", 请求类型："+reqType+", 数据："+json.toString()));
-	        	loginfo.setUserid(userinfo.getId());
-	        	loginfo.setUsername(userinfo.getUsername());
-	        	logDao.saveLog(loginfo);
+	        	try{
+	        		request.getMethod();
+	        		Map map = request.getParameterMap();
+	        		String reqType=request.getMethod();
+	        		JSONArray json = JSONArray.fromObject(map);
+	        		
+	        		LogInfo loginfo=new LogInfo();
+	        		loginfo.setId(UUID.randomUUID().toString());
+	        		loginfo.setCreatetime(new Date());
+	        		String type =getMthodType(pjp);
+	        		loginfo.setType(type);
+	        		String remark = getMthodRemark(pjp);
+	        		loginfo.setDescription(("操作类型："+remark+", 请求类型："+reqType+", 数据："+json.toString()));
+	        		loginfo.setUserid(userinfo.getId());
+	        		loginfo.setUsername(userinfo.getUsername());
+	        		logDao.saveLog(loginfo);
+	        	}catch (Exception e) {
+	        		logger.error("记录日志失败");
+					e.printStackTrace();
+				}
 	        }
     	}
         // 调用目标对象的方法  
