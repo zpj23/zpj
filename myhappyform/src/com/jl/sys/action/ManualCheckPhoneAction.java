@@ -145,7 +145,7 @@ public class ManualCheckPhoneAction extends IAction {
 			loginfo.setId(UUID.randomUUID().toString());
 			loginfo.setCreatetime(new Date());
 			loginfo.setType("jlManualCheckPhoneAction_docopy");
-			loginfo.setDescription(("操作类型：保存考勤信息, 请求类型："+reqType+", 数据："+json.toString()));
+			loginfo.setDescription(("操作类型：手机端复制考勤信息, 请求类型："+reqType+", 数据："+json.toString()));
 			loginfo.setUserid(user.getId());
 			loginfo.setUsername(user.getUsername());
 			jlLogInfoService.logInfo(loginfo);
@@ -311,7 +311,7 @@ public class ManualCheckPhoneAction extends IAction {
 			loginfo.setId(UUID.randomUUID().toString());
 			loginfo.setCreatetime(new Date());
 			loginfo.setType("jlManualCheckPhoneAction_saveInfoByPhone");
-			loginfo.setDescription(("操作类型：保存考勤信息, 请求类型："+reqType+", 数据："+json.toString()));
+			loginfo.setDescription(("操作类型：手机端保存考勤信息，"+editFlag+", 请求类型："+reqType+", 数据："+json.toString()));
 			loginfo.setUserid(user.getId());
 			loginfo.setUsername(user.getUsername());
 			jlLogInfoService.logInfo(loginfo);

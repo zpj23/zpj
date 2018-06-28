@@ -118,7 +118,7 @@ public class ManualCheckInfoAction extends IAction{
 			loginfo.setId(UUID.randomUUID().toString());
 			loginfo.setCreatetime(new Date());
 			loginfo.setType("jlManualCheckInfoAction_doManageAdd");
-			loginfo.setDescription(("操作类型：保存考勤信息, 请求类型："+reqType+", 数据："+json.toString()));
+			loginfo.setDescription(("操作类型：电脑端批量保存考勤信息, 请求类型："+reqType+", 数据："+json.toString()));
 			loginfo.setUserid(user.getId());
 			loginfo.setUsername(user.getUsername());
 			jlLogInfoService.logInfo(loginfo);
@@ -206,7 +206,7 @@ public class ManualCheckInfoAction extends IAction{
 			loginfo.setId(UUID.randomUUID().toString());
 			loginfo.setCreatetime(new Date());
 			loginfo.setType("jlManualCheckInfoAction_doAdd");
-			loginfo.setDescription(("操作类型：保存考勤信息, 请求类型："+reqType+", 数据："+json.toString()));
+			loginfo.setDescription(("操作类型：电脑端保存考勤信息，"+editFlag+", 请求类型："+reqType+", 数据："+json.toString()));
 			loginfo.setUserid(user.getId());
 			loginfo.setUsername(user.getUsername());
 			jlLogInfoService.logInfo(loginfo);
@@ -663,23 +663,23 @@ public class ManualCheckInfoAction extends IAction{
 //	}
 	
 	
-	@Action(value="jlManualCheckInfoAction_delInfoByIdByPhone",
-	results={
-	@Result(type="json", params={"root","jsonData"})})
-	public void delInfoByIdByPhone(){
-		user = getCurrentUser(request);
-		String id = request.getParameter("delId");
-		if(null!=id&&!id.equalsIgnoreCase("")){
-			mService.delInfo(id);
-			try {
-				Map map =new HashMap();
-				map.put("msg", true);
-				this.jsonWrite(map);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+//	@Action(value="jlManualCheckInfoAction_delInfoByIdByPhone",
+//	results={
+//	@Result(type="json", params={"root","jsonData"})})
+//	public void delInfoByIdByPhone(){
+//		user = getCurrentUser(request);
+//		String id = request.getParameter("delId");
+//		if(null!=id&&!id.equalsIgnoreCase("")){
+//			mService.delInfo(id);
+//			try {
+//				Map map =new HashMap();
+//				map.put("msg", true);
+//				this.jsonWrite(map);
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//	}
 	
 	/**
 	 * 获取手机当前登录对象信息

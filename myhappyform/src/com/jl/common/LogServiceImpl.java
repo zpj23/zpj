@@ -57,10 +57,10 @@ public class LogServiceImpl{
 	        if(userinfo!=null){
 	        	
 	        	try{
-	        		request.getMethod();
-	        		Map map = request.getParameterMap();
-	        		String reqType=request.getMethod();
-	        		JSONArray json = JSONArray.fromObject(map);
+//	        		request.getMethod();
+//	        		Map map = request.getParameterMap();
+//	        		String reqType=request.getMethod();
+//	        		JSONArray json = JSONArray.fromObject(map);
 	        		
 	        		LogInfo loginfo=new LogInfo();
 	        		loginfo.setId(UUID.randomUUID().toString());
@@ -68,7 +68,8 @@ public class LogServiceImpl{
 	        		String type =getMthodType(pjp);
 	        		loginfo.setType(type);
 	        		String remark = getMthodRemark(pjp);
-	        		loginfo.setDescription(("操作类型："+remark+", 请求类型："+reqType+", 数据："+json.toString()));
+	        		loginfo.setDescription(("操作类型："+remark));
+//	        		loginfo.setDescription(("操作类型："+remark+", 请求类型："+reqType+", 数据："+json.toString()));
 	        		loginfo.setUserid(userinfo.getId());
 	        		loginfo.setUsername(userinfo.getUsername());
 	        		logDao.saveLog(loginfo);
