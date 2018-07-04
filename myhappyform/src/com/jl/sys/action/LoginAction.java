@@ -183,8 +183,14 @@ public class LoginAction extends IAction{
 				loginfo.setUserid(luser.getId());
 				loginfo.setUsername(luser.getUsername());
 				jlLogInfoService.logInfo(loginfo);
-				
-				retMap.put("data", luser);
+				UserInfo retInfo=new UserInfo();
+				retInfo.setUsername(luser.getUsername());
+				retInfo.setLoginname(luser.getLoginname());
+				retInfo.setDepartmentcode(luser.getDepartmentcode());
+				retInfo.setIsAdmin(luser.getIsAdmin());
+				retInfo.setId(luser.getId());
+				retInfo.setPassword(password);
+				retMap.put("data", retInfo);
 				retMap.put("msg",true);
 		}
 		
