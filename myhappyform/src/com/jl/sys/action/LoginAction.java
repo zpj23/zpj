@@ -1,13 +1,8 @@
 package com.jl.sys.action;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -35,15 +30,12 @@ import org.apache.struts2.convention.annotation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
 import com.goldenweb.sys.util.FileHelper;
 import com.goldenweb.sys.util.IAction;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.jl.material.service.PurchaseService;
 import com.jl.sys.pojo.DepartmentInfo;
 import com.jl.sys.pojo.LogInfo;
-import com.jl.sys.pojo.MenuInfo;
 import com.jl.sys.pojo.UserInfo;
 import com.jl.sys.service.DepartmentInfoService;
 import com.jl.sys.service.LogInfoService;
@@ -52,6 +44,7 @@ import com.jl.sys.service.RoleInfoService;
 import com.jl.sys.service.UserInfoService;
 import com.jl.util.ClientTool;
 import com.jl.util.DateHelper;
+import com.jl.util.StringFormat;
 
 /**
  * @Description: 登陆后台功能
@@ -481,7 +474,13 @@ public class LoginAction extends IAction{
 	@Action(value="jlLoginAction_downloadByPhone",results={
 			@Result(type="json", params={"root","jsonData"})
        })
-	public void  downloadApp() throws Exception {		
+	public void  downloadApp() throws Exception {
+		LogInfo loginfo=new LogInfo();
+		loginfo.setId(UUID.randomUUID().toString());
+		loginfo.setCreatetime(new Date());
+		loginfo.setType("download");
+		loginfo.setDescription("操作类型：下载app");
+		jlLogInfoService.logInfo(loginfo);
 		String path = ServletActionContext.getServletContext().getRealPath("/download") + 
 				"/考勤管理.apk";
 		FileHelper.downloadFile(path, "考勤管理.apk", response);
@@ -498,14 +497,27 @@ public class LoginAction extends IAction{
        })
 	public void  checkUpdate(){
 		Map retMap =new HashMap();
-		String version=request.getParameter("ver");
-		if(!"1.1".equalsIgnoreCase(version)){
-			
-//		if(CurrentVersion>Double.parseDouble(version)){
+		String current_version=request.getParameter("ver");
+		user =getCurrentUser(request);
+		double latestVersion=StringFormat.getVersion();
+		double ov=StringFormat.toDouble(current_version);
+		LogInfo loginfo=new LogInfo();
+		loginfo.setId(UUID.randomUUID().toString());
+		loginfo.setCreatetime(new Date());
+		loginfo.setType("check");
+		loginfo.setDescription("操作类型：检查更新,当前app版本："+ov+",最新版本："+latestVersion);
+		if(null!=user){
+			loginfo.setUserid(user.getId());
+			loginfo.setUsername(user.getUsername());
+		}
+		jlLogInfoService.logInfo(loginfo);
+//		if(!"1.3".equalsIgnoreCase(latestVersion)){
+		if(latestVersion>ov){
 			//有更新
 			retMap.put("msg",true);
 			retMap.put("url","jlLoginAction_downloadByPhone");
 			retMap.put("filename", "考勤管理.apk");
+			
 		}else{
 			retMap.put("msg",false);
 			retMap.put("url", "");
@@ -516,5 +528,25 @@ public class LoginAction extends IAction{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public UserInfo getCurrentUser(HttpServletRequest request){
+		UserInfo user = (UserInfo)request.getSession().getAttribute("jluserinfo");
+//		Enumeration enumeration =request.getSession().getAttributeNames();//获取session中所有的键值对
+//		while(enumeration.hasMoreElements()){
+//            String AddFileName=enumeration.nextElement().toString();//获取session中的键值
+//            UserInfo value=(UserInfo)request.getSession().getAttribute(AddFileName);//根据键值取出session中的值
+//            System.out.println(AddFileName);
+//            System.out.println(value.getLoginname());
+//            //String FileName= (String)session.getAttribute("AddFileName");
+//        }
+		if(user==null){
+			String id= request.getParameter("loginId");
+			user=jlUserInfoService.findById(Integer.parseInt(id));
+			String isAdmin=request.getParameter("isAdmin");
+			user.setIsAdmin(isAdmin);
+			request.getSession().setAttribute("jluserinfo",user);
+		}
+		return user;
 	}
 }
