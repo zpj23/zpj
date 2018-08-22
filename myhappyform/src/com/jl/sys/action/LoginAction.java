@@ -500,28 +500,32 @@ public class LoginAction extends IAction{
 		String current_version=request.getParameter("ver");
 		user =getCurrentUser(request);
 		double latestVersion=StringFormat.getVersion();
-		double ov=StringFormat.toDouble(current_version);
+		try{
+			double ov=StringFormat.toDouble(current_version);
+			if(latestVersion>ov){
+				//有更新
+				retMap.put("msg",true);
+				retMap.put("url","jlLoginAction_downloadByPhone");
+				retMap.put("filename", "考勤管理.apk");
+				
+			}else{
+				retMap.put("msg",false);
+				retMap.put("url", "");
+			}
+		}catch (Exception e) {
+			retMap.put("msg",false);
+			retMap.put("url", "");
+		}
 		LogInfo loginfo=new LogInfo();
 		loginfo.setId(UUID.randomUUID().toString());
 		loginfo.setCreatetime(new Date());
 		loginfo.setType("check");
-		loginfo.setDescription("操作类型：检查更新,当前app版本："+ov+",最新版本："+latestVersion);
+		loginfo.setDescription("操作类型：检查更新,当前app版本："+current_version+",最新版本："+latestVersion);
 		if(null!=user){
 			loginfo.setUserid(user.getId());
 			loginfo.setUsername(user.getUsername());
 		}
 		jlLogInfoService.logInfo(loginfo);
-//		if(!"1.3".equalsIgnoreCase(latestVersion)){
-		if(latestVersion>ov){
-			//有更新
-			retMap.put("msg",true);
-			retMap.put("url","jlLoginAction_downloadByPhone");
-			retMap.put("filename", "考勤管理.apk");
-			
-		}else{
-			retMap.put("msg",false);
-			retMap.put("url", "");
-		}
 		
 		try {
 			jsonWrite(retMap);
