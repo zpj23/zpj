@@ -498,7 +498,7 @@ public class LoginAction extends IAction{
 	public void  checkUpdate(){
 		Map retMap =new HashMap();
 		String current_version=request.getParameter("ver");
-		user =getCurrentUser(request);
+//		user =getCurrentUser(request);
 		double latestVersion=StringFormat.getVersion();
 		try{
 			double ov=StringFormat.toDouble(current_version);
@@ -521,10 +521,10 @@ public class LoginAction extends IAction{
 		loginfo.setCreatetime(new Date());
 		loginfo.setType("check");
 		loginfo.setDescription("操作类型：检查更新,当前app版本："+current_version+",最新版本："+latestVersion);
-		if(null!=user){
-			loginfo.setUserid(user.getId());
-			loginfo.setUsername(user.getUsername());
-		}
+//		if(null!=user){
+//			loginfo.setUserid(user.getId());
+//			loginfo.setUsername(user.getUsername());
+//		}
 		jlLogInfoService.logInfo(loginfo);
 		
 		try {
