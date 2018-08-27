@@ -328,6 +328,9 @@ public class ManualCheckPhoneAction extends IAction {
 		String staffnames=request.getParameter("staffname");
 		String workduringtime=request.getParameter("workduringtime");
 		String overtime=request.getParameter("overtime");
+		if(null==overtime||overtime.equalsIgnoreCase("")||overtime.equalsIgnoreCase("undefined")){
+			overtime="0";
+		}
 		String workcontent=request.getParameter("workcontent");
 		String remark=request.getParameter("remark");
 		String departmentname=request.getParameter("departmentname");
