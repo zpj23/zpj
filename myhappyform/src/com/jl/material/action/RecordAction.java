@@ -17,8 +17,11 @@ import org.springframework.stereotype.Component;
 
 import com.goldenweb.sys.util.IAction;
 import com.jl.material.pojo.RecordInfo;
+import com.jl.material.pojo.RecordInfoDetail;
 import com.jl.material.service.RecordService;
 import com.jl.sys.pojo.UserInfo;
+
+import net.sf.json.JSONArray;
 
 @Namespace("/")
 @Scope("prototype")
@@ -51,6 +54,22 @@ public class RecordAction extends IAction{
 		return "success";
 	}
 	
+	/**
+	 * 新增时 页面 的datagrid
+	 * @Title toListRecordDetail
+	 * @return
+	 * @author zpj
+	 * @time 2018年8月30日 下午4:14:29
+	 */
+	@Action(value="jlRecordInfoAction_toListRecordDetail",results={
+			@Result(name="success",location="material/receiveRecord/detail.jsp"),
+			@Result(name="error",location="/login.jsp")
+	})
+	public String toListRecordDetail(){
+		request.setAttribute("rid", request.getParameter("rid"));
+		return "success";
+	}
+	
 	
 	@Action(value="jlRecordInfoAction_toiframe",results={
 			@Result(name="success",location="material/receiveRecord/list_iframe.jsp"),
@@ -58,6 +77,50 @@ public class RecordAction extends IAction{
 	})
 	public String toiframe(){
 		return "success";
+	}
+	
+	
+	
+	/**
+	 * 查询每单的详细信息
+	 * @Title getRecordsDetailListJson
+	 * @author zpj
+	 * @time 2018年8月30日 下午3:30:55
+	 */
+	@Action(value="jlRecordInfoAction_getRecordsDetailListJson",
+	results={
+	@Result(type="json", params={"root","jsonData"})})
+	public void getRecordsDetailListJson(){
+		user = (UserInfo)request.getSession().getAttribute("jluserinfo");
+		String tpage=request.getParameter("page");
+		String trows=request.getParameter("rows");
+		if(null!=tpage&&!"".equalsIgnoreCase(tpage)){
+			page=Integer.parseInt(tpage);
+		}
+		if(null!=trows&&!"".equalsIgnoreCase(trows)){
+			rows=Integer.parseInt(trows);
+		}
+		Map<String,String> param=new HashMap<String,String>();
+		param.put("rid", request.getParameter("rid"));
+		
+		Map map=recordService.findRecordsDetailList(user,page,100,param);
+		List list=(List)map.get("list");
+		int countNumber=(Integer)map.get("count");
+		if(list!=null&&list.size()>0){
+			  StringBuffer str =new StringBuffer();
+			  str.append("{\"total\":\"").append(countNumber).append("\",\"rows\":");
+			  String lstr=gson.toJson(list);
+			  str.append(lstr);
+			  str.append("}");
+			  jsonData= str.toString();
+		}else{
+			jsonData="[]";
+		}
+		try {
+			this.jsonWrite(jsonData);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -131,7 +194,26 @@ public class RecordAction extends IAction{
 			@Result(type="json", params={"root","jsonData"})})
 	public void saveRecord(){
 		int m=recordService.saveRecord(recordInfo);
+		String detailfields=request.getParameter("detailfileds");
 		try {
+			
+			//不管编辑还是新增，之前都先删一遍关联表对应的关联信息
+			recordService.delRecordDetailByRecordId(recordInfo.getId());
+			
+			JSONArray jsonArr = JSONArray.fromObject(detailfields);
+			RecordInfoDetail rid=null;
+			net.sf.json.JSONObject temp=null;
+			for(int n=0;n<jsonArr.size();n++){
+				temp=(net.sf.json.JSONObject)jsonArr.get(n);
+				rid=new RecordInfoDetail();
+				rid.setId(UUID.randomUUID().toString());
+				rid.setgName(temp.getString("gName"));
+				rid.setgNumber(temp.getString("gNumber"));
+				rid.setRecordId(recordInfo.getId());
+				recordService.saveDetail(rid);
+			}
+			temp=null;
+			rid=null;
 			JSONObject job=new JSONObject();
 			if(m==1){
 				job.put("status","y");
@@ -158,6 +240,7 @@ public class RecordAction extends IAction{
 		int m=0;
 		if(null!=id&&!id.equalsIgnoreCase("")){
 			m=recordService.delRecord(id);
+			recordService.delRecordDetailByRecordId(id);
 		}
 		try {
 			this.jsonWrite(m);

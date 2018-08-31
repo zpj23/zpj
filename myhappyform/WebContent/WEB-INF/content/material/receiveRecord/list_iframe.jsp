@@ -6,6 +6,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title></title>
+<script type="text/javascript" src="js/EasyUI/EasyUI1.3.6/datagrid-detailview.js"></script>
+
 <script type="text/javascript">
 var datagrid;
 $(document).ready(function(){
@@ -49,23 +51,36 @@ $(document).ready(function(){
 			}
 		}
 		
-		] ]
+		] ],
+		view: detailview,
+		detailFormatter:function(index,row){//严重注意喔
+			return '<div"><table id="ddv-' + index + '" ></table></div>';
+		},
+		onExpandRow: function(index,row){//嵌套第一层，严重注意喔
+			var ddv = $(this).datagrid('getRowDetail',index).find('#ddv-'+index);//严重注意喔
+			ddv.datagrid({
+				url:'jlRecordInfoAction_getRecordsDetailListJson?rid='+row.id,
+				autoRowHeight:true,
+				fitColumns:true,//改变横向滚动条
+				singleSelect:false,//去掉选中效果
+				rownumbers:true,
+				loadMsg:'',
+//					height:'auto',
+				columns:[[
+					{field:'gName',title:'物品名称',width:100},
+					{field:'gNumber',title:'数量',width:100}
+				]]
+			});
+			$('#dg').datagrid('fixDetailRowHeight',index);
+		}
 	});
 });
 
-/*管理员-启停用*/
-function admin_ss(flag,id){
-	if(flag=="1"){//停用
-		parent.admin_start(id);
-	}else if(flag=="0"){//启用
-		parent.admin_stop(id);
-	}
-}
-/****编辑用户****/
+// /****编辑用户****/
 function admin_edit(id){
 	parent.admin_edit('编辑记录','jlRecordAction_toAddRecord?id='+id,'800','650');
 }
-/*****删除用户*****/
+ /*****删除用户*****/
 function admin_del(id){
 	parent.admin_del(id);
 }
@@ -77,10 +92,14 @@ function load(datemin,datemax,username){
 		username:username
 	});
 }
+	
 
 </script>
 </head>
 <body>
+
+
+
 <table id="datagrid" fit="true" fitColumns="true"
 				style="height: auto; width: auto;" toolbar="" title=""
 				pageSize="${ipagesize}" pageList="${ipagelist}"

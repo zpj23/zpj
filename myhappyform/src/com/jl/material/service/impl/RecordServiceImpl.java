@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 
 import com.jl.common.BaseService.MethodLog2;
 import com.jl.material.dao.RecordDao;
+import com.jl.material.dao.RecordDetailDao;
 import com.jl.material.pojo.RecordInfo;
+import com.jl.material.pojo.RecordInfoDetail;
 import com.jl.material.service.RecordService;
 import com.jl.sys.pojo.UserInfo;
 @Service
@@ -18,6 +20,17 @@ import com.jl.sys.pojo.UserInfo;
 public class RecordServiceImpl implements RecordService {
 	@Autowired
 	public RecordDao recordDao;
+	@Autowired
+	public RecordDetailDao recordDetailDao;
+	
+	public Map findRecordsDetailList(UserInfo user,int page,int rows,Map<String,String> param){
+		List list=recordDetailDao.findList(user,page,rows,param);
+		int count=recordDetailDao.findCount(user,param); 
+		Map map=new HashMap();
+		map.put("list", list);
+		map.put("count", count);
+		return map;
+	}
 	
 	@Override
 	public Map findList(UserInfo user, int page, int rows,
@@ -42,4 +55,13 @@ public class RecordServiceImpl implements RecordService {
 	public int saveRecord(RecordInfo supper) {
 		return recordDao.saveRecord(supper);
 	}
+	
+	public int saveDetail(RecordInfoDetail rid){
+		return recordDetailDao.saveDetail(rid);
+	}
+	
+	public void delRecordDetailByRecordId(String recordId){
+		recordDetailDao.delRecordDetailByRecordId(recordId);
+	}
+	
 }

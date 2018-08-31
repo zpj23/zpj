@@ -24,6 +24,18 @@ $(function(){
 			{
 		tiptype:2,		
 		ajaxPost:true,
+		beforeSubmit:function(curform){
+			var df="";
+			try{
+				recordDetail.tempSaveData();
+				df=recordDetail.transfer_to_par;
+			}catch(e){
+				recordDetail.contentWindow.tempSaveData();
+				df=recordDetail.contentWindow.transfer_to_par;
+			} 
+			$("#detailfileds").val(df);
+			return true;
+		},
 		callback:function(data){
 			if(data.map.status=="y"){
 				$.Hidemsg();
@@ -62,6 +74,9 @@ $(function(){
 		   }
 	});
 	changeDep();
+	var rid="${recordInfo.id}";
+	document.getElementById('recordDetail').src="jlRecordInfoAction_toListRecordDetail?rid="+rid;
+	
 });
 
 //获取当前时间
@@ -90,7 +105,7 @@ function closethisWin(){
 }
 </script>
 </head>
-<body style="overflow: hidden">
+<body style="overflow: auto">
 <div >
   <form action="jlRecordAction_saveRecord" name="form1" method="post" class="form form-horizontal" id="form1">
     <input type="hidden" id="id" name="recordInfo.id" value="${recordInfo.id}" />
@@ -140,6 +155,16 @@ function closethisWin(){
       </div>
       <div class="col-4"> </div>
     </div>
+    <div class="row cl">
+      <label class="form-label col-3">清单列表：</label>
+      <div class="formControls col-7">
+      		<input type="hidden" id="detailfileds" name="detailfileds" value="" />
+           <iframe id="recordDetail" name="recordDetail" src="" width="100%" height="300" frameborder="0"></iframe>
+      </div>
+      <div class="col-4"> </div>
+    </div>
+    
+    
     <div class="row cl">
       <div class="col-9 col-offset-3">
 <!--       	<input class="btn btn-primary radius"  type="button" value="提 交" id="tijiao"  /> -->
