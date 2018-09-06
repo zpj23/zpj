@@ -82,7 +82,11 @@ $(document).ready(function(){
 		},{
 			field : 'remark',
 			title : '备注',
-			width : 50 
+			width : 50 ,
+			formatter:function(value,row){  
+		        var content = '<span title="' + value + '" class="easyui-tooltip">' + value + '</span>';  
+		        return content;  
+		    }
 		},{
 			field : 'username',
 			title : '录入人',
