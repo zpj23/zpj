@@ -479,11 +479,21 @@ public class LoginAction extends IAction{
 		loginfo.setId(UUID.randomUUID().toString());
 		loginfo.setCreatetime(new Date());
 		loginfo.setType("download");
-		loginfo.setDescription("操作类型：下载app");
-		jlLogInfoService.logInfo(loginfo);
 		String path = ServletActionContext.getServletContext().getRealPath("/download") + 
 				"/考勤管理.apk";
-		FileHelper.downloadFile(path, "考勤管理.apk", response);
+		try{
+			boolean flag= FileHelper.downloadFile(path, "考勤管理.apk", response);
+			if(flag){
+				loginfo.setDescription("下载app成功");
+			}else{
+				loginfo.setDescription("下载app失败");
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+			loginfo.setDescription("下载app失败");
+		}finally {
+			jlLogInfoService.logInfo(loginfo);
+		}
 		jsonData=path;
 	}
 	/**
