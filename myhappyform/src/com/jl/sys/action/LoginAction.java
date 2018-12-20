@@ -134,7 +134,7 @@ public class LoginAction extends IAction{
 		
 		Map retMap =new HashMap();
 		retMap.put("msg",false);
-		
+		retMap.put("info","");
 		if(luser!=null){
 //				luser.setPassword(password);
 				//根据登陆用户信息查询 根据user id信息查询用户所有的角色和部门所有的角色查询关联表对应角色
@@ -160,33 +160,43 @@ public class LoginAction extends IAction{
 						rolecodeSet.add(dlist.get(j)[1]);
 					}
 				}
-				if(rolecodeSet.contains("ROLE_1462257894696")){//是管理员角色
-					luser.setIsAdmin("1");
+				if(rolecodeSet.isEmpty()){
+					retMap.put("info", "该用户未授权,无法登陆！");
+					retMap.put("msg",false);
 				}else{
-					luser.setIsAdmin("0");
+					if(rolecodeSet.contains("ROLE_1462257894696")){//是管理员角色
+						luser.setIsAdmin("1");
+					}else{//其他角色
+						luser.setIsAdmin("0");
+					}
+					retMap.put("info", "登陆成功！");
+					retMap.put("msg",true);
+					
+					request.getSession().setAttribute("jluserinfo",luser);
+					
+					String loginIP=getIp2(request);
+					LogInfo loginfo=new LogInfo();
+					loginfo.setId(UUID.randomUUID().toString());
+					loginfo.setCreatetime(new Date());
+					loginfo.setType("登陆");
+					loginfo.setDescription(DateHelper.getToday("yyyy-MM-dd HH:mm:ss")+"   "+luser.getUsername()+"  成功登陆系统"+",IP地址"+loginIP);
+					loginfo.setUserid(luser.getId());
+					loginfo.setUsername(luser.getUsername());
+					jlLogInfoService.logInfo(loginfo);
+					UserInfo retInfo=new UserInfo();
+					retInfo.setUsername(luser.getUsername());
+					retInfo.setLoginname(luser.getLoginname());
+					retInfo.setDepartmentcode(luser.getDepartmentcode());
+					retInfo.setIsAdmin(luser.getIsAdmin());
+					retInfo.setId(luser.getId());
+					retInfo.setPassword(password);
+					retMap.put("data", retInfo);
 				}
-				request.getSession().setAttribute("jluserinfo",luser);
 				
-				String loginIP=getIp2(request);
-				LogInfo loginfo=new LogInfo();
-				loginfo.setId(UUID.randomUUID().toString());
-				loginfo.setCreatetime(new Date());
-				loginfo.setType("登陆");
-				loginfo.setDescription(DateHelper.getToday("yyyy-MM-dd HH:mm:ss")+"   "+luser.getUsername()+"  成功登陆系统"+",IP地址"+loginIP);
-				loginfo.setUserid(luser.getId());
-				loginfo.setUsername(luser.getUsername());
-				jlLogInfoService.logInfo(loginfo);
-				UserInfo retInfo=new UserInfo();
-				retInfo.setUsername(luser.getUsername());
-				retInfo.setLoginname(luser.getLoginname());
-				retInfo.setDepartmentcode(luser.getDepartmentcode());
-				retInfo.setIsAdmin(luser.getIsAdmin());
-				retInfo.setId(luser.getId());
-				retInfo.setPassword(password);
-				retMap.put("data", retInfo);
-				retMap.put("msg",true);
+		}else{
+			retMap.put("info", "用户名或密码错误!");
+			retMap.put("msg",false);
 		}
-		
 		try {
 			jsonWrite(retMap);
 		} catch (IOException e) {
