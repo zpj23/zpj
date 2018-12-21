@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,14 +24,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jl.common.BaseService.MethodLog2;
+import com.jl.sys.dao.HistoryStaffNameDao;
 import com.jl.sys.dao.ManualInfoDao;
 import com.jl.sys.pojo.CheckInfo;
+import com.jl.sys.pojo.HistoryStaffname;
 import com.jl.sys.pojo.UserInfo;
 import com.jl.sys.service.ManualInfoService;
 @Service
 public class ManualInfoServiceImpl implements ManualInfoService {
 	@Autowired
 	private ManualInfoDao mDao;
+	@Autowired
+	private HistoryStaffNameDao hsDao;
 	
 	@MethodLog2(remark="保存考勤信息",type="新增/编辑")
 	public void saveInfo(CheckInfo cInfo){
@@ -41,6 +46,11 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 			e.printStackTrace();
 			throw new RuntimeException();  
 		}
+		HistoryStaffname hs=new HistoryStaffname();
+		hs.setId(UUID.randomUUID().toString());
+		hs.setStaffName(cInfo.getStaffname());
+		hs.setUserId(cInfo.getCreateuserid());
+		hsDao.saveHistoryStaffName(hs);
 	}
 	
 	public Map findList(UserInfo user,int page,int rows,Map<String,String> param){
@@ -70,6 +80,11 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 		map.put("zgs", wzgs+ozgs);
 		return map;
 	}
+	
+	public List findStaffNameList(UserInfo user){
+		return hsDao.findStaffNameList(user.getId());
+	}
+	
 	
 	public CheckInfo findById(String id){
 		return mDao.findById(id);

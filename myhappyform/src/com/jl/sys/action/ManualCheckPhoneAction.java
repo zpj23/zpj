@@ -27,6 +27,7 @@ package com.jl.sys.action;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -120,7 +121,25 @@ public class ManualCheckPhoneAction extends IAction {
 		
 	}
 	
-	
+	/**
+	 * 查询选择人员的员工列表历史输入过的人员姓名记录
+	 * @Title findStaffNameByPhone
+	 * @author zpj
+	 * @time 2018年12月21日 下午1:30:27
+	 */
+	@Action(value="jlManualCheckPhoneAction_findStaffNameByPhone",
+			results={
+			@Result(type="json", params={"root","jsonData"})})
+	public void findStaffNameByPhone(){
+		user = getCurrentUser(request);
+		List list=mService.findStaffNameList(user);
+		try {
+			this.jsonWrite(list);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
 	
 	/**
 	 * 手机复制一条记录

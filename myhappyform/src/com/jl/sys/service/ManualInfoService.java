@@ -25,6 +25,16 @@ public interface ManualInfoService {
 	 */
 	public Map findList(UserInfo user,int page,int rows,Map<String,String> param);
 	
+	
+	/**
+	 * 查询历史人员列表
+	 * @Title findStaffNameList
+	 * @return
+	 * @author zpj
+	 * @time 2018年12月21日 下午1:34:51
+	 */
+	public List findStaffNameList(UserInfo user);
+	
 	/**
 	 * 根据id查询考勤对象
 	 * @Title findById
