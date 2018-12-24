@@ -4,6 +4,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -30,6 +31,7 @@ import com.jl.sys.pojo.CheckInfo;
 import com.jl.sys.pojo.HistoryStaffname;
 import com.jl.sys.pojo.UserInfo;
 import com.jl.sys.service.ManualInfoService;
+import com.jl.util.DateHelper;
 @Service
 public class ManualInfoServiceImpl implements ManualInfoService {
 	@Autowired
@@ -50,6 +52,7 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 		hs.setId(UUID.randomUUID().toString());
 		hs.setStaffName(cInfo.getStaffname());
 		hs.setUserId(cInfo.getCreateuserid());
+		hs.setCreateTime(new Date());
 		hsDao.saveHistoryStaffName(hs);
 	}
 	

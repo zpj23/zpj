@@ -22,7 +22,7 @@ public class HistoryStaffNameDaoImpl extends BaseDao<HistoryStaffname> implement
 	}
 	
 	public List findStaffNameList(int userId){
-		List list=this.findMapObjBySql("select staffname from jl_history_staffname where userid='"+userId+"'", null, 1, 100);
+		List list=this.findMapObjBySql("select staffname from jl_history_staffname where userid='"+userId+"' order by createtime asc ", null, 1, 100);
 		return list;
 	}
 

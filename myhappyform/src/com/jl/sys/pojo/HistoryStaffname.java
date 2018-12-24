@@ -1,9 +1,13 @@
 package com.jl.sys.pojo;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 
     /**
@@ -20,6 +24,7 @@ public class HistoryStaffname implements java.io.Serializable{
 	private String id;
 	private int  userId; 
 	private String staffName;
+	private Date createTime;
 	
 	@Id
 	@Column(name = "id", nullable = false, length=50)
@@ -41,5 +46,15 @@ public class HistoryStaffname implements java.io.Serializable{
 	public void setStaffName(String staffName) {
 		this.staffName = staffName;
 	}
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "createtime", length=7)
+	public Date getCreateTime() {
+		return createTime;
+	}
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+	
+	
 	
 }
