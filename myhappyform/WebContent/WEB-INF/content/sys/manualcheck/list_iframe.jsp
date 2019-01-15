@@ -84,6 +84,9 @@ $(document).ready(function(){
 			title : '备注',
 			width : 50 ,
 			formatter:function(value,row){  
+				if(value==undefined||value=="undefined"){
+					return "";
+				}
 		        var content = '<span title="' + value + '" class="easyui-tooltip">' + value + '</span>';  
 		        return content;  
 		    }
