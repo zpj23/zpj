@@ -11,7 +11,7 @@ var datagrid;
 $(document).ready(function(){
 	datagrid = $('#datagrid');
 	datagrid.datagrid({
-		url : 'jlManualCheckInfoAction_getListJson',
+		url : 'jlShoppingAction_getListJson',
 		queryParams : {
 			
 		},

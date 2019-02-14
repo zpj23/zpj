@@ -69,7 +69,7 @@ public class ShoppingAction extends IAction{
 	
 	
 	
-	@Action(value="jlManualCheckInfoAction_getListJson",
+	@Action(value="jlShoppingAction_getListJson",
 			results={
 			@Result(type="json", params={"root","jsonData"})})
 	public void getUserListJson(){
