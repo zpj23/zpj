@@ -85,7 +85,29 @@ public class PayrollAction extends IAction {
 			  str.append("{\"total\":\"").append(countNumber).append("\",\"rows\":");
 			  String lstr=gson.toJson(list);
 			  str.append(lstr);
-//			  str.append(",\"footer\":[{\"id\":\"1\",\"departmentname\":\""+(Double)map.get("zgs")+"\",\"workdate\":\"\",\"workduringtime\":\""+(Double)map.get("wzgs")+"\",\"workcontent\":\"合计\",\"overtime\":\""+(Double)map.get("ozgs")+"\",\"staffname\":\"\",\"remark\":\"\"}]");
+			  str.append(",\"footer\":[{\"id\":\"1\","
+			  		+ "\"zgz\":\""+(Double)map.get("total_zgz")+"\","
+			  		+ "\"yfgzy\":\""+(Double)map.get("total_yfgzy")+"\","
+			  		+ "\"sygz\":\""+(Double)map.get("total_sygz")+"\","
+			  		+ "\"xm\":\"\","
+			  		+ "\"yf\":\"\","
+			  		+ "\"gd\":\"\","
+			  		+ "\"gjby\":\"\","
+			  		+ "\"jbgz\":\"\","
+			  		+ "\"jbgzhjj\":\"\","
+			  		+ "\"yfgz\":\"\","
+			  		+ "\"lhbt\":\"\","
+			  		+ "\"fybt\":\"\","
+			  		+ "\"mq\":\"\","
+			  		+ "\"qtkk\":\"\","
+			  		+ "\"qz\":\"\","
+			  		+ "\"bz\":\"\","
+			  		+ "\"chuqin\":\"\","
+			  		+ "\"jiaban\":\"\","
+			  		+ "\"zonggongshi\":\"\""
+			  		+ "}]");
+			  
+			  
 			  str.append("}");
 			  jsonData= str.toString();
 		}else{

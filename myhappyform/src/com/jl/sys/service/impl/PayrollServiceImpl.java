@@ -29,29 +29,30 @@ public class PayrollServiceImpl implements PayrollService{
 	
 	public Map findList(int page,int rows,Map<String,String> param){
 		List<Map> list=payrollDao.findList(page,rows,param);
-//		double wzgs=0;
-//		double ozgs=0;
-//		double workduringtime=0;
-//		double overtime=0;
-//		for(int i=0,length=list.size();i<length;i++){
-//			workduringtime=0;
-//			overtime=0;
-//			list.get(i).put("workdate", ((Map)(list.get(i))).get("workdate").toString().substring(0, 10));
-//			Object str=((Map)(list.get(i))).get("workduringtime");
-//			workduringtime=Double.valueOf(str.toString());
-//			overtime=Double.valueOf(((Map)(list.get(i))).get("overtime").toString());
-//			wzgs+=workduringtime;
-//			ozgs+=overtime;
-//		}
-//		System.out.println(zgs+">>>>>>>循环数组");
-//		System.out.println(System.currentTimeMillis());
+		double total_zgz=0;//总工资
+		double total_yfgzy=0;//预付工资
+		double total_sygz=0;//剩余工资
+		double zgz=0;
+		double yfgzy=0;
+		double sygz=0;
+		for(int i=0,length=list.size();i<length;i++){
+			zgz=0;
+			yfgzy=0;
+			sygz=0;
+			zgz=Double.valueOf(((Map)(list.get(i))).get("zgz").toString());
+			yfgzy=Double.valueOf(((Map)(list.get(i))).get("yfgzy").toString());
+			sygz=Double.valueOf(((Map)(list.get(i))).get("sygz").toString());
+			total_zgz+=zgz;
+			total_yfgzy+=yfgzy;
+			total_sygz+=sygz;
+		}
 		int count=payrollDao.findCount(param); 
 		Map map=new HashMap();
 		map.put("list", list);
 		map.put("count", count);
-//		map.put("wzgs", wzgs);
-//		map.put("ozgs", ozgs);
-//		map.put("zgs", wzgs+ozgs);
+		map.put("total_zgz", total_zgz);
+		map.put("total_yfgzy", total_yfgzy);
+		map.put("total_sygz", total_sygz);
 		return map;
 	}
 }

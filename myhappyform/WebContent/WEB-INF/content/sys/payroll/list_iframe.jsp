@@ -19,6 +19,7 @@ $(document).ready(function(){
 		rowStyler:function(rowIndex,rowData){  
             return 'height:40px;';  
         },
+        showFooter:true,
 		idField : 'id',
 // 		frozenColumns : [ [  ] ],
 // 		columns : [ [ {
