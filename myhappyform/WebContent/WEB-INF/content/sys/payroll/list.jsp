@@ -31,6 +31,7 @@
 <script type="text/javascript">
 
 $(document).ready(function(){
+	initDep();
 });
 
 
@@ -45,14 +46,6 @@ $(document).ready(function(){
 */
 /*增加*/
 function admin_add(title,url,w,h){
-	if(ISPHONE){
-		w=document.body.clientWidth;
-		h=document.body.clientHeight;
-	}
-	
-	layer_show(title,url,w,h);
-}
-function manager_add(title,url,w,h){
 	w=document.body.clientWidth-100;
 	h=document.body.clientHeight-100;
 	layer_show(title,url,w,h);
@@ -78,26 +71,13 @@ function manager_add(title,url,w,h){
 // 	});
 // }
 
-function initCondition(){
-	var year=$("#year").val();	
-	var yuefen=$("#yuefen").val();	
-	var temp="";
-	if(year!=""&&yuefen!=""){
-		temp=year+"-"+yuefen;
-	}else if(year!=""&&yuefen==""){
-		temp=year;
-	}else if(year==""&&yuefen!=""){
-		temp=yuefen;
-	}
-	return temp;
-}
 
 function searchInfo(){
 	
-	list_iframe.contentWindow.load($('#username').val(),initCondition());
+	list_iframe.contentWindow.load($('#username').val(),$('#departmentid').val(),$('#yuefen').val());
 }
 function tolist(){
-	list_iframe.contentWindow.load($('#username').val(),initCondition());
+	list_iframe.contentWindow.load($('#username').val(),$('#departmentid').val(),$('#yuefen').val());
 }
 
 // function dataimport(){
@@ -114,35 +94,61 @@ function dataoutput(){
 // 	form1.action="jlManualCheckInfoAction_exportExcel";
 // 	form1.submit();
 }
+//初始化部门下拉框
+function initDep(){
+	   $.ajax({
+	     type: "POST",
+	     url: "jlDepartmentInfoAction_getDep",
+	     async:false,
+	     success: function(data1){
+	      var str="";
+	      var data = $.parseJSON(data1);
+	      str="<option value='' >请选择</option>";
+	      for(var i=0;i<data.length;i++){
+	       str+="<option value='"+data[i].name+"' >"+data[i].name+"</option>";
+	      }
+	      $("#departmentid").html(str);
 
+	     }
+	});
+}
 
 </script>
 </head>
 <body style="overflow: hidden">
-<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 基本信息 <span class="c-gray en">&gt;</span> 工资信息<a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 工资管理 <span class="c-gray en">&gt;</span> 工资单管理<a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 <div class="pd-20">
 <form action="" name="form1" method="post" enctype="multipart/form-data"  id="form1"  >
  
 	<div class="text-c"> 
+		
 		<input type="text" class="input-text" style="width:120px" placeholder="姓名" id="username" name="username" />
-		<input type="text" placeholder="选择年份" onfocus="WdatePicker({dateFmt:'yyyy',minDate:'2016',maxDate:'2050'})" id="year" name="year" class="input-text Wdate" style="width:80px;">
+		<span class="select-box inline">
+			<select class="select" size="1" name="departmentid" id="departmentid" value="" onchange="" datatype="*" nullmsg="请选择所属部门！">
+	          <option value="" selected>所属区域</option>
+	        </select>
+        </span>
 		<input type="text" placeholder="选择月份" onfocus="WdatePicker({dateFmt:'MM'})" id="yuefen" name="yuefen" class="input-text Wdate" style="width:80px;">
 		<button type="button"  class="btn btn-success" onclick="searchInfo();" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 查询</button>
 	</div>
-	<div class="cl pd-5 bg-1 bk-gray mt-20">
-	 <span class="l">
+	<div class="text-c"> 
+		&nbsp;
+	</div>
+<!-- 	<div class="cl pd-5 bg-1 bk-gray mt-20"> -->
+<!-- 	 <span class="l"> -->
 <!-- 	 <span class="btn-upload form-group"> -->
 <!-- 			<input class="input-text upload-url" type="text" name="ad" id="ad" readonly  datatype="*" nullmsg="请添加附件！" style="width:200px"> -->
 <!-- 			<a href="javascript:void();" style="color: white" class="btn btn-primary upload-btn radius"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a> -->
 <!-- 			<input type="file" id="file" multiple name="file" class="input-file"> -->
 <!-- 		</span> -->
 <!-- 	  <a href="javascript:;" style="color: white" onclick="dataimport()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe600;</i>批量导入</a>  -->
-	  <a href="javascript:;" style="color: white" onclick="dataoutput()" class="btn btn-success radius"><i class="Hui-iconfont">&#xe644;</i>导出数据</a>
-	  </span>
-	</div>
+<!-- 	  <a href="javascript:;" style="color: white" onclick="admin_add('添加信息','jlPayrollAction_toAdd','800','650')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加信息</a> -->
+<!-- 	  <a href="javascript:;" style="color: white" onclick="dataoutput()" class="btn btn-success radius"><i class="Hui-iconfont">&#xe644;</i>导出数据</a> -->
+<!-- 	  </span> -->
+<!-- 	</div> -->
 	</form>
 		
-<iframe id="list_iframe" name="list_frame" src="jlPayrollAction_toiframe" width="100%" height="75%" frameborder="0"></iframe>
+<iframe id="list_iframe" name="list_frame" src="jlPayrollAction_toiframe" width="100%" height="78%" frameborder="0"></iframe>
 </div>
 
 </body>

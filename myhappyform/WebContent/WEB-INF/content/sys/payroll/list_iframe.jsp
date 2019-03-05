@@ -7,13 +7,12 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title></title>
 <script type="text/javascript">
-var transfer_to_par = "";
 var datagrid;
 var editRow = undefined; //定义全局变量：当前编辑的行
 $(document).ready(function(){
 	datagrid = $('#datagrid');
 	datagrid.datagrid({
-		url : '',
+		url : 'jlPayrollAction_getListJson',
 		queryParams : {
 			
 		},
@@ -23,20 +22,15 @@ $(document).ready(function(){
 		idField : 'id',
 // 		frozenColumns : [ [  ] ],
 // 		columns : [ [ {
-// 			field : 'sgxm',
-// 			title : '施工项目',
+// 			field : 'pk',
+// 			title : '主键',
 // 			width : 30,
-// 			editor:{
-// 				type:'text'	
-// 			}
+// 			hidden:true
 			
 // 		},{
-// 			field : 'sgqy',
-// 			title : '施工区域',
-// 			width : 30,
-// 			editor:{
-// 				type:'text'	
-// 			}
+// 			field : 'xm',
+// 			title : '姓名',
+// 			width : 80
 			
 // 		},{
 // 			field : 'staffname',
@@ -95,8 +89,7 @@ $(document).ready(function(){
                 datagrid.datagrid("insertRow", {
                     index: 0, // index start with 0
                     row: {
-//                     	workduringtime:8,
-//                     	overtime:0
+                    	id:guid()
                     }
                 });
                 //将新插入的那一行开户编辑状态
@@ -121,13 +114,26 @@ $(document).ready(function(){
                     datagrid.datagrid("insertRow", {
                         index: 0, // index start with 0
                         row: {
-//                             sgxm:rows[0].sgxm,
-//                             sgqy:rows[0].sgqy,
-//                             staffname:rows[0].staffname,
-//                             workcontent:rows[0].workcontent,
-//                             workduringtime:rows[0].workduringtime,
-//                             overtime:rows[0].overtime,
-//                             remark:rows[0].remark
+                        	id:guid(),
+                        	xm:rows[0].xm,
+                        	yf:rows[0].yf,
+                        	gd:rows[0].gd,
+                        	gjby:rows[0].gjby,
+                        	jbgz:rows[0].jbgz,
+                        	jbgzhjj:rows[0].jbgzhjj,
+                        	yfgz:rows[0].yfgz,
+                        	lhbt:rows[0].lhbt,
+                        	fybt:rows[0].fybt,
+                        	mq:rows[0].mq,
+                        	qtkk:rows[0].qtkk,
+                        	zgz:rows[0].zgz,
+                        	yfgzy:rows[0].yfgzy,
+                        	sygz:rows[0].sygz,
+                        	qz:rows[0].qz,
+                        	bz:rows[0].bz,
+                        	chuqin:rows[0].chuqin,
+                        	jiaban:rows[0].jiaban,
+                        	zonggongshi:rows[0].zonggongshi
                         }
                     });
                     //将新插入的那一行开户编辑状态
@@ -147,7 +153,8 @@ $(document).ready(function(){
              if (indexrow1!=-1) {
                  $.messager.confirm("提示", "你确定要删除吗?", function (r) {
                      if (r) {
-                    	 datagrid.datagrid('deleteRow',indexrow1);
+                    	 delInfo(selectedRow.id,indexrow1);
+//                     	 datagrid.datagrid('deleteRow',indexrow1);
                      }
                  });
              }
@@ -183,77 +190,133 @@ $(document).ready(function(){
          { text: '保存', iconCls: 'icon-save', handler: function () {
              //保存时结束当前编辑的行，自动触发onAfterEdit事件如果要与后台交互可将数据通过Ajax提交后台
              datagrid.datagrid("endEdit", editRow);
-             tempSaveData();
+         }
+         }, '-',
+         { text: '导出', iconCls: 'icon-export', handler: function () {
+             //保存时结束当前编辑的行，自动触发onAfterEdit事件如果要与后台交互可将数据通过Ajax提交后台
+//              datagrid.datagrid("endEdit", editRow);
          }
          }],
          onAfterEdit: function (rowIndex, rowData, changes) {
              //endEdit该方法触发此事件
+             
             try{
-//              console.info(rowData);
+//             	 var updated = datagrid.datagrid('getChanges', 'updated');
+//             	 console.log(updated);
+//                  if (updated.length < 1) {  
+//                      editRow = undefined;  
+//                      datagrid.datagrid('unselectAll');  
+//                      return;  
+//                  }else{
+                	 tempSaveData(rowData);
+//                  }  
+             
             }catch (e) {
  			}
              editRow = undefined;
          },
          onDblClickRow: function (rowIndex, rowData) {
          //双击开启编辑行
-             if (editRow != undefined) {
-                 datagrid.datagrid("endEdit", editRow);
-             }
-             editRow=undefined;
-             if (editRow == undefined) {
-                 datagrid.datagrid("beginEdit", rowIndex);
-                 editRow = rowIndex;
-             }
+//              if (editRow != undefined) {
+//                  datagrid.datagrid("endEdit", editRow);
+//              }
+//              editRow=undefined;
+//              if (editRow == undefined) {
+//                  datagrid.datagrid("beginEdit", rowIndex);
+//                  editRow = rowIndex;
+//              }
          }
 	});
 	
 });
 
-function tempSaveData(){
-	datagrid.datagrid("endEdit", editRow);
-	var arr = datagrid.datagrid("getRows");
-	transfer_to_par = JSON.stringify(arr);
-	alert(transfer_to_par);
+function tempSaveData(data){
+// 	var datagrid.datagrid("getRowIndex");
+// 	datagrid.datagrid("endEdit", editRow);
+// 	var arr = datagrid.datagrid("getRows");
+// 	var row=datagrid.datagrid("getSelected");
+// 	console.log(row);
+	var transfer_to_par = JSON.stringify(data);
+// 	alert(transfer_to_par);
+	if(data.xm==""){
+		alert("数据不完整，不能保存,请填写姓名!");
+		return;
+	}
+	
 	$.ajax({
 		   type: "POST",
-		   url: "jlPayrollAction_doDel",
+		   url: "jlPayrollAction_saveInfo",
 		   async:false,
-		   data: "id="+id,
+		   data: "data="+transfer_to_par,
 		   success: function(data){
-			   if(data==1){
-					layer.msg('已删除!',{icon:1,time:1000});
+			   if(data){
+				   parent.layer.msg('保存成功!',{icon: 1,time:1000});
 			   }else{
-				   layer.msg('删除失败!',{icon: 5,time:1000});
+				   parent.layer.msg('保存失败!',{icon: 5,time:1000});
 			   }
-			   tolist();
 		   }
 		});
 }
+//删除数据
+function delInfo(id,index){
+	$.ajax({
+		   type: "POST",
+		   url: "jlPayrollAction_delInfo",
+		   async:false,
+		   data: "id="+id,
+		   success: function(data){
+			   if(data){
+				   datagrid.datagrid('deleteRow',index);
+				   parent.layer.msg('删除成功!',{icon: 1,time:1000});
+			   }else{
+				   parent.layer.msg('删除失败!',{icon: 5,time:1000});
+			   }
+		   }
+		});
+}
+
+function load(username,departmentname,yuefen){
+	datagrid.datagrid("load", { 
+		username:username,
+		departmentname:departmentname,
+		yuefen:yuefen
+	});
+}
+
+function S4() {
+    return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+}
+//用于生成uuid
+function guid() {
+    return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+}
+
 </script>
 </head>
 <body>
-<table id="datagrid" title="2019度工资明细" class="easyui-datagrid" style="height: auto; width: auto;"  
+<table id="datagrid" fit="true" fitColumns="true" title="工资明细" class="easyui-datagrid" style="height: auto; width: auto;"  
         url=""  
-        singleSelect="true" iconCls="icon-save" rownumbers="true">  
+        singleSelect="true" iconCls="icon-save" rownumbers="true" pageSize="${ipagesize}" pageList="${ipagelist}" pagination="true">  
     <thead>  
         <tr >  
+        	<th rowspan="2" field="id"  data-options="editor:{type:'text'},hidden:'true'" align="center" >id</th>
             <th rowspan="2" field="xm" data-options="editor:{type:'text'},width:80" align="center" >姓名</th>  
-            <th rowspan="2" field="yf" data-options="editor:{type:'numberbox'},width:80" align="center" >月份</th>  
+            <th rowspan="2" field="yf" data-options="editor:{type:'text'},width:80" align="center" >月份</th>  
             <th rowspan="2" field="gd" data-options="editor:{type:'text'},width:80" align="center"  >工地</th>  
             <th colspan="3"  >出勤明细</th>
-            <th rowspan="2" field="gjby" data-options="editor:{type:'numberbox',options:{precision:1}},width:65" align="center" >工价/包月</th>  
-            <th rowspan="2" field="jbgz" data-options="editor:{type:'numberbox',options:{precision:1}},width:65" align="center" >基本工资</th>  
-            <th rowspan="2" field="jbgzhjj" data-options="editor:{type:'numberbox',options:{precision:1}},width:65" align="center" >加班工资和奖金</th>  
-            <th rowspan="2" field="yfgz" data-options="editor:{type:'numberbox',options:{precision:1}},width:65" align="center" >应发工资</th>  
-            <th rowspan="2" field="lhbt" data-options="editor:{type:'numberbox',options:{precision:1}},width:65" align="center" >劳护补贴</th>  
-            <th rowspan="2" field="fybt" data-options="editor:{type:'numberbox',options:{precision:1}},width:65" align="center" >费用补贴（元）</th>  
-            <th rowspan="2" field="mq" data-options="editor:{type:'numberbox',options:{precision:1}},width:65" align="center" >满勤</th>  
-            <th rowspan="2" field="qtkk" data-options="editor:{type:'numberbox',options:{precision:1}},width:65" align="center" >其他扣款</th> 
-            <th rowspan="2" field="zgz" data-options="editor:{type:'numberbox',options:{precision:1}},width:65" align="center" >总工资（元）</th>
-            <th rowspan="2" field="yfgzy" data-options="editor:{type:'numberbox',options:{precision:1}},width:65" align="center" >预付工资（元）</th>
-            <th rowspan="2" field="sygz" data-options="editor:{type:'numberbox',options:{precision:1}},width:65" align="center" >剩余工资（元）</th>
-            <th rowspan="2" field="qz" data-options="editor:{type:'text'},width:65" align="center" >签字</th>
-            <th rowspan="2" field="bz" data-options="editor:{type:'text'},width:65" align="center" >备注</th>
+            <th rowspan="2" field="gjby" data-options="editor:{type:'numberbox',options:{precision:1}},width:65,resizable:'true'" align="center" >工价/包月</th>  
+            <th rowspan="2" field="jbgz" data-options="editor:{type:'numberbox',options:{precision:1}},width:65,resizable:'true'" align="center" >基本工资</th>  
+            <th rowspan="2" field="jbgzhjj" data-options="editor:{type:'numberbox',options:{precision:1}},width:65,resizable:'true'" align="center" >加班工资和奖金</th>  
+            <th rowspan="2" field="yfgz" data-options="editor:{type:'numberbox',options:{precision:1}},width:65,resizable:'true'" align="center" >应发工资</th>  
+            <th rowspan="2" field="lhbt" data-options="editor:{type:'numberbox',options:{precision:1}},width:65,resizable:'true'" align="center" >劳护补贴</th>  
+            <th rowspan="2" field="fybt" data-options="editor:{type:'numberbox',options:{precision:1}},width:65,resizable:'true'" align="center" >费用补贴（元）</th>  
+            <th rowspan="2" field="mq" data-options="editor:{type:'numberbox',options:{precision:1}},width:65,resizable:'true'" align="center" >满勤</th>  
+            <th rowspan="2" field="qtkk" data-options="editor:{type:'numberbox',options:{precision:1}},width:65,resizable:'true'" align="center" >其他扣款</th> 
+            <th rowspan="2" field="zgz" data-options="editor:{type:'numberbox',options:{precision:1}},width:65,resizable:'true'" align="center" >总工资（元）</th>
+            <th rowspan="2" field="yfgzy" data-options="editor:{type:'numberbox',options:{precision:1}},width:65,resizable:'true'" align="center" >预付工资（元）</th>
+            <th rowspan="2" field="sygz" data-options="editor:{type:'numberbox',options:{precision:1}},width:65,resizable:'true'" align="center" >剩余工资（元）</th>
+            <th rowspan="2" field="qz" data-options="editor:{type:'text'},width:65,resizable:'true'" align="center" >签字</th>
+            <th rowspan="2" field="bz" data-options="editor:{type:'text'},width:65,resizable:'true'" align="center" >备注</th>
         </tr>  
         <tr>  
             <th field="chuqin" data-options="editor:{type:'numberbox',options:{precision:1}},width:65" align="center">出勤（h）</th>  
