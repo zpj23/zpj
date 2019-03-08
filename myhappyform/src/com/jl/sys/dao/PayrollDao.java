@@ -12,7 +12,7 @@ public interface PayrollDao {
 	
 	public List findList(int page,int rows,Map<String,String> param);
 	
-	public int findCount(Map<String,String> param);
+	public Map findCount(Map<String,String> param);
 	
 	public PayrollInfo findById(String id);
 	

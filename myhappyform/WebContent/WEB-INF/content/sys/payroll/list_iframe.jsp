@@ -21,62 +21,6 @@ $(document).ready(function(){
         },
         showFooter:true,
 		idField : 'id',
-// 		frozenColumns : [ [  ] ],
-// 		columns : [ [ {
-// 			field : 'pk',
-// 			title : '主键',
-// 			width : 30,
-// 			hidden:true
-			
-// 		},{
-// 			field : 'xm',
-// 			title : '姓名',
-// 			width : 80
-			
-// 		},{
-// 			field : 'staffname',
-// 			title : '施工人员',
-// 			width : 30,
-// 			editor:{
-// 				type:'text'	
-// 			}
-// 		},{
-// 			field : 'workcontent',
-// 			title : '工作内容',
-// 			width : 100,
-// 			editor:{
-// 				type:'text'	
-// 			}
-// 		},{
-// 			field : 'workduringtime',
-// 			title : '出勤时间（小时）',
-// 			width : 50,
-// 			editor:{
-// 				type:'numberbox',
-// 				options:{  
-// 			        precision:2  
-// 			    } 
-// 			}
-// 		},{
-// 			field : 'overtime',
-// 			title : '加班时间（小时）',
-// 			width : 50,
-// 			editor:{
-// 				type:'numberbox',
-// 				options:{  
-// 			        precision:2  
-// 			    } 
-// 			}
-// 		},{
-// 			field : 'remark',
-// 			title : '备注',
-// 			width : 100,
-// 			editor:{
-// 				type:'text'	
-// 			}
-// 		}
-// 		] ]
-//         ,
         toolbar: [{ text: '添加', iconCls: 'icon-add', handler: function () {//添加列表的操作按钮添加，修改，删除等
             //添加时先判断是否有开启编辑的行，如果有则把开户编辑的那行结束编辑
             
@@ -90,7 +34,18 @@ $(document).ready(function(){
                 datagrid.datagrid("insertRow", {
                     index: 0, // index start with 0
                     row: {
-                    	id:guid()
+                    	id:guid(),
+                    	gjby:0,
+                    	jbgz:0,
+                    	jbgzhjj:0,
+                    	yfgz:0,
+                    	lhbt:0,
+                    	fybt:0,
+                    	mq:0,
+                    	qtkk:0,
+                    	zgz:0,
+                    	yfgzy:0,
+                    	sygz:0
                     }
                 });
                 //将新插入的那一行开户编辑状态
@@ -232,13 +187,7 @@ $(document).ready(function(){
 });
 
 function tempSaveData(data){
-// 	var datagrid.datagrid("getRowIndex");
-// 	datagrid.datagrid("endEdit", editRow);
-// 	var arr = datagrid.datagrid("getRows");
-// 	var row=datagrid.datagrid("getSelected");
-// 	console.log(row);
 	var transfer_to_par = JSON.stringify(data);
-// 	alert(transfer_to_par);
 	if(data.xm==""){
 		alert("数据不完整，不能保存,请填写姓名!");
 		return;
@@ -253,7 +202,7 @@ function tempSaveData(data){
 			   if(data){
 				   parent.layer.msg('保存成功!',{icon: 1,time:1000});
 			   }else{
-				   parent.layer.msg('保存失败!',{icon: 5,time:1000});
+				   parent.layer.msg('保存失败!',{icon: 5,time:10000});
 			   }
 		   }
 		});
@@ -270,7 +219,7 @@ function delInfo(id,index){
 				   datagrid.datagrid('deleteRow',index);
 				   parent.layer.msg('删除成功!',{icon: 1,time:1000});
 			   }else{
-				   parent.layer.msg('删除失败!',{icon: 5,time:1000});
+				   parent.layer.msg('删除失败!',{icon: 5,time:10000});
 			   }
 		   }
 		});

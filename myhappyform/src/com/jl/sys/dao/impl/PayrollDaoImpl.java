@@ -50,9 +50,9 @@ public class PayrollDaoImpl extends BaseDao<PayrollInfo> implements PayrollDao{
 		return list;
 	}
 	
-	public int findCount(Map<String,String> param){
+	public Map findCount(Map<String,String> param){
 		StringBuffer sql = new StringBuffer();
-		sql.append(" select count(a.id) from jl_payroll_info a  where 1=1  ");
+		sql.append(" select count(a.id) zs ,SUM(chuqin) cq,SUM(jiaban) jb,SUM(zonggongshi) zgs,SUM(zgz) zgz,SUM(yfgzy) yfgz,SUM(sygz) sygz from jl_payroll_info a  where 1=1  ");
 		if(null!=param.get("username")&&!"".equalsIgnoreCase(param.get("username").toString())){
 			sql.append(" and  a.xm like ").append("'%"+param.get("username")+"%'  ");
 		}
@@ -67,8 +67,12 @@ public class PayrollDaoImpl extends BaseDao<PayrollInfo> implements PayrollDao{
 		if(null!=param.get("departmentname")&&!"".equalsIgnoreCase(param.get("departmentname").toString())){
 			sql.append(" and  a.gd like ").append("'%"+param.get("departmentname")+"%'  ");
 		}
-		int count=this.findListCountBySql(sql.toString(), null);
-		return count;
+		List<Map> list=this.findMapObjBySql(sql.toString(), null, 1, 10000);
+		if(null!=list&&list.size()>0){
+			return list.get(0);
+		}else{
+			return null;
+		}
 		
 	}
 	
