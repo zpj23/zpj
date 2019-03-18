@@ -295,7 +295,8 @@ public class ManualCheckInfoAction extends IAction{
 			@Result(type="json", params={"root","jsonData"})})
 	public void shenhe(){
 		String id=request.getParameter("id");
-		int r=mService.saveShenhe(id);
+		user = (UserInfo)request.getSession().getAttribute("jluserinfo");
+		int r=mService.saveShenhe(id,user);
 		try {
 			this.jsonWrite(r);
 		} catch (Exception e) {

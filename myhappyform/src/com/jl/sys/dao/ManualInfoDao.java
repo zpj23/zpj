@@ -93,4 +93,6 @@ public interface ManualInfoDao {
 	
 	public int getWshNum(UserInfo user);
 	
+	public List findListByIds(String id);
+	
 }

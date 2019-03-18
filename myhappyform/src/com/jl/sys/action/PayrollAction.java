@@ -205,4 +205,28 @@ public class PayrollAction extends IAction {
 		}
 	}
 	
+	
+	/**
+	 * 审核保存时计算该人员当前月的数据
+	 * @Title calculateInfo
+	 * @throws IOException
+	 * @author zpj
+	 * @time 2019年3月18日 下午3:10:07
+	 */
+	@Action(value="jlPayrollAction_calculate",
+			results={
+			@Result(type="json", params={"root","jsonData"})})
+	public void calculateInfo() throws IOException{
+		String yuefen=request.getParameter("yuefen");
+		String username=request.getParameter("username");
+		UserInfo user = (UserInfo)request.getSession().getAttribute("jluserinfo");
+		try {
+			payrollService.calculateInfo(yuefen,username,user);
+			this.jsonWrite(true);
+		} catch (IOException e) {
+			e.printStackTrace();
+			this.jsonWrite(false);
+		}
+	}
+	
 }

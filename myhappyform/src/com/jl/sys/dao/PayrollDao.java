@@ -17,5 +17,12 @@ public interface PayrollDao {
 	public PayrollInfo findById(String id);
 	
 	public void delInfo(String id);
+	
+	public List<PayrollInfo> findByYFAndXM(String yuefen,String xm);
+	
+	public void insertPayrollData(String yuefen,String xm);
+	
+	
+	public void updatePayrollData(String yuefen,String xm);
 
 }

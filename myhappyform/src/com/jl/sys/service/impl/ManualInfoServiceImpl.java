@@ -27,10 +27,15 @@ import org.springframework.stereotype.Service;
 import com.jl.common.BaseService.MethodLog2;
 import com.jl.sys.dao.HistoryStaffNameDao;
 import com.jl.sys.dao.ManualInfoDao;
+import com.jl.sys.dao.PayrollDao;
 import com.jl.sys.pojo.CheckInfo;
 import com.jl.sys.pojo.HistoryStaffname;
+import com.jl.sys.pojo.LogInfo;
+import com.jl.sys.pojo.PayrollInfo;
 import com.jl.sys.pojo.UserInfo;
+import com.jl.sys.service.LogInfoService;
 import com.jl.sys.service.ManualInfoService;
+import com.jl.sys.service.PayrollService;
 import com.jl.util.DateHelper;
 @Service
 public class ManualInfoServiceImpl implements ManualInfoService {
@@ -38,6 +43,10 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 	private ManualInfoDao mDao;
 	@Autowired
 	private HistoryStaffNameDao hsDao;
+	@Autowired
+	private PayrollDao payrollDao; 
+	@Autowired
+	public LogInfoService jlLogInfoService;
 	
 	@MethodLog2(remark="保存考勤信息",type="新增/编辑")
 	public void saveInfo(CheckInfo cInfo){
@@ -185,7 +194,58 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 		return mDao.getWshNum(user);
 	}
 	@MethodLog2(remark="审核考勤",type="审核")
-	public int saveShenhe(String ids){
-		return mDao.saveShenhe(ids);
+	public int saveShenhe(String ids,UserInfo user){
+		String[] ids1=ids.split(",");
+		StringBuilder str=new StringBuilder(500);
+		for(int m=0;m<ids1.length;m++){
+			if(m>0){
+				str.append(",");
+			}
+			str.append("'"+ids1[m]+"'");
+		}
+		int ret=mDao.saveShenhe(str.toString());
+		List<Map> list=mDao.findListByIds(str.toString());
+		if(null!=list&&list.size()>0){
+			for(int n=0;n<list.size();n++){
+				calculateInfo(list.get(n).get("xm").toString(),list.get(n).get("yf").toString(),user);
+			}
+		}
+		return ret;
 	}
+	
+	public synchronized void calculateInfo(String yuefen,String username,UserInfo user){
+		List<PayrollInfo> list =payrollDao.findByYFAndXM(yuefen,username);
+		try{
+			if(list.size()==0){
+				//判断没有存在对应人员对应月份的数据，需要新增（统计当前月份当前人员的考勤数据）
+				payrollDao.insertPayrollData(yuefen,username);
+				insertLog(user,"新增工资单信息","审核完成后，自动新增工资单对应的数据(没有当前月的数据的时候新增)"+"月份："+yuefen+"，人员："+username);
+				
+			}else if(list.size()==1){
+				//有且仅有1一条对应人员对应月份的数据，需要编辑（重新统计当前月份当前人员的考勤数据）
+				payrollDao.updatePayrollData(yuefen,username);
+				insertLog(user,"修改工资单信息","审核完成后，自动更新工资单对应的数据(没有当前月的数据的时候新增)"+"月份："+yuefen+"，人员："+username);
+			}else if(list.size()>1){
+				//说明有重复的数据
+				insertLog(user,"工资单信息问题",yuefen+"月份"+username+"信息有"+list.size()+"条");
+			}
+		}catch (Exception e) {
+			throw new RuntimeException();
+		}
+		
+		
+//		return retMap;
+	}
+	
+	public void insertLog(UserInfo user,String type,String description){
+		LogInfo loginfo=new LogInfo();
+		loginfo.setId(UUID.randomUUID().toString());
+		loginfo.setCreatetime(new Date());
+		loginfo.setType("新增工资单信息");
+		loginfo.setDescription("审核完成后，自动新增工资单对应的数据(没有当前月的数据的时候新增)");
+		loginfo.setUserid(user.getId());
+		loginfo.setUsername(user.getUsername());
+		jlLogInfoService.logInfo(loginfo);
+	}
+	
 }

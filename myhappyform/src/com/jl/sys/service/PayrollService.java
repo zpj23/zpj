@@ -47,4 +47,14 @@ public interface PayrollService {
 	 * @time 2019年3月5日 下午2:22:39
 	 */
 	public PayrollInfo findById(String id);
+	
+	/**
+	 * 审核时计算（统计）当某月某人的考勤信息
+	 * @Title calculateInfo
+	 * @param yuefen
+	 * @param username
+	 * @author zpj
+	 * @time 2019年3月18日 下午3:12:17
+	 */
+	public Map calculateInfo(String yuefen,String username,UserInfo user);
 }

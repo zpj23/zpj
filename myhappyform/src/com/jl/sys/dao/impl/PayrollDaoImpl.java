@@ -1,5 +1,6 @@
 package com.jl.sys.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -74,6 +75,28 @@ public class PayrollDaoImpl extends BaseDao<PayrollInfo> implements PayrollDao{
 			return null;
 		}
 		
+	}
+	
+	
+	public List<PayrollInfo> findByYFAndXM(String yuefen,String xm){
+		List<PayrollInfo> list=this.find("from PayrollInfo where yf=? and xm=?", yuefen,xm);
+		if(null!=list){
+			return list;
+		}
+		return new ArrayList<PayrollInfo>();
+	}
+	
+	
+	public void insertPayrollData(String yuefen,String xm){
+		this.executeSql("insert into jl_payroll_info(id,xm,yf,gd,chuqin,jiaban,zonggongshi,gjby,jbgz,jbgzhjj,yfgz,lhbt,fybt,mq,qtkk,zgz,yfgzy,sygz) ( SELECT UUID(),t1,'2',t2,t3,t4,t5,'0','0','0','0','0','0','0','0','0','0','0' from yuefen"+yuefen+" where where t1='"+xm+"' )");
+	}
+	
+	public void updatePayrollData(String yuefen,String xm){
+		List list=this.findMapObjBySql("select t3 as chuqin,t4 as jiaban,t5 as zonggongshi from yuefen"+yuefen+" where t1='"+xm+"'", null, 1, 1);
+		if(null!=list&&list.size()>0){
+			Map map=(Map)list.get(0);
+			this.executeSql("update jl_payroll_info set chuqin='"+map.get("chuqin")+"',jiaban='"+map.get("jiaban")+"',zonggongshi='"+map.get("jiaban")+"' where xm='"+xm+"' and yf='"+yuefen+"'");
+		}
 	}
 	
 }

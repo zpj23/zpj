@@ -1,16 +1,21 @@
 package com.jl.sys.dao.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.jl.common.BaseDao;
 import com.jl.sys.dao.ManualInfoDao;
+import com.jl.sys.dao.PayrollDao;
 import com.jl.sys.pojo.CheckInfo;
+import com.jl.sys.pojo.PayrollInfo;
 import com.jl.sys.pojo.UserInfo;
 @Repository
 public class ManualInfoDaoImpl extends BaseDao<CheckInfo> implements ManualInfoDao {
+	
 	
 	public void saveInfo(CheckInfo cInfo) throws Exception{
 		CheckInfo temp =this.get(cInfo.getId());
@@ -258,15 +263,7 @@ public class ManualInfoDaoImpl extends BaseDao<CheckInfo> implements ManualInfoD
 		return list;
 	}
 	
-	public int saveShenhe(String ids){
-		String[] ids1=ids.split(",");
-		StringBuilder str=new StringBuilder(500);
-		for(int m=0;m<ids1.length;m++){
-			if(m>0){
-				str.append(",");
-			}
-			str.append("'"+ids1[m]+"'");
-		}
+	public int saveShenhe(String str){
 		try{
 			this.executeSql("update jl_check_info set shenhe='1' where id in ("+str+")");
 			return 1;
@@ -274,5 +271,10 @@ public class ManualInfoDaoImpl extends BaseDao<CheckInfo> implements ManualInfoD
 			return 0;
 		}
 		
+	}
+	
+	public List findListByIds(String id){
+		List list=this.findMapObjBySql("select staffname as xm ,MONTH(workdate) as yf from jl_check_info where id in ("+id+")", null, 1, 1000);
+		return list;
 	}
 }

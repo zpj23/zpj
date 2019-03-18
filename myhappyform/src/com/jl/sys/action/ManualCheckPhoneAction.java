@@ -217,7 +217,7 @@ public class ManualCheckPhoneAction extends IAction {
 		String id=request.getParameter("id");
 		Map map =new HashMap();
 		try {
-			int r=mService.saveShenhe(id);
+			int r=mService.saveShenhe(id,user);
 			if(r==1){
 				map.put("msg", true);
 			}else{

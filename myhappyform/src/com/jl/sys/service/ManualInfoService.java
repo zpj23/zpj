@@ -95,5 +95,5 @@ public interface ManualInfoService {
 	 * @author zpj
 	 * @time 2018-1-30 上午9:21:07
 	 */
-	public int saveShenhe(String ids);
+	public int saveShenhe(String ids,UserInfo user);
 }
