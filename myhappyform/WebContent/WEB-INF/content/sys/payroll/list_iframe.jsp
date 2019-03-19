@@ -150,9 +150,13 @@ $(document).ready(function(){
          }, '-',
          { text: '导出', iconCls: 'icon-export', handler: function () {
              //保存时结束当前编辑的行，自动触发onAfterEdit事件如果要与后台交互可将数据通过Ajax提交后台
-//              datagrid.datagrid("endEdit", editRow);
          }
-         }],
+         }, '-',
+         { text: '刷新', iconCls: 'icon-refresh', handler: function () {
+        	 parent.searchInfo();
+         }
+         }
+         ],
          onAfterEdit: function (rowIndex, rowData, changes) {
              //endEdit该方法触发此事件
              

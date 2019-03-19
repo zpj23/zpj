@@ -106,14 +106,14 @@ public class LogAction extends IAction{
 			results={
 			@Result(type="json", params={"root","jsonData"})})
 	public void jlLogAction_delLog(){
-		String id=request.getParameter("id");
-		if(null!=id&&!id.equalsIgnoreCase("")){
-			jlLogInfoService.delLog(id);
+//		String id=request.getParameter("id");
+//		if(null!=id&&!id.equalsIgnoreCase("")){
 			try {
+				jlLogInfoService.delLog("");
 				this.jsonWrite(1);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}
+//		}
 	}
 }

@@ -194,7 +194,7 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 		return mDao.getWshNum(user);
 	}
 	@MethodLog2(remark="审核考勤",type="审核")
-	public int saveShenhe(String ids,UserInfo user){
+	public int saveShenhe(String ids,UserInfo user) throws RuntimeException{
 		String[] ids1=ids.split(",");
 		StringBuilder str=new StringBuilder(500);
 		for(int m=0;m<ids1.length;m++){
@@ -203,28 +203,38 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 			}
 			str.append("'"+ids1[m]+"'");
 		}
-		int ret=mDao.saveShenhe(str.toString());
-		List<Map> list=mDao.findListByIds(str.toString());
-		if(null!=list&&list.size()>0){
-			for(int n=0;n<list.size();n++){
-				calculateInfo(list.get(n).get("xm").toString(),list.get(n).get("yf").toString(),user);
+		try{
+			int ret=mDao.saveShenhe(str.toString());
+			List<Map> list=mDao.findListByIds(str.toString());
+			Set<Map> tempSet=new HashSet<Map>();
+			if(null!=list&&list.size()>0){
+				for(int n=0;n<list.size();n++){
+					tempSet.add(list.get(n));
+				}
+				tempSet.forEach((tmp)->{
+					calculateInfo(tmp.get("xm").toString(),tmp.get("yf").toString(),user);
+				});
 			}
+			return ret;
+		}catch (RuntimeException e) {
+			e.printStackTrace();
+			throw new RuntimeException();
 		}
-		return ret;
+		
 	}
 	
-	public synchronized void calculateInfo(String yuefen,String username,UserInfo user){
+	public synchronized void calculateInfo(String username,String yuefen,UserInfo user) throws RuntimeException{
 		List<PayrollInfo> list =payrollDao.findByYFAndXM(yuefen,username);
 		try{
 			if(list.size()==0){
 				//判断没有存在对应人员对应月份的数据，需要新增（统计当前月份当前人员的考勤数据）
 				payrollDao.insertPayrollData(yuefen,username);
-				insertLog(user,"新增工资单信息","审核完成后，自动新增工资单对应的数据(没有当前月的数据的时候新增)"+"月份："+yuefen+"，人员："+username);
+				insertLog(user,"新增工资单信息","审核完成后，自动“新增”工资单对应的数据(没有当前月的数据的时候新增)"+"月份："+yuefen+"，人员："+username);
 				
 			}else if(list.size()==1){
 				//有且仅有1一条对应人员对应月份的数据，需要编辑（重新统计当前月份当前人员的考勤数据）
 				payrollDao.updatePayrollData(yuefen,username);
-				insertLog(user,"修改工资单信息","审核完成后，自动更新工资单对应的数据(没有当前月的数据的时候新增)"+"月份："+yuefen+"，人员："+username);
+				insertLog(user,"修改工资单信息","审核完成后，自动“更新”工资单对应的数据(有当前月的数据的时候更新)"+"月份："+yuefen+"，人员："+username);
 			}else if(list.size()>1){
 				//说明有重复的数据
 				insertLog(user,"工资单信息问题",yuefen+"月份"+username+"信息有"+list.size()+"条");
@@ -232,17 +242,14 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 		}catch (Exception e) {
 			throw new RuntimeException();
 		}
-		
-		
-//		return retMap;
 	}
 	
 	public void insertLog(UserInfo user,String type,String description){
 		LogInfo loginfo=new LogInfo();
 		loginfo.setId(UUID.randomUUID().toString());
 		loginfo.setCreatetime(new Date());
-		loginfo.setType("新增工资单信息");
-		loginfo.setDescription("审核完成后，自动新增工资单对应的数据(没有当前月的数据的时候新增)");
+		loginfo.setType(type);
+		loginfo.setDescription(description);
 		loginfo.setUserid(user.getId());
 		loginfo.setUsername(user.getUsername());
 		jlLogInfoService.logInfo(loginfo);
