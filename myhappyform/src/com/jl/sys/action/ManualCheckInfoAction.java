@@ -377,11 +377,11 @@ public class ManualCheckInfoAction extends IAction{
 		param.put("workcontent", workcontent);
 		param.put("shenhe", shenhe);
 		param.put("lrrname", lrrname);
-//		if(null!=cfsj&&!"".equalsIgnoreCase(cfsj)){
-//			param.put("cfsj", cfsj);
-//		}else{
-//			param.put("cfsj", "");
-//		}
+		if(null!=cfsj&&!"".equalsIgnoreCase(cfsj)){
+			param.put("cfsj", cfsj);
+		}else{
+			param.put("cfsj", "");
+		}
 		Map map=mService.findList(user,page,rows,param);
 		List<UserInfo> list=(List<UserInfo>)map.get("list");
 		int countNumber=(Integer)map.get("count");

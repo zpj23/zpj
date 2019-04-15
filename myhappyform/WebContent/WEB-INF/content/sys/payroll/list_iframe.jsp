@@ -237,6 +237,16 @@ function load(username,departmentname,yuefen){
 	});
 }
 
+
+function showContents(value,row,index){
+	if(value==undefined||value==''){
+		return '';
+	}else{
+		return '<span title=\"' + value + '\" class="easyui-tooltip">' + value + '</span>';  
+	}
+}
+
+
 function S4() {
     return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
 }
@@ -244,6 +254,8 @@ function S4() {
 function guid() {
     return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
 }
+
+
 
 </script>
 </head>
@@ -269,8 +281,8 @@ function guid() {
             <th rowspan="2" field="zgz" data-options="editor:{type:'numberbox',options:{precision:1}},width:65,resizable:'true'" align="center" >总工资（元）</th>
             <th rowspan="2" field="yfgzy" data-options="editor:{type:'numberbox',options:{precision:1}},width:65,resizable:'true'" align="center" >预付工资（元）</th>
             <th rowspan="2" field="sygz" data-options="editor:{type:'numberbox',options:{precision:1}},width:65,resizable:'true'" align="center" >剩余工资（元）</th>
-            <th rowspan="2" field="qz" data-options="editor:{type:'text'},width:65,resizable:'true'" align="center" >签字</th>
-            <th rowspan="2" field="bz" data-options="editor:{type:'text'},width:65,resizable:'true'" align="center" >备注</th>
+            <th rowspan="2" field="qz" data-options="editor:{type:'text'},width:65,resizable:'true',formatter:showContents" align="center" >签字</th>
+            <th rowspan="2" field="bz" data-options="editor:{type:'text'},width:65,resizable:'true',formatter:showContents" align="center" >备注</th>
         </tr>  
         <tr>  
             <th field="chuqin" data-options="editor:{type:'numberbox',options:{precision:1}},width:65" align="center">出勤（h）</th>  
