@@ -66,7 +66,12 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 	}
 	
 	public Map findList(UserInfo user,int page,int rows,Map<String,String> param){
-		List<Map> list=mDao.findList(user,page,rows,param);
+		List<Map> list=null;
+		if(null!=param.get("cfsj")&&param.get("cfsj").equalsIgnoreCase("1")){
+			list=mDao.findRepeatList(user,page,rows,param);
+		}else{
+			list=mDao.findList(user,page,rows,param);
+		}
 		double wzgs=0;
 		double ozgs=0;
 		double workduringtime=0;
@@ -83,7 +88,12 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 		}
 //		System.out.println(zgs+">>>>>>>循环数组");
 //		System.out.println(System.currentTimeMillis());
-		int count=mDao.findCount(user,param); 
+		int count=0;
+		if(null!=param.get("cfsj")&&param.get("cfsj").equalsIgnoreCase("1")){
+			count=mDao.findRepeatCount(user,param);
+		}else{
+			count =mDao.findCount(user,param);
+		}
 		Map map=new HashMap();
 		map.put("list", list);
 		map.put("count", count);

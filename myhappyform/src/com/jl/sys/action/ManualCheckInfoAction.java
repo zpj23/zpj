@@ -360,6 +360,7 @@ public class ManualCheckInfoAction extends IAction{
 		String tpage=request.getParameter("page");
 		String trows=request.getParameter("rows");
 		String lrrname=request.getParameter("lrrname");//录入人
+		String cfsj=request.getParameter("cfsj");//是否查询重复数据1为是，其他为否
 		if(null!=tpage&&!"".equalsIgnoreCase(tpage)){
 			page=Integer.parseInt(tpage);
 		}
@@ -376,6 +377,11 @@ public class ManualCheckInfoAction extends IAction{
 		param.put("workcontent", workcontent);
 		param.put("shenhe", shenhe);
 		param.put("lrrname", lrrname);
+//		if(null!=cfsj&&!"".equalsIgnoreCase(cfsj)){
+//			param.put("cfsj", cfsj);
+//		}else{
+//			param.put("cfsj", "");
+//		}
 		Map map=mService.findList(user,page,rows,param);
 		List<UserInfo> list=(List<UserInfo>)map.get("list");
 		int countNumber=(Integer)map.get("count");

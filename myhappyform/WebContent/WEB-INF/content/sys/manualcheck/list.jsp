@@ -110,10 +110,18 @@ function admin_shenhe(id){
 }
 
 function searchInfo(){
-	list_iframe.contentWindow.load($('#datemin').val(),$('#datemax').val(),$('#username').val(),$('#departmentid').val(),$('#sgxm').val(),$('#sgqy').val(),$("#workcontent").val(),$("#shenhe").val(),$("#lrrname").val());
+	tolist();
+// 	list_iframe.contentWindow.load($('#datemin').val(),$('#datemax').val(),$('#username').val(),$('#departmentid').val(),$('#sgxm').val(),$('#sgqy').val(),$("#workcontent").val(),$("#shenhe").val(),$("#lrrname").val());
 }
 function tolist(){
-	list_iframe.contentWindow.load($('#datemin').val(),$('#datemax').val(),$('#username').val(),$('#departmentid').val(),$('#sgxm').val(),$('#sgqy').val(),$("#workcontent").val(),$("#shenhe").val(),$("#lrrname").val());
+	
+	var cfsj="0";
+	if($("#cfsj").prop('checked')){
+		cfsj="1";
+	}else{
+		cfsj="0";
+	}
+	list_iframe.contentWindow.load($('#datemin').val(),$('#datemax').val(),$('#username').val(),$('#departmentid').val(),$('#sgxm').val(),$('#sgqy').val(),$("#workcontent").val(),$("#shenhe").val(),$("#lrrname").val(),cfsj);
 }
 
 function dataimport(){
@@ -162,6 +170,7 @@ function analysis(){
 <form action="" name="form1" method="post"  id="form1"  >
  
 	<div class="text-c"> 
+		<input type="checkbox"    id="cfsj" name="cfsj" />重复数据
 		<input type="text" placeholder="施工日期开始" onfocus="WdatePicker({maxDate:'#F{$dp.$D(\'datemax\')}'})" id="datemin" name="datemin" class="input-text Wdate" style="width:120px;">
 		-
 		<input type="text" placeholder="施工日期结束" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'datemin\')}'})" id="datemax" name="datemax" class="input-text Wdate" style="width:120px;">

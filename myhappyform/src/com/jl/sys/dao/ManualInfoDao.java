@@ -29,6 +29,18 @@ public interface ManualInfoDao {
 	 * @time 2017-6-17 下午3:50:23
 	 */
 	public List findList(UserInfo user,int page,int rows,Map<String,String> param);
+	/**
+	 * 查询重复的数据
+	 * @Title findRepeatList
+	 * @param user
+	 * @param page
+	 * @param rows
+	 * @param param
+	 * @return
+	 * @author zpj
+	 * @time 2019年4月11日 下午5:24:53
+	 */
+	public List findRepeatList(UserInfo user,int page,int rows,Map<String,String> param);
 	
 	/**
 	 * 当前页数据工时求和，原来是循环数组，这样会慢，直接交给数据库查询总和
@@ -64,6 +76,16 @@ public interface ManualInfoDao {
 	 * @time 2017-6-17 下午4:04:29
 	 */
 	public int findCount(UserInfo user,Map<String,String> param);
+	/**
+	 * 查询重复数据的总数
+	 * @Title findRepeatCount
+	 * @param user
+	 * @param param
+	 * @return
+	 * @author zpj
+	 * @time 2019年4月11日 下午5:25:19
+	 */
+	public int findRepeatCount(UserInfo user,Map<String,String> param);
 	
 	/**
 	 * 根据id查询对象
