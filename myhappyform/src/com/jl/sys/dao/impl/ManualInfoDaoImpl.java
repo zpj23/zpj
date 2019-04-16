@@ -179,7 +179,7 @@ public class ManualInfoDaoImpl extends BaseDao<CheckInfo> implements ManualInfoD
 			//不是管理员
 			sql.append(" and  a.createuserid="+user.getId());
 		}
-		sql.append(" order by workdate desc,adddate desc ");
+//		sql.append(" order by workdate desc,adddate desc ");
 		List list=this.findMapObjBySql(sql.toString(), null, page, rows);
 		return list;
 	}
