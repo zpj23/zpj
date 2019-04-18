@@ -20,7 +20,7 @@ public class RecordDetailDaoImpl extends BaseDao<RecordInfoDetail> implements Re
 //		if(null!=param.get("rid")&&!"".equalsIgnoreCase(param.get("rid").toString())){
 		sql.append(" and recordId =").append("'"+param.get("rid")+"'");
 //		}
-		sql.append(" order by createtime desc ");
+//		sql.append(" order by createtime desc ");
 		List list=this.findMapObjBySql(sql.toString(), null, page, rows);
 		return list;
 	}

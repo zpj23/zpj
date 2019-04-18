@@ -167,4 +167,29 @@ public class PayrollInfo implements java.io.Serializable{
 		this.xm = xm;
 	}
 	
+	@Override
+	public String toString() {
+		StringBuffer sb=new StringBuffer(200);
+		sb.append("id:"+this.id+",");
+		sb.append("姓名xm:"+this.xm+",");
+		sb.append("月份yf:"+this.yf+",");
+		sb.append("工地gd:"+this.gd+",");
+		sb.append("工价包月gjby:"+this.gjby+",");
+		sb.append("基本工资jbgz:"+this.jbgz+",");
+		sb.append("加班工资和奖金jbgzhjj:"+this.jbgzhjj+",");
+		sb.append("应发工资yfgz:"+this.yfgz+",");
+		sb.append("劳护补贴lhbt:"+this.lhbt+",");
+		sb.append("费用补贴fybt:"+this.fybt+",");
+		sb.append("满勤mq:"+this.mq+",");
+		sb.append("其他扣款qtkk:"+this.qtkk+",");
+		sb.append("总工资zgz:"+this.zgz+",");
+		sb.append("预付工资yfgzy:"+this.yfgzy+",");
+		sb.append("剩余工资sygz:"+this.sygz+",");
+		sb.append("签字qz:"+this.qz+",");
+		sb.append("备注bz:"+this.bz+",");
+		sb.append("出勤chuqin:"+this.chuqin+",");
+		sb.append("加班jiaban:"+this.jiaban+",");
+		sb.append("总工时zonggongshi:"+this.zonggongshi+" ");
+		return sb.toString();
+	}
 }

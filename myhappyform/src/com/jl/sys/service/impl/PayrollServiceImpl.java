@@ -50,50 +50,50 @@ public class PayrollServiceImpl implements PayrollService{
 	}
 	
 	public Map calculateInfo(String yuefen,String username,UserInfo user){
-		List<PayrollInfo> list =payrollDao.findByYFAndXM(yuefen,username);
+//		List<PayrollInfo> list =payrollDao.findByYFAndXM(yuefen,username);
 		Map retMap=new HashMap();
-		retMap.put("flag", false);
-		retMap.put("msg", "");
-		try{
-			if(list.size()==0){
-				//判断没有存在对应人员对应月份的数据，需要新增（统计当前月份当前人员的考勤数据）
-				//insert into jl_payroll_info(id,xm,yf,gd,chuqin,jiaban,zonggongshi,gjby,jbgz,jbgzhjj,yfgz,lhbt,fybt,mq,qtkk,zgz,yfgzy,sygz) SELECT UUID(),t1,'2',t2,t3,t4,t5,'0','0','0','0','0','0','0','0','0','0','0' from yuefen2
-				payrollDao.insertPayrollData(yuefen,username);
-				retMap.put("flag", true);
-				retMap.put("msg", "新增成功");
-				insertLog(user,"新增工资单信息","审核完成后，自动新增工资单对应的数据(没有当前月的数据的时候新增)"+"月份："+yuefen+"，人员："+username);
-				
-			}else if(list.size()==1){
-				//有且仅有1一条对应人员对应月份的数据，需要编辑（重新统计当前月份当前人员的考勤数据）
-				payrollDao.updatePayrollData(yuefen,username);
-				retMap.put("flag", true);
-				retMap.put("msg", "修改成功");
-				insertLog(user,"修改工资单信息","审核完成后，自动更新工资单对应的数据(没有当前月的数据的时候新增)"+"月份："+yuefen+"，人员："+username);
-			}else if(list.size()>1){
-				//说明有重复的数据
-				retMap.put("flag", false);
-				retMap.put("msg", yuefen+"月份"+username+"信息有"+list.size()+"条");
-				insertLog(user,"工资单信息问题",yuefen+"月份"+username+"信息有"+list.size()+"条");
-			}
-		}catch (Exception e) {
-			retMap.put("flag", false);
-			retMap.put("msg", "更新失败");
-			throw new RuntimeException();
-		}
+//		retMap.put("flag", false);
+//		retMap.put("msg", "");
+//		try{
+//			if(list.size()==0){
+//				//判断没有存在对应人员对应月份的数据，需要新增（统计当前月份当前人员的考勤数据）
+//				//insert into jl_payroll_info(id,xm,yf,gd,chuqin,jiaban,zonggongshi,gjby,jbgz,jbgzhjj,yfgz,lhbt,fybt,mq,qtkk,zgz,yfgzy,sygz) SELECT UUID(),t1,'2',t2,t3,t4,t5,'0','0','0','0','0','0','0','0','0','0','0' from yuefen2
+//				payrollDao.insertPayrollData(yuefen,username);
+//				retMap.put("flag", true);
+//				retMap.put("msg", "新增成功");
+//				insertLog(user,"新增工资单信息","审核完成后，自动新增工资单对应的数据(没有当前月的数据的时候新增)"+"月份："+yuefen+"，人员："+username);
+//				
+//			}else if(list.size()==1){
+//				//有且仅有1一条对应人员对应月份的数据，需要编辑（重新统计当前月份当前人员的考勤数据）
+//				payrollDao.updatePayrollData(yuefen,username);
+//				retMap.put("flag", true);
+//				retMap.put("msg", "修改成功");
+//				insertLog(user,"修改工资单信息","审核完成后，自动更新工资单对应的数据(没有当前月的数据的时候新增)"+"月份："+yuefen+"，人员："+username);
+//			}else if(list.size()>1){
+//				//说明有重复的数据
+//				retMap.put("flag", false);
+//				retMap.put("msg", yuefen+"月份"+username+"信息有"+list.size()+"条");
+//				insertLog(user,"工资单信息问题",yuefen+"月份"+username+"信息有"+list.size()+"条");
+//			}
+//		}catch (Exception e) {
+//			retMap.put("flag", false);
+//			retMap.put("msg", "更新失败");
+//			throw new RuntimeException();
+//		}
 		
 		
 		return retMap;
 	}
 	
-	public void insertLog(UserInfo user,String type,String description){
-		LogInfo loginfo=new LogInfo();
-		loginfo.setId(UUID.randomUUID().toString());
-		loginfo.setCreatetime(new Date());
-		loginfo.setType("新增工资单信息");
-		loginfo.setDescription("审核完成后，自动新增工资单对应的数据(没有当前月的数据的时候新增)");
-		loginfo.setUserid(user.getId());
-		loginfo.setUsername(user.getUsername());
-		jlLogInfoService.logInfo(loginfo);
-	}
+//	public void insertLog(UserInfo user,String type,String description){
+//		LogInfo loginfo=new LogInfo();
+//		loginfo.setId(UUID.randomUUID().toString());
+//		loginfo.setCreatetime(new Date());
+//		loginfo.setType("新增工资单信息");
+//		loginfo.setDescription("审核完成后，自动新增工资单对应的数据(没有当前月的数据的时候新增)");
+//		loginfo.setUserid(user.getId());
+//		loginfo.setUsername(user.getUsername());
+//		jlLogInfoService.logInfo(loginfo);
+//	}
 	
 }

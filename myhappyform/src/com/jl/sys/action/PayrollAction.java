@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
@@ -15,8 +16,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.goldenweb.sys.util.IAction;
+import com.jl.sys.pojo.LogInfo;
 import com.jl.sys.pojo.PayrollInfo;
 import com.jl.sys.pojo.UserInfo;
+import com.jl.sys.service.LogInfoService;
 import com.jl.sys.service.PayrollService;
 
 import net.sf.json.JSON;
@@ -31,6 +34,8 @@ public class PayrollAction extends IAction {
 	
 	@Autowired
 	private PayrollService payrollService;
+	@Autowired
+	public LogInfoService jlLogInfoService;
 	
 	@Action(value="jlPayrollAction_toList",results={
 			@Result(name="success",location="sys/payroll/list.jsp"),
@@ -153,7 +158,9 @@ public class PayrollAction extends IAction {
 			 String chuqin=String.valueOf(json.getDouble("chuqin"));//出勤
 			 String jiaban=String.valueOf(json.getDouble("jiaban"));//加班
 			 String zonggongshi=String.valueOf(json.getDouble("zonggongshi"));//总工时
+			 UserInfo user = (UserInfo)request.getSession().getAttribute("jluserinfo");
 			 
+
 			 PayrollInfo pi=new PayrollInfo();
 			 pi.setId(id);
 			 pi.setXm(xm);
@@ -176,12 +183,31 @@ public class PayrollAction extends IAction {
 			 pi.setJiaban(jiaban);
 			 pi.setZonggongshi(zonggongshi);
 			 pi.setCreatetime(new Date());
+			 
+			 PayrollInfo temp=payrollService.findById(pi.getId());
+			 if(null!=temp){
+				insertLog(user,"修改工资单信息","修改前的数据："+temp.toString()+"修改后的数据："+pi.toString());
+			 }else{
+				insertLog(user,"新增工资单信息",pi.toString());
+			 }
+			 
 			 payrollService.saveInfo(pi);
 			 this.jsonWrite(true);
 		 }catch (Exception e) {
 			e.printStackTrace();
 			this.jsonWrite(false);
 		}
+	}
+	
+	public void insertLog(UserInfo user,String type,String description){
+		LogInfo loginfo=new LogInfo();
+		loginfo.setId(UUID.randomUUID().toString());
+		loginfo.setCreatetime(new Date());
+		loginfo.setType(type);
+		loginfo.setDescription(description);
+		loginfo.setUserid(user.getId());
+		loginfo.setUsername(user.getUsername());
+		jlLogInfoService.logInfo(loginfo);
 	}
 	
 	/**

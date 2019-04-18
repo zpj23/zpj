@@ -24,6 +24,7 @@ public class RecordDaoImpl extends BaseDao<RecordInfo> implements RecordDao {
 		if(null!=param.get("username")&&!"".equalsIgnoreCase(param.get("username").toString())){
 			sql.append(" and  lyr like ").append("'%"+param.get("username")+"%'  ");
 		}
+		sql.append(" order by createtime desc ");
 		List list=this.findMapObjBySql(sql.toString(), null, page, rows);
 		return list;
 	}
