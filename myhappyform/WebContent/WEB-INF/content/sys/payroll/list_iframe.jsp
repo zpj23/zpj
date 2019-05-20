@@ -9,6 +9,7 @@
 <script type="text/javascript">
 var datagrid;
 var editRow = undefined; //定义全局变量：当前编辑的行
+var isSaveFlag=false;
 $(document).ready(function(){
 	datagrid = $('#datagrid');
 	datagrid.datagrid({
@@ -27,7 +28,7 @@ $(document).ready(function(){
             if (editRow != undefined) {
             	alert("请先保存之前的数据");
             	return;
-                datagrid.datagrid("endEdit", editRow);
+//                 datagrid.datagrid("endEdit", editRow);
             }
             //添加时如果没有正在编辑的行，则在datagrid的第一行插入一行
             if (editRow == undefined) {
@@ -60,7 +61,7 @@ $(document).ready(function(){
             if (editRow != undefined) {
             	alert("请先保存之前的数据");
             	return;
-                datagrid.datagrid("endEdit", editRow);
+//                 datagrid.datagrid("endEdit", editRow);
             }
         	//获取当前选中行，准备复制数据
             var rows = datagrid.datagrid("getSelections");
@@ -126,9 +127,22 @@ $(document).ready(function(){
              if (rows.length == 1) {
                  //修改之前先关闭已经开启的编辑行，当调用endEdit该方法时会触发onAfterEdit事件
                  if (editRow != undefined) {
-                     datagrid.datagrid("endEdit", editRow);
+                	 isSaveFlag=true;
+                	 datagrid.datagrid("endEdit", editRow);
+                	 
+//                 	 $.messager.confirm("提示", "是否保存已编辑的数据?", function (r) {
+//                          if (r) {
+// 		                	 isSaveFlag=true;
+// 		                	 datagrid.datagrid("endEdit", editRow);
+		                	 
+//                          }else{
+//                         	 isSaveFlag=false;
+// 		                	 datagrid.datagrid("endEdit", editRow);
+//                          }
+//                      });
                  }
                  //当无编辑行时
+                 editRow=undefined;
                  if (editRow == undefined) {
                      //获取到当前选择行的下标
                      var index = datagrid.datagrid("getRowIndex", rows[0]);
@@ -145,6 +159,7 @@ $(document).ready(function(){
          }, '-',
          { text: '保存', iconCls: 'icon-save', handler: function () {
              //保存时结束当前编辑的行，自动触发onAfterEdit事件如果要与后台交互可将数据通过Ajax提交后台
+             isSaveFlag=true;
              datagrid.datagrid("endEdit", editRow);
          }
          }, '-',
@@ -153,6 +168,10 @@ $(document).ready(function(){
          }
          }, '-',
          { text: '刷新', iconCls: 'icon-refresh', handler: function () {
+        	 if (editRow != undefined) {
+        		 isSaveFlag=false;
+                 datagrid.datagrid("endEdit", editRow);
+             }
         	 parent.searchInfo();
          }
          }
@@ -161,30 +180,24 @@ $(document).ready(function(){
              //endEdit该方法触发此事件
              
             try{
-//             	 var updated = datagrid.datagrid('getChanges', 'updated');
-//             	 console.log(updated);
-//                  if (updated.length < 1) {  
-//                      editRow = undefined;  
-//                      datagrid.datagrid('unselectAll');  
-//                      return;  
-//                  }else{
+				if(isSaveFlag){
                 	 tempSaveData(rowData);
-//                  }  
-             
+				}
             }catch (e) {
  			}
              editRow = undefined;
          },
          onDblClickRow: function (rowIndex, rowData) {
          //双击开启编辑行
-//              if (editRow != undefined) {
-//                  datagrid.datagrid("endEdit", editRow);
-//              }
-//              editRow=undefined;
-//              if (editRow == undefined) {
-//                  datagrid.datagrid("beginEdit", rowIndex);
-//                  editRow = rowIndex;
-//              }
+             if (editRow != undefined) {
+            	 isSaveFlag=true;
+                 datagrid.datagrid("endEdit", editRow);
+             }
+             editRow=undefined;
+             if (editRow == undefined) {
+                 datagrid.datagrid("beginEdit", rowIndex);
+                 editRow = rowIndex;
+             }
          }
 	});
 	
