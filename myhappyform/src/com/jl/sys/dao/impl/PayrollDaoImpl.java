@@ -88,15 +88,15 @@ public class PayrollDaoImpl extends BaseDao<PayrollInfo> implements PayrollDao{
 	
 	
 	public void insertPayrollData(String yuefen,String xm){
-		StringBuffer sql=new StringBuffer("insert into jl_payroll_info (id,xm,yf,gd,chuqin,jiaban,zonggongshi,gjby,jbgz,jbgzhjj,yfgz,lhbt,fybt,mq,qtkk,zgz,yfgzy,sygz) ( SELECT UUID(),t1,'"+yuefen+"',t2,t3,t4,t5,'0','0','0','0','0','0','0','0','0','0','0' from yuefen"+yuefen+" where t1='"+xm+"' )");
+		StringBuffer sql=new StringBuffer("insert into jl_payroll_info (id,xm,yf,gd,chuqin,jiaban,zonggongshi,gjby,jbgz,jbgzhjj,yfgz,lhbt,fybt,mq,qtkk,zgz,yfgzy,sygz) ( SELECT UUID(),t1,'"+yuefen+"',t2,t3,t4,t5,'0','0','0','0',t6,'0','0','0','0','0','0' from yuefen"+yuefen+" where t1='"+xm+"' )");
 		this.executeSql(sql.toString());
 	}
 	
 	public void updatePayrollData(String yuefen,String xm){
-		List list=this.findMapObjBySql("select t3 as chuqin,t4 as jiaban,t5 as zonggongshi from yuefen"+yuefen+" where t1='"+xm+"'", null, 1, 1);
+		List list=this.findMapObjBySql("select t3 as chuqin,t4 as jiaban,t5 as zonggongshi,t6 as lhbt from yuefen"+yuefen+" where t1='"+xm+"'", null, 1, 1);
 		if(null!=list&&list.size()>0){
 			Map map=(Map)list.get(0);
-			StringBuffer sql=new StringBuffer("update jl_payroll_info set chuqin='"+map.get("chuqin")+"',jiaban='"+map.get("jiaban")+"',zonggongshi='"+map.get("zonggongshi")+"' where xm='"+xm+"' and yf='"+yuefen+"'");
+			StringBuffer sql=new StringBuffer("update jl_payroll_info set chuqin='"+map.get("chuqin")+"',jiaban='"+map.get("jiaban")+"',zonggongshi='"+map.get("zonggongshi")+"' ,lhbt='"+map.get("lhbt")+"' where xm='"+xm+"' and yf='"+yuefen+"'");
 			this.executeSql(sql.toString());
 		}
 	}

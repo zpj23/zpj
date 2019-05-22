@@ -53,6 +53,7 @@ $(document).ready(function(){
                 datagrid.datagrid("beginEdit", 0);
                 //给当前编辑的行赋值
                 editRow = 0;
+                bindInfo(editRow);
             }
         }
         }, '-',
@@ -97,6 +98,7 @@ $(document).ready(function(){
                     datagrid.datagrid("beginEdit", 0);
                     //给当前编辑的行赋值
                     editRow = 0;
+                    bindInfo(editRow);
                 }
             }
             
@@ -153,6 +155,7 @@ $(document).ready(function(){
                      //当开启了当前选择行的编辑状态之后，
                      //应该取消当前列表的所有选择行，要不然双击之后无法再选择其他行进行编辑
                      datagrid.datagrid("unselectAll");
+                     bindInfo(editRow);
                  }
              }
          }
@@ -197,11 +200,94 @@ $(document).ready(function(){
              if (editRow == undefined) {
                  datagrid.datagrid("beginEdit", rowIndex);
                  editRow = rowIndex;
+	             bindInfo(editRow);
              }
          }
 	});
 	
 });
+
+//绑定 在字段上加keyup监听 
+function bindInfo(ri){
+	var ed = $('#datagrid').datagrid('getEditors', ri);
+		for (var i = 0; i < ed.length; i++){
+			var et = ed[i];
+			if(et.field == "gjby"){
+				//工价包月
+				$(et.target).bind("keyup", function(){
+	            	chf($(this),"gjby");
+	            });
+			}else if(et.field == "jbgz"){
+				//监听基本工资
+				$(et.target).bind("keyup", function(){
+	            	chf($(this),"jbgz");
+	            });
+			}else if(et.field == "jbgzhjj"){
+				//监听加班工资和奖金
+				$(et.target).bind("keyup", function(){
+	            	chf($(this),"jbgzhjj");
+	            });
+			}else if(et.field == "qtkk"){
+				//其他扣款
+				$(et.target).bind("keyup", function(){
+	            	chf($(this),"qtkk");
+	            });
+			}else if(et.field == "yfgzy"){
+				//预付工资元
+				$(et.target).bind("keyup", function(){
+	            	chf($(this),"yfgzy");
+	            });
+			}
+		}
+}
+
+//keyup方法
+function chf(textarea,tfield){
+	if(editRow != undefined){
+		var edr = $('#datagrid').datagrid('getEditors', editRow);
+		var newval = $(textarea).val();
+		if(tfield=="gjby"){
+			//判断改变的是工价包月 ,则利用总工时*工价包月
+			var temp= $(edr[6].target).val();
+			if(null!=temp&&temp!=""&&null!=newval&&newval!=""){
+				var yfgz=temp*newval;
+				$(edr[10].target).val(yfgz);
+			}
+		}else if(tfield=="jbgz"){
+			//判断如果改变的是基本工资，则用应发工资-基本工资=加班工资和奖金
+			var yfgz=$(edr[10].target).val();
+			if(null!=yfgz&&yfgz!=""&&null!=newval&&newval!=""){
+				var jbgzhjj=yfgz-newval;
+				$(edr[9].target).val(jbgzhjj);
+			}
+		}else if(tfield=="jbgzhjj"){
+			//判断如果改变的是加班工资和奖金，则用应发工资-加班工资和奖金=基本工资
+			var yfgz=$(edr[10].target).val();
+			if(null!=yfgz&&yfgz!=""&&null!=newval&&newval!=""){
+				var jbgz=yfgz-newval;
+				$(edr[8].target).val(jbgz);
+			}
+		}else if(tfield=="qtkk"){
+			//判断如果改变的是其他扣款，则  总工资=应发工资+劳护补贴+费用补贴+满勤-其他扣款
+			var yfgz=$(edr[10].target).val();//应发工资
+			var lhbt=$(edr[11].target).val();//劳护补贴
+			var fybt=$(edr[12].target).val();//费用补贴
+			var mq=$(edr[13].target).val();//满勤
+			var qtkk=$(edr[14].target).val();//其他扣款
+			var zgz=parseFloat(yfgz)+parseFloat(lhbt)+parseFloat(fybt)+parseFloat(mq)-parseFloat(newval);
+			$(edr[15].target).val(zgz);
+			var yfgzy=$(edr[16].target).val();
+			var sygz=zgz-parseFloat(yfgzy);
+			$(edr[17].target).val(sygz);
+		}else if(tfield=="yfgzy"){
+			//判断如果改变的是预发工资，剩余工资=总工资-预发工资
+			var zgz=$(edr[15].target).val();
+			var sygz=zgz-parseFloat(newval);
+			$(edr[17].target).val(sygz);
+		}
+	}
+	
+}
 
 function tempSaveData(data){
 	var transfer_to_par = JSON.stringify(data);
@@ -273,6 +359,7 @@ function guid() {
 </script>
 </head>
 <body>
+
 <table id="datagrid" fit="true" fitColumns="true" title="工资明细" class="easyui-datagrid" style="height: auto; width: auto;"  
         url=""  
         singleSelect="true" iconCls="icon-save" rownumbers="true" pageSize="${ipagesize}" pageList="${ipagelist}" pagination="true">  
@@ -297,7 +384,7 @@ function guid() {
             <th rowspan="2" field="qz" data-options="editor:{type:'text'},width:65,resizable:'true',formatter:showContents" align="center" >签字</th>
             <th rowspan="2" field="bz" data-options="editor:{type:'text'},width:65,resizable:'true',formatter:showContents" align="center" >备注</th>
         </tr>  
-        <tr>  
+        <tr>
             <th field="chuqin" data-options="editor:{type:'numberbox',options:{precision:1}},width:65" align="center">出勤（h）</th>  
             <th field="jiaban" data-options="editor:{type:'numberbox',options:{precision:1}},width:65"  align="center">加班（h）</th>  
             <th field="zonggongshi" data-options="editor:{type:'numberbox',options:{precision:1}},width:65" align="center">总工时（h）</th>  

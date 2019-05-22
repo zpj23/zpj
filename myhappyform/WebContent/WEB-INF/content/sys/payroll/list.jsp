@@ -29,7 +29,7 @@
 <![endif]-->
 <title>工资单管理</title>
 <script type="text/javascript">
-
+//提示：1、工价/包月 填完会根据应发工资=（工价/包月）*总工时，自动计算出应发工资；2、基本工资 填完会根据加班工资和奖金=总工资-基本工资，自动计算出加班工资和奖金；3、劳护补贴在审核时会自动填入；4、其他扣款 填完会根据总工资=应发工资+劳护补贴+费用补贴+满勤-其他扣款，自动计算总工资；5、填写完预发工资，或者第4步中的计算自动生成剩余工资，根据公式 剩余工资=总工资-预发工资。
 $(document).ready(function(){
 	initDep();
 });
@@ -117,11 +117,10 @@ function initDep(){
 </head>
 <body style="overflow: hidden">
 <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 工资管理 <span class="c-gray en">&gt;</span> 工资单管理<a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
-<div class="pd-20">
+<div class="pd-10">
+提示：1、工价/包月 填完会根据应发工资=（工价/包月）*总工时，自动计算出应发工资；2、基本工资 填完会根据加班工资和奖金=总工资-基本工资，自动计算出加班工资和奖金；3、劳护补贴在审核时会自动填入；4、其他扣款 填完会根据总工资=应发工资+劳护补贴+费用补贴+满勤-其他扣款，自动计算总工资；5、填写完预发工资，或者第4步中的计算自动生成剩余工资，根据公式 剩余工资=总工资-预发工资。
 <form action="" name="form1" method="post" enctype="multipart/form-data"  id="form1"  >
- 
-	<div class="text-c"> 
-		
+		<div class="text-c"> 
 		<input type="text" class="input-text" style="width:120px" placeholder="姓名" id="username" name="username" />
 		<span class="select-box inline">
 			<select class="select" size="1" name="departmentid" id="departmentid" value="" onchange="" datatype="*" nullmsg="请选择所属部门！">
@@ -130,22 +129,11 @@ function initDep(){
         </span>
 		<input type="text" placeholder="选择月份" onfocus="WdatePicker({dateFmt:'MM'})" id="yuefen" name="yuefen" class="input-text Wdate" style="width:80px;">
 		<button type="button"  class="btn btn-success" onclick="searchInfo();" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 查询</button>
+		
 	</div>
 	<div class="text-c"> 
 		&nbsp;
 	</div>
-<!-- 	<div class="cl pd-5 bg-1 bk-gray mt-20"> -->
-<!-- 	 <span class="l"> -->
-<!-- 	 <span class="btn-upload form-group"> -->
-<!-- 			<input class="input-text upload-url" type="text" name="ad" id="ad" readonly  datatype="*" nullmsg="请添加附件！" style="width:200px"> -->
-<!-- 			<a href="javascript:void();" style="color: white" class="btn btn-primary upload-btn radius"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a> -->
-<!-- 			<input type="file" id="file" multiple name="file" class="input-file"> -->
-<!-- 		</span> -->
-<!-- 	  <a href="javascript:;" style="color: white" onclick="dataimport()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe600;</i>批量导入</a>  -->
-<!-- 	  <a href="javascript:;" style="color: white" onclick="admin_add('添加信息','jlPayrollAction_toAdd','800','650')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加信息</a> -->
-<!-- 	  <a href="javascript:;" style="color: white" onclick="dataoutput()" class="btn btn-success radius"><i class="Hui-iconfont">&#xe644;</i>导出数据</a> -->
-<!-- 	  </span> -->
-<!-- 	</div> -->
 	</form>
 		
 <iframe id="list_iframe" name="list_frame" src="jlPayrollAction_toiframe" width="100%" height="78%" frameborder="0"></iframe>
