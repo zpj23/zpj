@@ -358,7 +358,7 @@ public class ManualInfoDaoImpl extends BaseDao<CheckInfo> implements ManualInfoD
 	}
 	
 	public List findListByIds(String id){
-		List list=this.findMapObjBySql("select staffname as xm ,MONTH(workdate) as yf from jl_check_info where id in ("+id+")", null, 1, 1000);
+		List list=this.findMapObjBySql("select staffname as xm ,CONCAT(YEAR(workdate),'-',MONTH(workdate)) as yf,sgxm,departmentname from jl_check_info where id in ("+id+")", null, 1, 1000);
 		return list;
 	}
 }

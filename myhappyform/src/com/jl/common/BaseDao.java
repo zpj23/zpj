@@ -892,6 +892,25 @@ public class BaseDao<T extends Serializable>{
 		}
 		return list;
 	}
+	
+public List findMapObjBySql(final String sql){
+		
+		List list=null;
+		Session session=null;
+		try {
+			session= sessionFactory.getCurrentSession();
+			Query query=session.createSQLQuery(sql);
+			query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+			list = query.list();
+			//session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			//session.close();
+		}
+		return list;
+	}
+	
 	/**
 	 * 返回对象list
 	 * @Title findObjectByHql

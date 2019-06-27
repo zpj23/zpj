@@ -28,6 +28,7 @@ import com.jl.common.BaseService.MethodLog2;
 import com.jl.sys.dao.HistoryStaffNameDao;
 import com.jl.sys.dao.ManualInfoDao;
 import com.jl.sys.dao.PayrollDao;
+import com.jl.sys.dao.SgxmDao;
 import com.jl.sys.pojo.CheckInfo;
 import com.jl.sys.pojo.HistoryStaffname;
 import com.jl.sys.pojo.LogInfo;
@@ -47,6 +48,8 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 	private PayrollDao payrollDao; 
 	@Autowired
 	public LogInfoService jlLogInfoService;
+	
+	
 	
 	@MethodLog2(remark="保存考勤信息",type="新增/编辑")
 	public void saveInfo(CheckInfo cInfo){
@@ -233,6 +236,19 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 		
 	}
 	
+	
+	
+	
+	/**
+	 * 工资单信息
+	 * @Title calculateInfo
+	 * @param username
+	 * @param yuefen
+	 * @param user
+	 * @throws RuntimeException
+	 * @author zpj
+	 * @time 2019年6月24日 下午2:39:35
+	 */
 	public synchronized void calculateInfo(String username,String yuefen,UserInfo user) throws RuntimeException{
 		List<PayrollInfo> list =payrollDao.findByYFAndXM(yuefen,username);
 		try{

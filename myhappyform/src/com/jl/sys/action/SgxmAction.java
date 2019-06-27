@@ -18,60 +18,49 @@ import org.springframework.stereotype.Component;
 import com.goldenweb.sys.util.IAction;
 import com.jl.sys.pojo.LogInfo;
 import com.jl.sys.pojo.PayrollInfo;
+import com.jl.sys.pojo.SgxmInfo;
 import com.jl.sys.pojo.UserInfo;
 import com.jl.sys.service.LogInfoService;
-import com.jl.sys.service.PayrollService;
+import com.jl.sys.service.SgxmService;
 
-import net.sf.json.JSON;
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+
 @Namespace("/")
 @Scope("prototype")
-@Component("jlPayrollAction")
+@Component("sgxmAction")
 @ParentPackage("json-default")
-public class PayrollAction extends IAction {
-	
-	
+public class SgxmAction extends IAction {
 	@Autowired
-	private PayrollService payrollService;
+	private SgxmService sgxmService;
 	@Autowired
 	public LogInfoService jlLogInfoService;
 	
-	@Action(value="jlPayrollAction_toList",results={
-			@Result(name="success",location="sys/payroll/list.jsp"),
+	@Action(value="sgxmAction_toList",results={
+			@Result(name="success",location="sys/sgxm/list.jsp"),
 			@Result(name="error",location="/login.jsp")
 	})
 	public String toList(){
 		return "success";
 	}
 	
-	@Action(value="jlPayrollAction_toiframe",results={
-			@Result(name="success",location="sys/payroll/list_iframe.jsp"),
+	@Action(value="sgxmAction_toiframe",results={
+			@Result(name="success",location="sys/sgxm/list_iframe.jsp"),
 			@Result(name="error",location="/login.jsp")
 	})
 	public String toiframe(){
 		return "success";
 	}
 	
-	@Action(value="jlPayrollAction_toAdd",results={
-			@Result(name="success",location="sys/payroll/add.jsp"),
-			@Result(name="error",location="/login.jsp")
-	})
-	public String toAdd(){
-		return "success";
-	}
-	
-	
-	@Action(value="jlPayrollAction_getListJson",
+	@Action(value="sgxmAction_getListJson",
 			results={
 			@Result(type="json", params={"root","jsonData"})})
 	public void getListJson(){
 		String tpage=request.getParameter("page");
 		String trows=request.getParameter("rows");
-//		String departmentname=request.getParameter("departmentname");
+		String departmentname=request.getParameter("departmentname");
 		String yuefen=request.getParameter("yuefen");
 		String username=request.getParameter("username");
-//		String sgxm=request.getParameter("sgxm");
+		String sgxm=request.getParameter("sgxm");
 		
 		if(null!=tpage&&!"".equalsIgnoreCase(tpage)){
 			page=Integer.parseInt(tpage);
@@ -80,11 +69,11 @@ public class PayrollAction extends IAction {
 			rows=Integer.parseInt(trows);
 		}
 		Map<String,String> param=new HashMap<String,String>();
-//		param.put("departmentname", departmentname);
+		param.put("departmentname", departmentname);
 		param.put("yuefen", yuefen);
 		param.put("username", username);
-//		param.put("sgxm", sgxm);
-		Map map=payrollService.findList(page,rows,param);
+		param.put("sgxm", sgxm);
+		Map map=sgxmService.findList(page,rows,param);
 		List list=(List)map.get("list");
 //		int countNumber=(Integer)map.get("count");
 		if(list!=null&&list.size()>0){
@@ -126,6 +115,8 @@ public class PayrollAction extends IAction {
 		}
 	} 
 	
+	
+	
 	/**
 	 * 保存数据
 	 * @Title saveInfo
@@ -133,7 +124,7 @@ public class PayrollAction extends IAction {
 	 * @throws IOException 
 	 * @time 2019年3月5日 上午9:54:39
 	 */
-	@Action(value="jlPayrollAction_saveInfo",
+	@Action(value="sgxmAction_saveInfo",
 			results={
 			@Result(type="json", params={"root","jsonData"})})
 	public void saveInfo() throws IOException{
@@ -144,7 +135,7 @@ public class PayrollAction extends IAction {
 			 String xm=json.getString("xm");//姓名
 			 String yf=json.getString("yf");//月份
 			 String gd=json.getString("gd");//工地
-//			 String sgxm=json.getString("sgxm");//施工项目
+			 String sgxm=json.getString("sgxm");//施工项目
 			 String gjby=String.valueOf(json.getString("gjby"));//工价/包月
 			 String jbgz=String.valueOf(json.getDouble("jbgz"));//基本工资
 			 String jbgzhjj=String.valueOf(json.getDouble("jbgzhjj"));//加班工资和奖金
@@ -164,12 +155,12 @@ public class PayrollAction extends IAction {
 			 UserInfo user = (UserInfo)request.getSession().getAttribute("jluserinfo");
 			 
 
-			 PayrollInfo pi=new PayrollInfo();
+			 SgxmInfo pi=new SgxmInfo();
 			 pi.setId(id);
 			 pi.setXm(xm);
 			 pi.setYf(yf);
 			 pi.setGd(gd);
-//			 pi.setSgxm(sgxm);
+			 pi.setSgxm(sgxm);
 			 pi.setGjby(gjby);
 			 pi.setJbgz(jbgz);
 			 pi.setJbgzhjj(jbgzhjj);
@@ -188,14 +179,14 @@ public class PayrollAction extends IAction {
 			 pi.setZonggongshi(zonggongshi);
 			 pi.setCreatetime(new Date());
 			 
-			 PayrollInfo temp=payrollService.findById(pi.getId());
+			 SgxmInfo temp=sgxmService.findById(pi.getId());
 			 if(null!=temp){
-				insertLog(user,"修改工资单信息","修改前的数据："+temp.toString()+"修改后的数据："+pi.toString());
+				insertLog(user,"修改项目管理单信息","修改前的数据："+temp.toString()+"修改后的数据："+pi.toString());
 			 }else{
-				insertLog(user,"新增工资单信息",pi.toString());
+				insertLog(user,"新增项目管理单信息",pi.toString());
 			 }
 			 
-			 payrollService.saveInfo(pi);
+			 sgxmService.saveInfo(pi);
 			 this.jsonWrite(true);
 		 }catch (Exception e) {
 			e.printStackTrace();
@@ -221,37 +212,13 @@ public class PayrollAction extends IAction {
 	 * @author zpj
 	 * @time 2019年3月6日 上午10:40:47
 	 */
-	@Action(value="jlPayrollAction_delInfo",
+	@Action(value="sgxmAction_delInfo",
 			results={
 			@Result(type="json", params={"root","jsonData"})})
 	public void delInfo() throws IOException{
 		String id=request.getParameter("id");
 		try {
-			payrollService.delInfo(id);
-			this.jsonWrite(true);
-		} catch (IOException e) {
-			e.printStackTrace();
-			this.jsonWrite(false);
-		}
-	}
-	
-	
-	/**
-	 * 审核保存时计算该人员当前月的数据
-	 * @Title calculateInfo
-	 * @throws IOException
-	 * @author zpj
-	 * @time 2019年3月18日 下午3:10:07
-	 */
-	@Action(value="jlPayrollAction_calculate",
-			results={
-			@Result(type="json", params={"root","jsonData"})})
-	public void calculateInfo() throws IOException{
-		String yuefen=request.getParameter("yuefen");
-		String username=request.getParameter("username");
-		UserInfo user = (UserInfo)request.getSession().getAttribute("jluserinfo");
-		try {
-			payrollService.calculateInfo(yuefen,username,user);
+			sgxmService.delInfo(id);
 			this.jsonWrite(true);
 		} catch (IOException e) {
 			e.printStackTrace();

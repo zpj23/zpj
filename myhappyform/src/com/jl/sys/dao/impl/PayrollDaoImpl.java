@@ -36,17 +36,21 @@ public class PayrollDaoImpl extends BaseDao<PayrollInfo> implements PayrollDao{
 			sql.append(" and  a.xm like ").append("'%"+param.get("username")+"%'  ");
 		}
 		if(null!=param.get("yuefen")&&!"".equalsIgnoreCase(param.get("yuefen").toString())){
-			String yuefen=param.get("yuefen").toString();
-			if(yuefen.substring(0,1).equalsIgnoreCase("0")){
-				sql.append(" and  a.yf = ").append("'"+yuefen.substring(1,2)+"'  ");
-			}else{
-				sql.append(" and  a.yf = ").append("'"+yuefen.substring(0,2)+"'  ");
-			}
+//			String yuefen=param.get("yuefen").toString();
+//			if(yuefen.substring(0,1).equalsIgnoreCase("0")){
+//				sql.append(" and  a.yf = ").append("'"+yuefen.substring(1,2)+"'  ");
+//			}else{
+//				sql.append(" and  a.yf = ").append("'"+yuefen.substring(0,2)+"'  ");
+//			}
+			sql.append(" and  a.yf = ").append("'"+param.get("yuefen").toString()+"'  ");
 		}
 		if(null!=param.get("departmentname")&&!"".equalsIgnoreCase(param.get("departmentname").toString())){
 			sql.append(" and  a.gd like ").append("'%"+param.get("departmentname")+"%'  ");
 		}
-		sql.append(" order by ABS(yf) asc ");
+		if(null!=param.get("sgxm")&&!"".equalsIgnoreCase(param.get("sgxm").toString())){
+			sql.append(" and  a.sgxm like ").append("'%"+param.get("sgxm")+"%'  ");
+		}
+		sql.append(" order by yf asc ");
 		List list=this.findMapObjBySql(sql.toString(), null, page, rows);
 		return list;
 	}
@@ -58,15 +62,19 @@ public class PayrollDaoImpl extends BaseDao<PayrollInfo> implements PayrollDao{
 			sql.append(" and  a.xm like ").append("'%"+param.get("username")+"%'  ");
 		}
 		if(null!=param.get("yuefen")&&!"".equalsIgnoreCase(param.get("yuefen").toString())){
-			String yuefen=param.get("yuefen").toString();
-			if(yuefen.substring(0,1).equalsIgnoreCase("0")){
-				sql.append(" and  a.yf = ").append("'"+yuefen.substring(1,2)+"'  ");
-			}else{
-				sql.append(" and  a.yf = ").append("'"+yuefen.substring(0,2)+"'  ");
-			}
+//			String yuefen=param.get("yuefen").toString();
+//			if(yuefen.substring(0,1).equalsIgnoreCase("0")){
+//				sql.append(" and  a.yf = ").append("'"+yuefen.substring(1,2)+"'  ");
+//			}else{
+//				sql.append(" and  a.yf = ").append("'"+yuefen.substring(0,2)+"'  ");
+//			}
+			sql.append(" and  a.yf = ").append("'"+param.get("yuefen").toString()+"'  ");
 		}
 		if(null!=param.get("departmentname")&&!"".equalsIgnoreCase(param.get("departmentname").toString())){
 			sql.append(" and  a.gd like ").append("'%"+param.get("departmentname")+"%'  ");
+		}
+		if(null!=param.get("sgxm")&&!"".equalsIgnoreCase(param.get("sgxm").toString())){
+			sql.append(" and  a.sgxm like ").append("'%"+param.get("sgxm")+"%'  ");
 		}
 		List<Map> list=this.findMapObjBySql(sql.toString(), null, 1, 10000);
 		if(null!=list&&list.size()>0){
@@ -88,12 +96,14 @@ public class PayrollDaoImpl extends BaseDao<PayrollInfo> implements PayrollDao{
 	
 	
 	public void insertPayrollData(String yuefen,String xm){
-		StringBuffer sql=new StringBuffer("insert into jl_payroll_info (id,xm,yf,gd,chuqin,jiaban,zonggongshi,gjby,jbgz,jbgzhjj,yfgz,lhbt,fybt,mq,qtkk,zgz,yfgzy,sygz) ( SELECT UUID(),t1,'"+yuefen+"',t2,t3,t4,t5,'0','0','0','0',t6,'0','0','0','0','0','0' from yuefen"+yuefen+" where t1='"+xm+"' )");
+		String view_id=yuefen.split("-")[1];
+		StringBuffer sql=new StringBuffer("insert into jl_payroll_info (id,xm,yf,gd,chuqin,jiaban,zonggongshi,gjby,jbgz,jbgzhjj,yfgz,lhbt,fybt,mq,qtkk,zgz,yfgzy,sygz) ( SELECT UUID(),t1,'"+yuefen+"',t2,t3,t4,t5,'0','0','0','0',t6,'0','0','0','0','0','0' from yuefen"+view_id+" where t1='"+xm+"' )");
 		this.executeSql(sql.toString());
 	}
 	
 	public void updatePayrollData(String yuefen,String xm){
-		List list=this.findMapObjBySql("select t3 as chuqin,t4 as jiaban,t5 as zonggongshi,t6 as lhbt from yuefen"+yuefen+" where t1='"+xm+"'", null, 1, 1);
+		String view_id=yuefen.split("-")[1];
+		List list=this.findMapObjBySql("select t3 as chuqin,t4 as jiaban,t5 as zonggongshi,t6 as lhbt from yuefen"+view_id+" where t1='"+xm+"'", null, 1, 1);
 		if(null!=list&&list.size()>0){
 			Map map=(Map)list.get(0);
 			StringBuffer sql=new StringBuffer("update jl_payroll_info set chuqin='"+map.get("chuqin")+"',jiaban='"+map.get("jiaban")+"',zonggongshi='"+map.get("zonggongshi")+"' ,lhbt='"+map.get("lhbt")+"' where xm='"+xm+"' and yf='"+yuefen+"'");

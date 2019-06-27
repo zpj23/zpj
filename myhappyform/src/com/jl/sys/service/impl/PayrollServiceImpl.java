@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jl.sys.dao.PayrollDao;
+import com.jl.sys.dao.SgxmDao;
 import com.jl.sys.pojo.LogInfo;
 import com.jl.sys.pojo.PayrollInfo;
 import com.jl.sys.pojo.UserInfo;
@@ -20,13 +21,37 @@ public class PayrollServiceImpl implements PayrollService{
 		
 	@Autowired
 	private PayrollDao payrollDao; 
+	@Autowired
+	private SgxmDao sgxmDao;
 	
 	@Autowired
 	public LogInfoService jlLogInfoService;
 	
 	public void saveInfo(PayrollInfo pi){
+		
+		calculateSgxmInfo(pi);
 		payrollDao.saveInfo(pi);
 	}
+	
+	/**
+	 * 施工项目的造价信息
+	 * @Title calculateSgxmInfo
+	 * @author zpj
+	 * @time 2019年6月24日 下午2:34:50
+	 */
+	public synchronized void calculateSgxmInfo(PayrollInfo pi){
+		
+
+//		List<PayrollInfo> piList=payrollDao.findByYFAndXM(yuefen, username);
+//		PayrollInfo pi=null;
+//		if(null!=piList&&piList.size()==1){
+//			pi=piList.get(0);
+//		}
+		sgxmDao.updateMultiInfo(pi);
+		
+	}
+	
+	
 	public PayrollInfo findById(String id){
 		return payrollDao.findById(id);
 	}
