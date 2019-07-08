@@ -1,5 +1,6 @@
 package com.jl.sys.dao.impl;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -108,7 +109,27 @@ public class PayrollDaoImpl extends BaseDao<PayrollInfo> implements PayrollDao{
 			Map map=(Map)list.get(0);
 			StringBuffer sql=new StringBuffer("update jl_payroll_info set chuqin='"+map.get("chuqin")+"',jiaban='"+map.get("jiaban")+"',zonggongshi='"+map.get("zonggongshi")+"' ,lhbt='"+map.get("lhbt")+"' where xm='"+xm+"' and yf='"+yuefen+"'");
 			this.executeSql(sql.toString());
+			double zonggongshi=(double)map.get("zonggongshi");
+			double lhbt=(double)map.get("lhbt");
+			calculatePayroll(yuefen,xm,String.valueOf(zonggongshi),String.valueOf(lhbt));
 		}
+	}
+	public void calculatePayroll(String yuefen,String xm,String zonggongshi,String lhbt){
+		List list=this.findMapObjBySql("select * from jl_payroll_info where xm='"+xm+"' and yf='"+yuefen+"'", null, 1, 1);
+		Map map=(Map)list.get(0);
+		DecimalFormat format=new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+		
+		//应发工资,通过工价包月*总工时得到
+		float yfgz=Float.parseFloat(zonggongshi)*Float.parseFloat((String)map.get("gjby"));
+        //加班工资和奖金,通过应发工资-基本工资
+		float jbgzhjj=yfgz-Float.parseFloat((String)map.get("jbgz"));
+		//总工资，通过应发工资+劳护补贴+费用补贴+满勤-其他扣款
+		float zgz=yfgz+Float.parseFloat(lhbt)+Float.parseFloat((String)map.get("fybt"))+Float.parseFloat((String)map.get("mq"))-Float.parseFloat((String)map.get("qtkk"));
+		//剩余工资,通过总工资-预发工资
+		float sygz=zgz-Float.parseFloat((String)map.get("yfgzy"));
+		
+		StringBuffer sql=new StringBuffer("update jl_payroll_info set yfgz='"+format.format(yfgz)+"',jbgzhjj='"+format.format(jbgzhjj)+"',zgz='"+format.format(zgz)+"',sygz='"+format.format(sygz)+"'  where xm='"+xm+"' and yf='"+yuefen+"'");
+		this.executeSql(sql.toString());
 	}
 	
 }

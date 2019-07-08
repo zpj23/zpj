@@ -266,6 +266,7 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 				insertLog(user,"工资单信息问题",yuefen+"月份"+username+"信息有"+list.size()+"条");
 			}
 		}catch (Exception e) {
+			e.printStackTrace();
 			throw new RuntimeException();
 		}
 	}
