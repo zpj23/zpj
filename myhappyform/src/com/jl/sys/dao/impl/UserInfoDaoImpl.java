@@ -130,4 +130,8 @@ public class UserInfoDaoImpl extends BaseDao<UserInfo> implements UserInfoDao{
 		List<Map> list=this.findMapObjBySql(sql.toString(), null, 1, 100);
 		return list;
 	}
+	
+	public void updateOpenId(String id,String openId){
+		this.executeUpdateOrDelete("update jl_user_info set openid='"+openId+"' where id='"+id+"'");
+	}
 }

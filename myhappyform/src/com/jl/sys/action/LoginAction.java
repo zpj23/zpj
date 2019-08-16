@@ -17,6 +17,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.protocol.HttpClientContext;
@@ -45,6 +46,8 @@ import com.jl.sys.service.UserInfoService;
 import com.jl.util.ClientTool;
 import com.jl.util.DateHelper;
 import com.jl.util.StringFormat;
+import com.jl.util.WxUtil;
+import com.thread.User;
 
 /**
  * @Description: 登陆后台功能
@@ -121,6 +124,125 @@ public class LoginAction extends IAction{
 			return "error";
 		}
 	}
+	/**
+	 * 获取用户的openid
+	 * @Title jlLoginAction_getUserOpenIdByWx
+	 * @author zpj
+	 * @time 2019年7月22日 下午3:13:21
+	 */
+	@Action(value="jlLoginAction_getUserOpenIdByWx",
+			results={
+			@Result(type="json", params={"root","jsonData"})})
+	public void jlLoginAction_getUserOpenIdByWx(){
+		String js_code=request.getParameter("js_code");
+		String user_id=request.getParameter("user_id");
+		
+		CloseableHttpClient  httpClient=ClientTool.getHttpClient();
+	    HttpClientContext localContext= HttpClientContext.create();
+	    try {
+			String result= httpGetContent("https://api.weixin.qq.com/sns/jscode2session?appid="+WxUtil.AppID+"&secret="+WxUtil.AppSecret+"&js_code="+js_code+"&grant_type=authorization_code",httpClient,localContext);
+			System.out.println(result);
+			Gson gson = new Gson();
+			Map resultMap=gson.fromJson(result, Map.class);
+			//{"session_key":"xVW70veOHdZs9SwHx8aWdg==","expires_in":7200,"openid":"oKhAE0a3OqRqQymVFchr9q3a6uw0"}
+			jlUserInfoService.updateOpenId(user_id,(String)resultMap.get("openid"));
+			jsonWrite(result);
+	    } catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	/**
+	 * 微信的登陆验证
+	 * @Title jlLoginAction_loginByWx
+	 * @author zpj
+	 * @time 2019年7月22日 下午2:13:41
+	 */
+	@Action(value="jlLoginAction_loginByWx",
+			results={
+			@Result(type="json", params={"root","jsonData"})})
+	public void jlLoginAction_loginByWx(){
+		String username=request.getParameter("username");
+		String password=request.getParameter("password");
+		System.out.println(username+">>>>>"+password);
+		UserInfo tempUser=new UserInfo();
+		tempUser.setLoginname(username);
+		tempUser.setPassword(password);
+		UserInfo luser=jlUserInfoService.findLogin(tempUser,false);
+		Map retMap=new HashMap();
+		if(null!=luser){
+			
+			//根据登陆用户信息查询 根据user id信息查询用户所有的角色和部门所有的角色查询关联表对应角色
+			//如果用户角色和部门角色相同，则取一个，再以及角色对应的菜单信息，以及菜单对应的操作信息
+			// role的 id、rolecode、rolename   
+			//用户的授权角色
+			List<Object[]> ulist =jlRoleInfoService.findRoleIdByUserId(luser.getId());
+			//部门的授权角色
+			DepartmentInfo dp=jlDepartmentInfoService.findDeptByDeptCode(luser.getDepartmentcode());
+			// role的 id、rolecode、rolename   
+			List<Object[]> dlist=jlRoleInfoService.findRoleIdByDepartmentId(dp.getId());
+			Set roleidSet=new HashSet();
+			Set rolecodeSet=new HashSet();
+			for(int i=0;i<ulist.size();i++){
+				roleidSet.add(ulist.get(i)[0]);
+				rolecodeSet.add(ulist.get(i)[1]);
+			}
+			for(int j=0;j<dlist.size();j++){
+				if(roleidSet.contains(dlist.get(j)[0])){
+					continue;
+				}else{
+					roleidSet.add(dlist.get(j)[0]);
+					rolecodeSet.add(dlist.get(j)[1]);
+				}
+			}
+			
+			
+			
+			
+			if(rolecodeSet.isEmpty()){
+				retMap.put("info", "该用户未授权,无法登陆！");
+				retMap.put("msg",false);
+			}else{
+				//用户的map对象
+				Map umap=new HashMap();
+				umap.put("id", luser.getId());
+				umap.put("loginname", luser.getLoginname());
+				umap.put("openId", luser.getOpenid());
+				umap.put("departmentcode",luser.getDepartmentcode());
+				umap.put("departmentname",luser.getDepartmentname());
+				umap.put("telephone", luser.getTelephone());
+				if(rolecodeSet.contains("ROLE_1462257894696")){//是管理员角色
+					umap.put("isAdmin", "1");
+				}else{//其他角色
+					umap.put("isAdmin", "0");
+				}
+				retMap.put("user", umap);
+				retMap.put("flag", true);
+				retMap.put("msg", "登陆成功");
+			}	
+			
+			
+			
+		}else{
+			retMap.put("flag", false);
+			retMap.put("msg", "用户名或密码错误");
+		}
+		
+		
+		try {
+			jsonWrite(retMap);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 手机登陆
+	 * @Title jlLoginAction_phoneLogin
+	 * @author zpj
+	 * @time 2019年7月22日 下午2:12:52
+	 */
 	@Action(value="jlLoginAction_loginByPhone",
 			results={
 			@Result(type="json", params={"root","jsonData"})})
@@ -204,7 +326,7 @@ public class LoginAction extends IAction{
 		}
 	}
 	/**
-	 * 登陆验证
+	 * 后台登陆验证
 	 */
 	@Action(value="jlLoginAction_checkLogin",results={
 			@Result(name="success",location="home1/index.jsp"),//fashionHome.jsp

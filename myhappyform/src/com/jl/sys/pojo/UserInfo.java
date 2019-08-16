@@ -38,6 +38,7 @@ public class UserInfo implements java.io.Serializable{
 	private Date lastlogintime;//上次登陆时间
 	private String lastloginip;//上次登陆ip
 	private String isAdmin;//1是，0不是
+	private String openid;//微信上用的
 	
 	//precision意为“精密度、精确”，在这里就表示该字段的有效数字位数了。 
 	//scale意为“刻度、数值范围”，那就是该字段的小数位数
@@ -209,6 +210,20 @@ public class UserInfo implements java.io.Serializable{
 	public void setLastloginip(String lastloginip) {
 		this.lastloginip = lastloginip;
 	}
+
+	
+	
+
+	public String getOpenid() {
+		return openid;
+	}
+
+
+
+	public void setOpenid(String openid) {
+		this.openid = openid;
+	}
+
 
 
 	@Transient

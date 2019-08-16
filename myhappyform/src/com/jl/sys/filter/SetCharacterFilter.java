@@ -84,6 +84,8 @@ public class SetCharacterFilter implements Filter{
 				chain.doFilter(servletRequest, servletResponse);
 			}else if(str_href.indexOf("ByPhone")>-1){//手机上的请求
 				chain.doFilter(servletRequest, servletResponse);
+			}else if(str_href.indexOf("ByWx")>-1){//微信上的请求
+				chain.doFilter(servletRequest, servletResponse);
 			}else if(str_href.indexOf("loginAction_downloadPrintActive")>-1){
 				chain.doFilter(servletRequest, servletResponse);
 			}else if(str_href.indexOf("Action_")>-1){

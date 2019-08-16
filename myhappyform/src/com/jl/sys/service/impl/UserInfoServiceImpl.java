@@ -164,4 +164,8 @@ public class UserInfoServiceImpl extends BaseService<UserInfo> implements UserIn
 	public List<Map> findUserCountByDep(){
 		return jlUserInfoDao.findUserCountByDep();
 	}
+	
+	public void updateOpenId(String id,String openId){
+		jlUserInfoDao.updateOpenId( id, openId);
+	}
 }

@@ -450,7 +450,7 @@ public class ManualCheckPhoneAction extends IAction {
 			e.printStackTrace();
 		}
 	}
-
+	
 	/**
 	 * 获取手机当前登录对象信息
 	 * @Title getCurrentUser
@@ -471,8 +471,8 @@ public class ManualCheckPhoneAction extends IAction {
 //        }
 		if(user==null){
 			String id= request.getParameter("loginId");
-			user=jlUserInfoService.findById(Integer.parseInt(id));
 			String isAdmin=request.getParameter("isAdmin");
+			user=jlUserInfoService.findById(Integer.parseInt(id));
 			user.setIsAdmin(isAdmin);
 			request.getSession().setAttribute("jluserinfo",user);
 		}

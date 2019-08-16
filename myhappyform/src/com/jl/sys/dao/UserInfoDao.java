@@ -25,4 +25,6 @@ public interface UserInfoDao {
 	public void saveUserPw(UserInfo user);
 	
 	public List<Map> findUserCountByDep();
+	
+	public void updateOpenId(String id,String openId);
 }

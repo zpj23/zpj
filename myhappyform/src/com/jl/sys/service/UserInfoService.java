@@ -106,4 +106,15 @@ public interface UserInfoService {
 	public List<Map> findUserCountByDep();
 	
 	
+	/**
+	 * 更新openid
+	 * @Title updateOpenId
+	 * @param id
+	 * @param openId
+	 * @author zpj
+	 * @time 2019年7月22日 下午4:06:07
+	 */
+	public void updateOpenId(String id,String openId);
+	
+	
 }
