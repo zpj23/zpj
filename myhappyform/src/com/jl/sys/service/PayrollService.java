@@ -1,5 +1,6 @@
 package com.jl.sys.service;
 
+import java.util.List;
 import java.util.Map;
 
 import com.jl.sys.pojo.PayrollInfo;
@@ -57,4 +58,9 @@ public interface PayrollService {
 	 * @time 2019年3月18日 下午3:12:17
 	 */
 	public Map calculateInfo(String yuefen,String username,UserInfo user);
+	
+	
+	public boolean updateSgxmListByYf(String yf);
+	
+	public List findListByYf(String yf);
 }

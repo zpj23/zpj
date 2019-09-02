@@ -24,5 +24,7 @@ public interface PayrollDao {
 	
 	
 	public void updatePayrollData(String yuefen,String xm);
+	
+	public List<PayrollInfo> findListByYf(String yf);
 
 }

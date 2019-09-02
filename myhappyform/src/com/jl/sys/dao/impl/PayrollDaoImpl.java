@@ -111,9 +111,20 @@ public class PayrollDaoImpl extends BaseDao<PayrollInfo> implements PayrollDao{
 			this.executeSql(sql.toString());
 			double zonggongshi=(double)map.get("zonggongshi");
 			double lhbt=(double)map.get("lhbt");
+			//计算工资单中各个值
 			calculatePayroll(yuefen,xm,String.valueOf(zonggongshi),String.valueOf(lhbt));
 		}
 	}
+	/**
+	 * 计算工资单各个计算值
+	 * @Title calculatePayroll
+	 * @param yuefen
+	 * @param xm
+	 * @param zonggongshi
+	 * @param lhbt
+	 * @author zpj
+	 * @time 2019年9月2日 上午9:54:13
+	 */
 	public void calculatePayroll(String yuefen,String xm,String zonggongshi,String lhbt){
 		List list=this.findMapObjBySql("select * from jl_payroll_info where xm='"+xm+"' and yf='"+yuefen+"'", null, 1, 1);
 		Map map=(Map)list.get(0);
@@ -132,4 +143,9 @@ public class PayrollDaoImpl extends BaseDao<PayrollInfo> implements PayrollDao{
 		this.executeSql(sql.toString());
 	}
 	
+	
+	public List<PayrollInfo> findListByYf(String yf){
+		List<PayrollInfo> list=this.find(" from PayrollInfo where yf='"+yf+"'", null);
+		return list;
+	}
 }

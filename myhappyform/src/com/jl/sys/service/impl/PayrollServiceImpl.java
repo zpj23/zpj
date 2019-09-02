@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.management.RuntimeErrorException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -73,6 +75,30 @@ public class PayrollServiceImpl implements PayrollService{
 		map.put("total_sygz", countMap.get("sygz"));//剩余工资
 		return map;
 	}
+	public List findListByYf(String yf){
+		List<PayrollInfo> list=payrollDao.findListByYf(yf);
+		return list;
+	}
+	public boolean updateSgxmListByYf(String yf){
+		boolean flag=false;
+		try {
+			List<PayrollInfo> list=payrollDao.findListByYf(yf);
+			if(null!=list&&list.size()>0){
+				for(int m=0;m<list.size();m++){
+					calculateSgxmInfo(list.get(m));
+				}
+			}
+			flag =true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			flag =false;
+			throw new RuntimeException();
+		}
+		return flag;
+	}
+	
+	
+	
 	
 	public Map calculateInfo(String yuefen,String username,UserInfo user){
 //		List<PayrollInfo> list =payrollDao.findByYFAndXM(yuefen,username);
@@ -110,15 +136,5 @@ public class PayrollServiceImpl implements PayrollService{
 		return retMap;
 	}
 	
-//	public void insertLog(UserInfo user,String type,String description){
-//		LogInfo loginfo=new LogInfo();
-//		loginfo.setId(UUID.randomUUID().toString());
-//		loginfo.setCreatetime(new Date());
-//		loginfo.setType("新增工资单信息");
-//		loginfo.setDescription("审核完成后，自动新增工资单对应的数据(没有当前月的数据的时候新增)");
-//		loginfo.setUserid(user.getId());
-//		loginfo.setUsername(user.getUsername());
-//		jlLogInfoService.logInfo(loginfo);
-//	}
 	
 }

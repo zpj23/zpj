@@ -258,5 +258,38 @@ public class PayrollAction extends IAction {
 			this.jsonWrite(false);
 		}
 	}
+	/**
+	 * 更新项目工资单
+	 * @Title jlPayrollAction_updateSgxmInfo
+	 * @throws IOException
+	 * @author zpj
+	 * @time 2019年9月2日 上午11:12:52
+	 */
+	@Action(value="jlPayrollAction_updateSgxmInfo",
+			results={
+			@Result(type="json", params={"root","jsonData"})})
+	public void jlPayrollAction_updateSgxmInfo() throws IOException{
+		String yf=request.getParameter("yf");
+		try {
+			boolean flag=payrollService.updateSgxmListByYf(yf);
+			this.jsonWrite(flag);
+		} catch (IOException e) {
+			e.printStackTrace();
+			this.jsonWrite(false);
+		}
+	}
+	
+	@Action(value="jlPayrollAction_list",
+			results={
+			@Result(type="json", params={"root","jsonData"})})
+	public void jlPayrollAction_list() throws IOException{
+		String yf=request.getParameter("yf");
+		try {
+			List list=payrollService.findListByYf(yf);
+			this.jsonWrite(list);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
 }

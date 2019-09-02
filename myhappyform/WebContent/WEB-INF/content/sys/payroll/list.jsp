@@ -85,7 +85,50 @@ function dataoutput(){
 // 	form1.action="jlManualCheckInfoAction_exportExcel";
 // 	form1.submit();
 }
-
+//更新项目工资单中的某个月份的数据
+function updateSgxmByYf(){
+	var yuefen=$("#sgxmyf").val();
+	if(yuefen==""){
+		alert("请选择需要更新的月份");
+		return;
+	}
+	$.messager.confirm('温馨提示', '您确定要更新'+yuefen+'的项目工资管理中的数据吗', function(b) {
+		if (b) {
+			showProcess(true, '温馨提示', '正在更新...');
+			setTimeout(function(){
+				ajaxupdateSgxmByYf(yuefen);
+			}, 200);
+		}
+	});
+	
+}
+function ajaxupdateSgxmByYf(yuefen){
+	$.ajax({
+	   type: "POST",
+	   url: "jlPayrollAction_updateSgxmInfo",
+	   async:true,
+	   data: "yf="+yuefen,
+	   success: function(data){
+		   showProcess(false);
+		   if(data){
+			   parent.layer.msg('更新成功!',{icon: 1,time:1000});
+		   }else{
+			   parent.layer.msg('更新失败!',{icon: 5,time:10000});
+		   }
+	   }
+	});
+}
+//进度条
+function showProcess(isShow, title, msg) {
+	if (!isShow) {
+		$.messager.progress('close');
+		return;
+	}
+	var win = $.messager.progress({
+		title : title,
+		msg : msg
+	});
+}
 </script>
 </head>
 <body style="overflow: hidden">
@@ -94,15 +137,18 @@ function dataoutput(){
 提示：1、工价/包月 填完会根据应发工资=（工价/包月）*总工时，自动计算出应发工资；2、基本工资 填完会根据加班工资和奖金=应发工资-基本工资，自动计算出加班工资和奖金；3、劳护补贴在审核时会自动填入；4、其他扣款 填完会根据总工资=应发工资+劳护补贴+费用补贴+满勤-其他扣款，自动计算总工资；5、填写完预发工资，或者第4步中的计算自动生成剩余工资，根据公式 剩余工资=总工资-预发工资。
 <form action="" name="form1" method="post" enctype="multipart/form-data"  id="form1"  >
 		<div class="text-c"> 
-		<input type="text" class="input-text" style="width:120px" placeholder="姓名" id="username" name="username" />
-		<input type="text" placeholder="选择月份" onfocus="WdatePicker({dateFmt:'yyyy-M'})" id="yuefen" name="yuefen" class="input-text Wdate" style="width:80px;">
-		
-		<button type="button"  class="btn btn-success" onclick="searchInfo();" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 查询</button>
-		
-	</div>
-	<div class="text-c"> 
-		&nbsp;
-	</div>
+<!-- 			<input type="checkbox" id="orderWay" name="orderWay"  />排序方式 -->
+			<input type="text" class="input-text" style="width:120px" placeholder="姓名" id="username" name="username" />
+			<input type="text" placeholder="选择月份" onfocus="WdatePicker({dateFmt:'yyyy-M'})" id="yuefen" name="yuefen" class="input-text Wdate" style="width:80px;">
+			<button type="button"  class="btn btn-success" onclick="searchInfo();" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 查询</button>
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="text" placeholder="选择月份" onfocus="WdatePicker({dateFmt:'yyyy-M'})" id="sgxmyf" name="sgxmyf" class="input-text Wdate" style="width:80px;">
+			<button type="button"  class="btn btn-primary" onclick="updateSgxmByYf();" id="" name=""><i class="Hui-iconfont">&#xe665;</i>  更新施工项目单信息</button>
+	
+		</div>
+		<div class="text-c">
+			&nbsp;&nbsp;&nbsp;&nbsp;
+		</div>
 	</form>
 		
 <iframe id="list_iframe" name="list_frame" src="jlPayrollAction_toiframe" width="100%" height="78%" frameborder="0"></iframe>
