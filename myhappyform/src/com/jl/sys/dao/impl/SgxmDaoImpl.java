@@ -103,6 +103,7 @@ public class SgxmDaoImpl extends BaseDao<SgxmInfo> implements SgxmDao {
 						if(alreadylist.get(p).get("xm").toString().equalsIgnoreCase(nameBuffer.toString())&&
 								alreadylist.get(p).get("sgxm").toString().equalsIgnoreCase(sgxmBuffer.toString())&&
 								alreadylist.get(p).get("gd").toString().equalsIgnoreCase(dpBuffer.toString())){
+//							System.out.println("修改现有的项目工资信息");
 							this.executeUpdateOrDelete(" update jl_sgxm_tj_info set chuqin='"+list.get(q).get("t3")+"',jiaban='"+list.get(q).get("t4")+"',zonggongshi='"+list.get(q).get("t5")+"' ,lhbt='"+list.get(q).get("t6")+"',gjby='"+pi.getGjby()+"', jbgz='"+pi.getJbgz()+"'  where yf='"+pi.getYf()+"' and xm='"+nameBuffer+"' and sgxm='"+sgxmBuffer+"' and gd='"+dpBuffer+"' ");
 							flag=true;
 							alreadylist.remove(p);
@@ -112,6 +113,7 @@ public class SgxmDaoImpl extends BaseDao<SgxmInfo> implements SgxmDao {
 					}
 				}
 				if(!flag){
+//					System.out.println("新增项目工资信息");
 					this.executeUpdateOrDelete("insert into jl_sgxm_tj_info (id,xm,yf,gd,chuqin,jiaban,zonggongshi,gjby,jbgz,jbgzhjj,yfgz,lhbt,fybt,mq,qtkk,zgz,yfgzy,sygz,sgxm) values(UUID(),'"+nameBuffer+"','"+pi.getYf()+"','"+dpBuffer+"','"+list.get(q).get("t3")+"','"+list.get(q).get("t4")+"','"+list.get(q).get("t5")+"','"+pi.getGjby()+"','"+pi.getJbgz()+"','0','0','"+list.get(q).get("t6")+"','0','0','0','0','0','0','"+sgxmBuffer+"' )");
 				}
 			}
@@ -123,6 +125,7 @@ public class SgxmDaoImpl extends BaseDao<SgxmInfo> implements SgxmDao {
 					}
 					ids.append("'"+alreadylist.get(n).get("id")+"'");
 				}
+//				System.out.println("删除已经不存在的项目工资信息");
 				this.executeUpdateOrDelete("delete from jl_sgxm_tj_info where id in ("+ids+")");
 			}
 			
@@ -132,55 +135,5 @@ public class SgxmDaoImpl extends BaseDao<SgxmInfo> implements SgxmDao {
 		
 	}
 	
-//	public void updateMultiInfo1(List list,PayrollInfo pi,String yuefen,String username){
-//		try{
-//			this.executeSql("delete from jl_sgxm_tj_info where yf='"+yuefen+"' and xm='"+username+"' ");
-//			StringBuffer sqls=new StringBuffer(1000);
-//			sqls.append("insert into jl_sgxm_tj_info (id,xm,yf,gd,chuqin,jiaban,zonggongshi,gjby,jbgz,jbgzhjj,yfgz,lhbt,fybt,mq,qtkk,zgz,yfgzy,sygz) values ");
-//			Map temp;
-//			for(int m=0;m<list.size();m++){
-//				temp=(Map)list.get(m);
-//				if(m>0){
-//					sqls.append(",");
-//				}
-//				sqls.append("(UUID(),t1,'"+yuefen+"',t2,t3,t4,t5,'"+pi.getGjby()+"','"+pi.getJbgz()+"','0','0',t6,'0','0','0','0','0','0' )");
-//			}
-//			if(null!=list&&list.size()>0){
-//				int state=this.executeUpdateOrDelete(sqls.toString());
-//			}
-//			
-//		}catch (Exception e) {
-//			throw new RuntimeException();
-//		}
-//		
-//	}
-	
-	
-//	public List<SgxmInfo> findByYFAndXMAndSgxmBm(String yuefen,String xm){
-//		List<SgxmInfo> list=this.find("from SgxmInfo where yf=? and xm=?", yuefen,xm);
-//		if(null!=list){
-//			return list;
-//		}
-//		return new ArrayList<SgxmInfo>();
-//	}
-	
-	
-	
-	
-//	public void insertSgxmData(String yuefen,String xm,String sgxm){
-//		String view_id=yuefen.split("-")[1];
-//		StringBuffer sql=new StringBuffer("insert into jl_sgxm_tj_info (id,xm,yf,gd,chuqin,jiaban,zonggongshi,gjby,jbgz,jbgzhjj,yfgz,lhbt,fybt,mq,qtkk,zgz,yfgzy,sygz,sgxm) ( SELECT UUID(),t1,'"+yuefen+"',t2,t3,t4,t5,'0','0','0','0',t6,'0','0','0','0','0','0','"+sgxm+"' from sgxm"+view_id+" where t1='"+xm+"' )");
-//		this.executeSql(sql.toString());
-//	}
-//	
-//	public void updateSgxmData(String yuefen,String xm,String sgxm){
-//		String view_id=yuefen.split("-")[1];
-//		List list=this.findMapObjBySql("select t3 as chuqin,t4 as jiaban,t5 as zonggongshi,t6 as lhbt from yuefen"+view_id+" where t1='"+xm+"'", null, 1, 1);
-//		if(null!=list&&list.size()>0){
-//			Map map=(Map)list.get(0);
-//			StringBuffer sql=new StringBuffer("update jl_sgxm_tj_info set chuqin='"+map.get("chuqin")+"',jiaban='"+map.get("jiaban")+"',zonggongshi='"+map.get("zonggongshi")+"' ,lhbt='"+map.get("lhbt")+"',sgxm='"+sgxm+"' where xm='"+xm+"' and yf='"+yuefen+"'");
-//			this.executeSql(sql.toString());
-//		}
-//	}
 	
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.jl.common.BaseDao;
 import com.jl.sys.dao.PayrollDao;
 import com.jl.sys.pojo.PayrollInfo;
+import com.jl.util.DateHelper;
 
 @Repository
 public class PayrollDaoImpl extends BaseDao<PayrollInfo> implements PayrollDao{
@@ -37,12 +38,6 @@ public class PayrollDaoImpl extends BaseDao<PayrollInfo> implements PayrollDao{
 			sql.append(" and  a.xm like ").append("'%"+param.get("username")+"%'  ");
 		}
 		if(null!=param.get("yuefen")&&!"".equalsIgnoreCase(param.get("yuefen").toString())){
-//			String yuefen=param.get("yuefen").toString();
-//			if(yuefen.substring(0,1).equalsIgnoreCase("0")){
-//				sql.append(" and  a.yf = ").append("'"+yuefen.substring(1,2)+"'  ");
-//			}else{
-//				sql.append(" and  a.yf = ").append("'"+yuefen.substring(0,2)+"'  ");
-//			}
 			sql.append(" and  a.yf = ").append("'"+param.get("yuefen").toString()+"'  ");
 		}
 		if(null!=param.get("departmentname")&&!"".equalsIgnoreCase(param.get("departmentname").toString())){
@@ -63,12 +58,6 @@ public class PayrollDaoImpl extends BaseDao<PayrollInfo> implements PayrollDao{
 			sql.append(" and  a.xm like ").append("'%"+param.get("username")+"%'  ");
 		}
 		if(null!=param.get("yuefen")&&!"".equalsIgnoreCase(param.get("yuefen").toString())){
-//			String yuefen=param.get("yuefen").toString();
-//			if(yuefen.substring(0,1).equalsIgnoreCase("0")){
-//				sql.append(" and  a.yf = ").append("'"+yuefen.substring(1,2)+"'  ");
-//			}else{
-//				sql.append(" and  a.yf = ").append("'"+yuefen.substring(0,2)+"'  ");
-//			}
 			sql.append(" and  a.yf = ").append("'"+param.get("yuefen").toString()+"'  ");
 		}
 		if(null!=param.get("departmentname")&&!"".equalsIgnoreCase(param.get("departmentname").toString())){
@@ -97,20 +86,33 @@ public class PayrollDaoImpl extends BaseDao<PayrollInfo> implements PayrollDao{
 	
 	
 	public void insertPayrollData(String yuefen,String xm){
-		String view_id=yuefen.split("-")[1];
-		StringBuffer sql=new StringBuffer("insert into jl_payroll_info (id,xm,yf,gd,chuqin,jiaban,zonggongshi,gjby,jbgz,jbgzhjj,yfgz,lhbt,fybt,mq,qtkk,zgz,yfgzy,sygz) ( SELECT UUID(),t1,'"+yuefen+"',t2,t3,t4,t5,'0','0','0','0',t6,'0','0','0','0','0','0' from yuefen"+view_id+" where t1='"+xm+"' )");
-		this.executeSql(sql.toString());
+		//SELECT UUID(),t1,'"+yuefen+"',t2,t3,t4,t5,'0','0','0','0',t6,'0','0','0','0','0','0' from yuefen"+view_id+" where t1='"+xm+"'
+		String firstDay=DateHelper.getFirstdayOfMonth(yuefen, "yyyy-MM");
+		String lastDay=DateHelper.getLastdayOfMonth(yuefen, "yyyy-MM");
+		
+		StringBuffer sb=new StringBuffer(100).append(" call yuefen('"+firstDay+"','"+lastDay+"','"+xm+"')  ");
+		List list=this.findMapObjBySql(sb.toString());
+		if(null!=list&&list.size()>0){
+			Map map=(Map)list.get(0);
+			StringBuffer sql=new StringBuffer("insert into jl_payroll_info (id,xm,yf,gd,chuqin,jiaban,zonggongshi,gjby,jbgz,jbgzhjj,yfgz,lhbt,fybt,mq,qtkk,zgz,yfgzy,sygz) values (UUID(),'"+map.get("t1")+"','"+yuefen+"','"+map.get("t2")+"','"+map.get("t3")+"','"+map.get("t4")+"','"+map.get("t5")+"','0','0','0','0','"+map.get("t6")+"','0','0','0','0','0','0' ) ");
+			this.executeSql(sql.toString());
+		}else{
+			System.out.println(xm+"没有"+yuefen+"的考勤数据");
+		}
+		
 	}
 	
 	public void updatePayrollData(String yuefen,String xm){
-		String view_id=yuefen.split("-")[1];
-		List list=this.findMapObjBySql("select t3 as chuqin,t4 as jiaban,t5 as zonggongshi,t6 as lhbt from yuefen"+view_id+" where t1='"+xm+"'", null, 1, 1);
+		String firstDay=DateHelper.getFirstdayOfMonth(yuefen, "yyyy-MM");
+		String lastDay=DateHelper.getLastdayOfMonth(yuefen, "yyyy-MM");
+		
+		List list=this.findMapObjBySql(" call yuefen('"+firstDay+"','"+lastDay+"','"+xm+"') ");
 		if(null!=list&&list.size()>0){
 			Map map=(Map)list.get(0);
-			StringBuffer sql=new StringBuffer("update jl_payroll_info set chuqin='"+map.get("chuqin")+"',jiaban='"+map.get("jiaban")+"',zonggongshi='"+map.get("zonggongshi")+"' ,lhbt='"+map.get("lhbt")+"' where xm='"+xm+"' and yf='"+yuefen+"'");
+			StringBuffer sql=new StringBuffer("update jl_payroll_info set chuqin='"+map.get("t3")+"',jiaban='"+map.get("t4")+"',zonggongshi='"+map.get("t5")+"' ,lhbt='"+map.get("t6")+"' where xm='"+xm+"' and yf='"+yuefen+"'");
 			this.executeSql(sql.toString());
-			double zonggongshi=(double)map.get("zonggongshi");
-			double lhbt=(double)map.get("lhbt");
+			double zonggongshi=(double)map.get("t5");
+			double lhbt=(double)map.get("t6");
 			//计算工资单中各个值
 			calculatePayroll(yuefen,xm,String.valueOf(zonggongshi),String.valueOf(lhbt));
 		}
@@ -128,7 +130,7 @@ public class PayrollDaoImpl extends BaseDao<PayrollInfo> implements PayrollDao{
 	public void calculatePayroll(String yuefen,String xm,String zonggongshi,String lhbt){
 		List list=this.findMapObjBySql("select * from jl_payroll_info where xm='"+xm+"' and yf='"+yuefen+"'", null, 1, 1);
 		Map map=(Map)list.get(0);
-		DecimalFormat format=new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+		DecimalFormat format=new DecimalFormat("0.0");//构造方法的字符格式这里如果小数不足1位,会以0补足.
 		
 		//应发工资,通过工价包月*总工时得到
 		float yfgz=Float.parseFloat(zonggongshi)*Float.parseFloat((String)map.get("gjby"));

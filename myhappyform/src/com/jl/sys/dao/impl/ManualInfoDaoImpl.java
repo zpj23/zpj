@@ -27,44 +27,86 @@ public class ManualInfoDaoImpl extends BaseDao<CheckInfo> implements ManualInfoD
 				this.save(cInfo);
 			}
 	}
-	public double findListSum(UserInfo user,int page,int rows,Map<String,String> param){
+//	public double findListSum(UserInfo user,int page,int rows,Map<String,String> param){
+//		StringBuffer sql = new StringBuffer();
+//		sql.append(" select workduringtime,overtime from jl_check_info a where 1=1  ");
+//		if(null!=param.get("datemin")&&!"".equalsIgnoreCase(param.get("datemin").toString())){
+//			sql.append(" and workdate >= ").append("'"+param.get("datemin")+"'");
+//		}
+//		if(null!=param.get("datemax")&&!"".equalsIgnoreCase(param.get("datemax").toString())){
+//			sql.append(" and workdate <= ").append("'"+param.get("datemax")+"'");
+//		}
+//		if(null!=param.get("username")&&!"".equalsIgnoreCase(param.get("username").toString())){
+//			sql.append(" and  staffname like ").append("'%"+param.get("username")+"%'  ");
+//		}
+//		if(null!=param.get("address")&&!"".equalsIgnoreCase(param.get("address").toString())){
+//			sql.append(" and  address like ").append("'%"+param.get("address")+"%'  ");
+//		}
+//		if(null!=param.get("workcontent")&&!"".equalsIgnoreCase(param.get("workcontent").toString())){
+//			sql.append(" and  workcontent like ").append("'%"+param.get("workcontent")+"%'  ");
+//		}
+//		if(null!=param.get("departmentid")&&!"".equalsIgnoreCase(param.get("departmentid").toString())){
+//			sql.append(" and departmentcode = ").append("'"+param.get("departmentid")+"'");
+//		}
+//		if(null!=param.get("shenhe")&&!"".equalsIgnoreCase(param.get("shenhe").toString())){
+//			sql.append(" and  shenhe =").append("'"+param.get("shenhe")+"'  ");
+//		}
+//		//判断是否是管理员用户
+//		if(!user.getIsAdmin().equalsIgnoreCase("1")){
+//			//不是管理员
+//			sql.append(" and  createuserid="+user.getId());
+//		}
+//		List<Object[]> list=this.findBySql2("select SUM(workduringtime)+sum(overtime) as zs from ( "+sql+" ) t1 ");
+//		
+//		double zs=(Double)list.get(0)[0];
+//		return zs;
+//	}
+	
+	public List findThreeSum(UserInfo user,Map<String,String> param,int page,int rows){
 		StringBuffer sql = new StringBuffer();
-		sql.append(" select workduringtime,overtime from jl_check_info a where 1=1  ");
+		//sum(a.workduringtime) as wdt,sum(a.overtime) as ot 
+		sql.append(" select sum(a.workduringtime) as wdt,sum(a.overtime) as ot from jl_check_info a left join jl_user_info u on a.createuserid=u.id where 1=1  ");
 		if(null!=param.get("datemin")&&!"".equalsIgnoreCase(param.get("datemin").toString())){
-			sql.append(" and workdate >= ").append("'"+param.get("datemin")+"'");
+			sql.append(" and a.workdate >= ").append("'"+param.get("datemin")+"'");
 		}
 		if(null!=param.get("datemax")&&!"".equalsIgnoreCase(param.get("datemax").toString())){
-			sql.append(" and workdate <= ").append("'"+param.get("datemax")+"'");
+			sql.append(" and a.workdate <= ").append("'"+param.get("datemax")+"'");
 		}
 		if(null!=param.get("username")&&!"".equalsIgnoreCase(param.get("username").toString())){
-			sql.append(" and  staffname like ").append("'%"+param.get("username")+"%'  ");
+			sql.append(" and  a.staffname like ").append("'%"+param.get("username")+"%'  ");
 		}
-		if(null!=param.get("address")&&!"".equalsIgnoreCase(param.get("address").toString())){
-			sql.append(" and  address like ").append("'%"+param.get("address")+"%'  ");
+		if(null!=param.get("sgxm")&&!"".equalsIgnoreCase(param.get("sgxm").toString())){
+			sql.append(" and  a.sgxm like ").append("'%"+param.get("sgxm")+"%'  ");
+		}
+		if(null!=param.get("sgqy")&&!"".equalsIgnoreCase(param.get("sgqy").toString())){
+			sql.append(" and  a.sgqy like ").append("'%"+param.get("sgqy")+"%'  ");
 		}
 		if(null!=param.get("workcontent")&&!"".equalsIgnoreCase(param.get("workcontent").toString())){
-			sql.append(" and  workcontent like ").append("'%"+param.get("workcontent")+"%'  ");
+			sql.append(" and  a.workcontent like ").append("'%"+param.get("workcontent")+"%'  ");
 		}
 		if(null!=param.get("departmentid")&&!"".equalsIgnoreCase(param.get("departmentid").toString())){
-			sql.append(" and departmentcode = ").append("'"+param.get("departmentid")+"'");
+			sql.append(" and a.departmentcode = ").append("'"+param.get("departmentid")+"'");
 		}
 		if(null!=param.get("shenhe")&&!"".equalsIgnoreCase(param.get("shenhe").toString())){
-			sql.append(" and  shenhe =").append("'"+param.get("shenhe")+"'  ");
+			sql.append(" and  a.shenhe =").append("'"+param.get("shenhe")+"'  ");
+		}
+		if(null!=param.get("lrrname")&&!"".equalsIgnoreCase(param.get("lrrname").toString())){
+			sql.append(" and  u.username like ").append("'"+param.get("lrrname")+"%'  ");
 		}
 		//判断是否是管理员用户
 		if(!user.getIsAdmin().equalsIgnoreCase("1")){
 			//不是管理员
-			sql.append(" and  createuserid="+user.getId());
+			sql.append(" and  a.createuserid="+user.getId());
 		}
-		List<Object[]> list=this.findBySql2("select SUM(workduringtime)+sum(overtime) as zs from ( "+sql+" ) t1 ");
-		
-		double zs=(Double)list.get(0)[0];
-		return zs;
+		List list=this.findMapObjBySql(sql.toString(), null, 1, 2);
+		return list;
 	}
+	
+	
 	
 	public List findList(UserInfo user,int page,int rows,Map<String,String> param){
 		StringBuffer sql = new StringBuffer();
-		sql.append(" select a.*,u.username as username from jl_check_info a left join jl_user_info u on a.createuserid=u.id where 1=1  ");
+		sql.append(" select a.id,a.departmentcode,a.departmentname,a.staffname,a.workcontent,DATE_FORMAT(a.workdate, '%Y-%m-%d') as workdate,a.workduringtime,a.overtime,a.remark,a.createuserid,a.shenhe,a.sgqy,a.sgxm,u.username as username from jl_check_info a left join jl_user_info u on a.createuserid=u.id where 1=1  ");
 		if(null!=param.get("datemin")&&!"".equalsIgnoreCase(param.get("datemin").toString())){
 			sql.append(" and a.workdate >= ").append("'"+param.get("datemin")+"'");
 		}
@@ -146,7 +188,7 @@ public class ManualInfoDaoImpl extends BaseDao<CheckInfo> implements ManualInfoD
 	
 	public List findRepeatList(UserInfo user,int page,int rows,Map<String,String> param){
 		StringBuffer sql = new StringBuffer();
-		sql.append(" select a.* from listallrepeat a where 1=1  ");
+		sql.append(" select a.id,a.departmentcode,a.departmentname,a.staffname,a.workcontent,DATE_FORMAT(a.workdate, '%Y-%m-%d') as workdate,a.workduringtime,a.overtime,a.remark,a.createuserid,a.shenhe,a.sgqy,a.sgxm from listallrepeat a where 1=1  ");
 		if(null!=param.get("datemin")&&!"".equalsIgnoreCase(param.get("datemin").toString())){
 			sql.append(" and a.workdate >= ").append("'"+param.get("datemin")+"'");
 		}

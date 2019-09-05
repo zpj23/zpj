@@ -75,20 +75,20 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 		}else{
 			list=mDao.findList(user,page,rows,param);
 		}
-		double wzgs=0;
-		double ozgs=0;
-		double workduringtime=0;
-		double overtime=0;
-		for(int i=0,length=list.size();i<length;i++){
-			workduringtime=0;
-			overtime=0;
-			list.get(i).put("workdate", ((Map)(list.get(i))).get("workdate").toString().substring(0, 10));
-			Object str=((Map)(list.get(i))).get("workduringtime");
-			workduringtime=Double.valueOf(str.toString());
-			overtime=Double.valueOf(((Map)(list.get(i))).get("overtime").toString());
-			wzgs+=workduringtime;
-			ozgs+=overtime;
-		}
+//		double wzgs=0;
+//		double ozgs=0;
+//		double workduringtime=0;
+//		double overtime=0;
+//		for(int i=0,length=list.size();i<length;i++){
+//			workduringtime=0;
+//			overtime=0;
+//			list.get(i).put("workdate", ((Map)(list.get(i))).get("workdate").toString().substring(0, 10));
+//			Object str=((Map)(list.get(i))).get("workduringtime");
+//			workduringtime=Double.valueOf(str.toString());
+//			overtime=Double.valueOf(((Map)(list.get(i))).get("overtime").toString());
+//			wzgs+=workduringtime;
+//			ozgs+=overtime;
+//		}
 //		System.out.println(zgs+">>>>>>>循环数组");
 //		System.out.println(System.currentTimeMillis());
 		int count=0;
@@ -100,9 +100,16 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 		Map map=new HashMap();
 		map.put("list", list);
 		map.put("count", count);
-		map.put("wzgs", wzgs);
-		map.put("ozgs", ozgs);
-		map.put("zgs", wzgs+ozgs);
+		//查询出勤和加班各自统计及两个求和
+		List mapList=mDao.findThreeSum(user,param,page,rows);
+		if(mapList!=null&&mapList.size()>0){
+			Map total=(Map)mapList.get(0);
+			total.get("wdt");
+			total.get("ot");
+			map.put("wzgs", total.get("wdt"));
+			map.put("ozgs", total.get("ot"));
+			map.put("zgs", (Double)total.get("wdt")+(Double)total.get("ot"));
+		}
 		return map;
 	}
 	

@@ -29,6 +29,19 @@ public interface ManualInfoDao {
 	 * @time 2017-6-17 下午3:50:23
 	 */
 	public List findList(UserInfo user,int page,int rows,Map<String,String> param);
+	
+	/**
+	 * 查询出勤，加班，总工时 3个字段的和
+	 * @Title findThreeSum
+	 * @param user
+	 * @param param
+	 * @return
+	 * @author zpj
+	 * @time 2019年9月2日 下午5:22:18
+	 */
+	public List findThreeSum(UserInfo user,Map<String,String> param,int page,int rows);
+	
+	
 	/**
 	 * 查询重复的数据
 	 * @Title findRepeatList
@@ -53,7 +66,7 @@ public interface ManualInfoDao {
 	 * @author zpj
 	 * @time 2017-7-15 上午9:22:49
 	 */
-	public double findListSum(UserInfo user,int page,int rows,Map<String,String> param);
+//	public double findListSum(UserInfo user,int page,int rows,Map<String,String> param);
 	/**
 	 * 根据条件查询返回object[]
 	 * @Title findListObjectArray

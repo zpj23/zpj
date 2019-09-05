@@ -10,7 +10,8 @@
 var datagrid;
 $(document).ready(function(){
 	datagrid = $('#datagrid');
-	datagrid.datagrid({
+	
+	var pagenation=datagrid.datagrid({
 		url : 'jlManualCheckInfoAction_getListJson',
 		queryParams : {
 			
@@ -54,16 +55,33 @@ $(document).ready(function(){
 		},{
 			field : 'sgxm',
 			title : '施工项目',
-			width : 30
+			width : 30,
+			formatter:function(value,row){ 
+				if(value==undefined||value=="undefined"){
+					return "";
+				}
+		        var content = '<span title="' + value + '" class="easyui-tooltip">' + value + '</span>';  
+		        return content;  
+		    } 
 		},{
 			field : 'sgqy',
 			title : '施工区域',
-			width : 40
+			width : 40,
+			formatter:function(value,row){  
+				if(value==undefined||value=="undefined"){
+					return "";
+				}
+		        var content = '<span title="' + value + '" class="easyui-tooltip">' + value + '</span>';  
+		        return content;  
+		    } 
 		},{
 			field : 'workcontent',
 			title : '工作内容',
 			width : 100,
-			formatter:function(value,row){  
+			formatter:function(value,row){
+// 				if(value==undefined||value=="undefined"){
+// 					return "";
+// 				}
 		        var content = '<span title="' + value + '" class="easyui-tooltip">' + value + '</span>';  
 		        return content;  
 		    }  
@@ -125,6 +143,7 @@ $(document).ready(function(){
 		
 		] ]
 	});
+	
 	
 });
 
