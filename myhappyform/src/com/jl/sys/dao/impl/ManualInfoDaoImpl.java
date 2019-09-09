@@ -65,7 +65,7 @@ public class ManualInfoDaoImpl extends BaseDao<CheckInfo> implements ManualInfoD
 	public List findThreeSum(UserInfo user,Map<String,String> param,int page,int rows){
 		StringBuffer sql = new StringBuffer();
 		//sum(a.workduringtime) as wdt,sum(a.overtime) as ot 
-		sql.append(" select sum(a.workduringtime) as wdt,sum(a.overtime) as ot from jl_check_info a left join jl_user_info u on a.createuserid=u.id where 1=1  ");
+		sql.append(" select ifnull(sum(a.workduringtime),0) as wdt,ifnull(sum(a.overtime),0) as ot from jl_check_info a left join jl_user_info u on a.createuserid=u.id where 1=1  ");
 		if(null!=param.get("datemin")&&!"".equalsIgnoreCase(param.get("datemin").toString())){
 			sql.append(" and a.workdate >= ").append("'"+param.get("datemin")+"'");
 		}

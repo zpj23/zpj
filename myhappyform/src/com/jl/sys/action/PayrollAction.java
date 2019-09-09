@@ -117,7 +117,16 @@ public class PayrollAction extends IAction {
 			  str.append("}");
 			  jsonData= str.toString();
 		}else{
-			jsonData="[]";
+			//置空原来的数据
+			StringBuffer str =new StringBuffer();
+			  str.append("{\"total\":\"0\",\"rows\":[]");
+			  str.append(",\"footer\":[{\"id\":\"1\",\"zgz\":\"0\",\"yfgzy\":\"0\",\"sygz\":\"0\",\"xm\":\"\","
+			  		+ "\"yf\":\"\",\"gd\":\"\",\"gjby\":\"\",\"jbgz\":\"\",\"jbgzhjj\":\"\",\"yfgz\":\"\","
+			  		+ "\"lhbt\":\"\",\"fybt\":\"\",\"mq\":\"\",\"qtkk\":\"\",\"qz\":\"\",\"bz\":\"\","
+			  		+ "\"chuqin\":\"0\",\"jiaban\":\"0\",\"zonggongshi\":\"0\"}]");
+			  
+			  str.append("}");
+			  jsonData= str.toString();
 		}
 		try {
 			this.jsonWrite(jsonData);

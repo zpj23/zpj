@@ -398,7 +398,12 @@ public class ManualCheckInfoAction extends IAction{
 			  str.append("}");
 			  jsonData= str.toString();
 		}else{
-			jsonData="[]";
+			StringBuffer str =new StringBuffer();
+			str.append("{\"total\":0,\"rows\":");
+			str.append("[]");
+			str.append(",\"footer\":[{\"id\":\"1\",\"departmentname\":\"0\",\"workdate\":\"\",\"workduringtime\":\"0\",\"workcontent\":\"合计\",\"overtime\":\"0\",\"staffname\":\"\",\"remark\":\"\"}]");
+			str.append("}");
+			jsonData= str.toString();
 		}
 		try {
 			this.jsonWrite(jsonData);
