@@ -53,7 +53,7 @@ public class PayrollDaoImpl extends BaseDao<PayrollInfo> implements PayrollDao{
 	
 	public Map findCount(Map<String,String> param){
 		StringBuffer sql = new StringBuffer();
-		sql.append(" select count(a.id) zs ,SUM(chuqin) cq,SUM(jiaban) jb,SUM(zonggongshi) zgs,SUM(zgz) zgz,SUM(yfgzy) yfgz,SUM(sygz) sygz from jl_payroll_info a  where 1=1  ");
+		sql.append(" select count(a.id) zs ,SUM(chuqin) cq,SUM(jiaban) jb,SUM(zonggongshi) zgs,convert(SUM(zgz),decimal(15,1)) zgz,convert(SUM(yfgzy),decimal(15,1)) yfgzy,convert(SUM(yfgz),decimal(15,1)) as yfgz,convert(SUM(sygz),decimal(15,1)) sygz from jl_payroll_info a  where 1=1  ");
 		if(null!=param.get("username")&&!"".equalsIgnoreCase(param.get("username").toString())){
 			sql.append(" and  a.xm like ").append("'%"+param.get("username")+"%'  ");
 		}
@@ -145,9 +145,23 @@ public class PayrollDaoImpl extends BaseDao<PayrollInfo> implements PayrollDao{
 		this.executeSql(sql.toString());
 	}
 	
-	
 	public List<PayrollInfo> findListByYf(String yf){
 		List<PayrollInfo> list=this.find(" from PayrollInfo where yf='"+yf+"'", null);
 		return list;
 	}
+	
+	
+	public List findListByGroupUser(String nianfen){
+		StringBuilder sql=new StringBuilder(100);
+		sql.append("select xm,SUM(chuqin) as chuqin, SUM(jiaban) as jiaban,SUM(zonggongshi) as zgs,convert(SUM(yfgz),decimal(15,1)) as yfgz,convert(SUM(zgz),decimal(15,1)) as zgz,convert(SUM(yfgzy),decimal(15,1)) as yfgzy,convert(SUM(sygz),decimal(15,1)) as sygz  from jl_payroll_info where 1=1 ");
+		if(null!=nianfen&&!nianfen.equalsIgnoreCase("")){
+			sql.append(" and yf like '"+nianfen+"%' ");
+		}
+		sql.append(" GROUP BY xm order by xm asc ");
+		List list = this.findBySql2(sql.toString());
+		return list;
+	}
+	
+	
+	
 }

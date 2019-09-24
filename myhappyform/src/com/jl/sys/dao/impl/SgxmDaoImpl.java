@@ -1,5 +1,6 @@
 package com.jl.sys.dao.impl;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -52,7 +53,7 @@ public class SgxmDaoImpl extends BaseDao<SgxmInfo> implements SgxmDao {
 	
 	public Map findCount(Map<String,String> param){
 		StringBuffer sql = new StringBuffer();
-		sql.append(" select count(a.id) zs ,SUM(chuqin) cq,SUM(jiaban) jb,SUM(zonggongshi) zgs,SUM(zgz) zgz,SUM(yfgzy) yfgz,SUM(sygz) sygz from jl_sgxm_tj_info a  where 1=1  ");
+		sql.append(" select count(a.id) zs ,SUM(chuqin) cq,SUM(jiaban) jb,SUM(zonggongshi) zgs,SUM(zgz) zgz,convert(SUM(yfgz),decimal(15,1)) as yfgz,SUM(yfgzy) yfgzy,SUM(sygz) sygz from jl_sgxm_tj_info a  where 1=1  ");
 		if(null!=param.get("username")&&!"".equalsIgnoreCase(param.get("username").toString())){
 			sql.append(" and  a.xm like ").append("'%"+param.get("username")+"%'  ");
 		}
@@ -87,7 +88,7 @@ public class SgxmDaoImpl extends BaseDao<SgxmInfo> implements SgxmDao {
 			String lastDay=DateHelper.getLastdayOfMonth(pi.getYf(), "yyyy-MM");
 			List<Map> list=invokeCall(firstDay, lastDay,pi.getXm());
 			StringBuffer sql=new StringBuffer(500);
-			
+			DecimalFormat df = new DecimalFormat ("#.0");
 			List<Map> alreadylist=this.findMapObjBySql("select * from jl_sgxm_tj_info where yf='"+pi.getYf()+"' and xm='"+pi.getXm()+"' ");
 			StringBuffer nameBuffer;
 			StringBuffer sgxmBuffer;
@@ -104,7 +105,10 @@ public class SgxmDaoImpl extends BaseDao<SgxmInfo> implements SgxmDao {
 								alreadylist.get(p).get("sgxm").toString().equalsIgnoreCase(sgxmBuffer.toString())&&
 								alreadylist.get(p).get("gd").toString().equalsIgnoreCase(dpBuffer.toString())){
 //							System.out.println("修改现有的项目工资信息");
-							this.executeUpdateOrDelete(" update jl_sgxm_tj_info set chuqin='"+list.get(q).get("t3")+"',jiaban='"+list.get(q).get("t4")+"',zonggongshi='"+list.get(q).get("t5")+"' ,lhbt='"+list.get(q).get("t6")+"',gjby='"+pi.getGjby()+"', jbgz='"+pi.getJbgz()+"'  where yf='"+pi.getYf()+"' and xm='"+nameBuffer+"' and sgxm='"+sgxmBuffer+"' and gd='"+dpBuffer+"' ");
+							
+							//计算应发工资=总工时*工价包月
+							double yfgz=((double)list.get(q).get("t5"))*Float.parseFloat(pi.getGjby());
+							this.executeUpdateOrDelete(" update jl_sgxm_tj_info set chuqin='"+list.get(q).get("t3")+"',jiaban='"+list.get(q).get("t4")+"',zonggongshi='"+list.get(q).get("t5")+"' ,lhbt='"+list.get(q).get("t6")+"',gjby='"+pi.getGjby()+"', jbgz='"+pi.getJbgz()+"',yfgz='"+df.format(yfgz)+"'  where yf='"+pi.getYf()+"' and xm='"+nameBuffer+"' and sgxm='"+sgxmBuffer+"' and gd='"+dpBuffer+"' ");
 							flag=true;
 							alreadylist.remove(p);
 							break;
@@ -114,7 +118,9 @@ public class SgxmDaoImpl extends BaseDao<SgxmInfo> implements SgxmDao {
 				}
 				if(!flag){
 //					System.out.println("新增项目工资信息");
-					this.executeUpdateOrDelete("insert into jl_sgxm_tj_info (id,xm,yf,gd,chuqin,jiaban,zonggongshi,gjby,jbgz,jbgzhjj,yfgz,lhbt,fybt,mq,qtkk,zgz,yfgzy,sygz,sgxm) values(UUID(),'"+nameBuffer+"','"+pi.getYf()+"','"+dpBuffer+"','"+list.get(q).get("t3")+"','"+list.get(q).get("t4")+"','"+list.get(q).get("t5")+"','"+pi.getGjby()+"','"+pi.getJbgz()+"','0','0','"+list.get(q).get("t6")+"','0','0','0','0','0','0','"+sgxmBuffer+"' )");
+					//计算应发工资=总工时*工价包月
+					double yfgz=((double)list.get(q).get("t5"))*Float.parseFloat(pi.getGjby());
+					this.executeUpdateOrDelete("insert into jl_sgxm_tj_info (id,xm,yf,gd,chuqin,jiaban,zonggongshi,gjby,jbgz,jbgzhjj,yfgz,lhbt,fybt,mq,qtkk,zgz,yfgzy,sygz,sgxm) values(UUID(),'"+nameBuffer+"','"+pi.getYf()+"','"+dpBuffer+"','"+list.get(q).get("t3")+"','"+list.get(q).get("t4")+"','"+list.get(q).get("t5")+"','"+pi.getGjby()+"','"+pi.getJbgz()+"','0','"+df.format(yfgz)+"','"+list.get(q).get("t6")+"','0','0','0','0','0','0','"+sgxmBuffer+"' )");
 				}
 			}
 			StringBuffer ids=new StringBuffer(200);
@@ -130,6 +136,7 @@ public class SgxmDaoImpl extends BaseDao<SgxmInfo> implements SgxmDao {
 			}
 			
 		}catch (Exception e) {
+			e.printStackTrace();
 			throw new RuntimeException();
 		}
 		

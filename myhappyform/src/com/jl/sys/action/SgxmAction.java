@@ -91,7 +91,7 @@ public class SgxmAction extends IAction {
 			  		+ "\"gjby\":\"\","
 			  		+ "\"jbgz\":\"\","
 			  		+ "\"jbgzhjj\":\"\","
-			  		+ "\"yfgz\":\"\","
+			  		+ "\"yfgz\":\""+map.get("total_yfgz")+"\","
 			  		+ "\"lhbt\":\"\","
 			  		+ "\"fybt\":\"\","
 			  		+ "\"mq\":\"\","
@@ -110,7 +110,7 @@ public class SgxmAction extends IAction {
 			StringBuffer str =new StringBuffer();
 			  str.append("{\"total\":\"0\",\"rows\":[]");
 			  str.append(",\"footer\":[{\"id\":\"1\",\"zgz\":\"0\",\"yfgzy\":\"0\",\"sygz\":\"0\",\"xm\":\"\","
-			  		+ "\"yf\":\"\",\"gd\":\"\",\"gjby\":\"\",\"jbgz\":\"\",\"jbgzhjj\":\"\",\"yfgz\":\"\","
+			  		+ "\"yf\":\"\",\"gd\":\"\",\"gjby\":\"\",\"jbgz\":\"\",\"jbgzhjj\":\"\",\"yfgz\":\"0\","
 			  		+ "\"lhbt\":\"\",\"fybt\":\"\",\"mq\":\"\",\"qtkk\":\"\",\"qz\":\"\",\"bz\":\"\","
 			  		+ "\"chuqin\":\"0\",\"jiaban\":\"0\",\"zonggongshi\":\"0\"}]");
 			  

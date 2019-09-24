@@ -37,6 +37,8 @@ public class PayrollAction extends IAction {
 	@Autowired
 	public LogInfoService jlLogInfoService;
 	
+	private UserInfo user;
+	
 	@Action(value="jlPayrollAction_toList",results={
 			@Result(name="success",location="sys/payroll/list.jsp"),
 			@Result(name="error",location="/login.jsp")
@@ -93,25 +95,25 @@ public class PayrollAction extends IAction {
 			  String lstr=gson.toJson(list);
 			  str.append(lstr);
 			  str.append(",\"footer\":[{\"id\":\"1\","
-			  		+ "\"zgz\":\""+(Double)map.get("total_zgz")+"\","
-			  		+ "\"yfgzy\":\""+(Double)map.get("total_yfgzy")+"\","
-			  		+ "\"sygz\":\""+(Double)map.get("total_sygz")+"\","
+			  		+ "\"zgz\":\""+map.get("total_zgz")+"\","
+			  		+ "\"yfgzy\":\""+map.get("total_yfgzy")+"\","
+			  		+ "\"sygz\":\""+map.get("total_sygz")+"\","
 			  		+ "\"xm\":\"\","
 			  		+ "\"yf\":\"\","
 			  		+ "\"gd\":\"\","
 			  		+ "\"gjby\":\"\","
 			  		+ "\"jbgz\":\"\","
 			  		+ "\"jbgzhjj\":\"\","
-			  		+ "\"yfgz\":\"\","
+			  		+ "\"yfgz\":\""+map.get("total_yfgz")+"\","
 			  		+ "\"lhbt\":\"\","
 			  		+ "\"fybt\":\"\","
 			  		+ "\"mq\":\"\","
 			  		+ "\"qtkk\":\"\","
 			  		+ "\"qz\":\"\","
 			  		+ "\"bz\":\"\","
-			  		+ "\"chuqin\":\""+(Double)map.get("chuqin")+"\","
-			  		+ "\"jiaban\":\""+(Double)map.get("jiaban")+"\","
-			  		+ "\"zonggongshi\":\""+(Double)map.get("zonggongshi")+"\""
+			  		+ "\"chuqin\":\""+map.get("chuqin")+"\","
+			  		+ "\"jiaban\":\""+map.get("jiaban")+"\","
+			  		+ "\"zonggongshi\":\""+map.get("zonggongshi")+"\""
 			  		+ "}]");
 			  
 			  str.append("}");
@@ -299,6 +301,16 @@ public class PayrollAction extends IAction {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	
+	@Action(value="jlPayrollAction_exportExcel",results={
+			@Result(name="success",type="json", params={"root","jsonData"})
+	})
+	public void exportExcel(){
+//		user = (UserInfo) request.getSession().getAttribute("jluserinfo");
+		payrollService.exportExcel(request,response);
+		
 	}
 	
 }

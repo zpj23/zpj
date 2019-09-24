@@ -1,5 +1,8 @@
 package com.jl.sys.service.impl;
 
+import java.awt.Font;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -7,10 +10,20 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.management.RuntimeErrorException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.jl.common.BaseService.MethodLog2;
 import com.jl.sys.dao.PayrollDao;
 import com.jl.sys.dao.SgxmDao;
 import com.jl.sys.pojo.LogInfo;
@@ -43,13 +56,11 @@ public class PayrollServiceImpl implements PayrollService{
 	 */
 	public synchronized void calculateSgxmInfo(PayrollInfo pi){
 		
-
-//		List<PayrollInfo> piList=payrollDao.findByYFAndXM(yuefen, username);
-//		PayrollInfo pi=null;
-//		if(null!=piList&&piList.size()==1){
-//			pi=piList.get(0);
-//		}
-		sgxmDao.updateMultiInfo(pi);
+		try{
+			sgxmDao.updateMultiInfo(pi);
+		}catch (Exception e) {
+			throw new RuntimeException();
+		}
 		
 	}
 	
@@ -71,7 +82,8 @@ public class PayrollServiceImpl implements PayrollService{
 		map.put("jiaban", countMap.get("jb"));//加班和
 		map.put("zonggongshi", countMap.get("zgs"));//总工时和
 		map.put("total_zgz", countMap.get("zgz"));//总工资
-		map.put("total_yfgzy", countMap.get("yfgz"));//预发工资
+		map.put("total_yfgzy", countMap.get("yfgzy"));//预发工资
+		map.put("total_yfgz", countMap.get("yfgz"));//应发工资
 		map.put("total_sygz", countMap.get("sygz"));//剩余工资
 		return map;
 	}
@@ -101,40 +113,85 @@ public class PayrollServiceImpl implements PayrollService{
 	
 	
 	public Map calculateInfo(String yuefen,String username,UserInfo user){
-//		List<PayrollInfo> list =payrollDao.findByYFAndXM(yuefen,username);
 		Map retMap=new HashMap();
-//		retMap.put("flag", false);
-//		retMap.put("msg", "");
-//		try{
-//			if(list.size()==0){
-//				//判断没有存在对应人员对应月份的数据，需要新增（统计当前月份当前人员的考勤数据）
-//				//insert into jl_payroll_info(id,xm,yf,gd,chuqin,jiaban,zonggongshi,gjby,jbgz,jbgzhjj,yfgz,lhbt,fybt,mq,qtkk,zgz,yfgzy,sygz) SELECT UUID(),t1,'2',t2,t3,t4,t5,'0','0','0','0','0','0','0','0','0','0','0' from yuefen2
-//				payrollDao.insertPayrollData(yuefen,username);
-//				retMap.put("flag", true);
-//				retMap.put("msg", "新增成功");
-//				insertLog(user,"新增工资单信息","审核完成后，自动新增工资单对应的数据(没有当前月的数据的时候新增)"+"月份："+yuefen+"，人员："+username);
-//				
-//			}else if(list.size()==1){
-//				//有且仅有1一条对应人员对应月份的数据，需要编辑（重新统计当前月份当前人员的考勤数据）
-//				payrollDao.updatePayrollData(yuefen,username);
-//				retMap.put("flag", true);
-//				retMap.put("msg", "修改成功");
-//				insertLog(user,"修改工资单信息","审核完成后，自动更新工资单对应的数据(没有当前月的数据的时候新增)"+"月份："+yuefen+"，人员："+username);
-//			}else if(list.size()>1){
-//				//说明有重复的数据
-//				retMap.put("flag", false);
-//				retMap.put("msg", yuefen+"月份"+username+"信息有"+list.size()+"条");
-//				insertLog(user,"工资单信息问题",yuefen+"月份"+username+"信息有"+list.size()+"条");
-//			}
-//		}catch (Exception e) {
-//			retMap.put("flag", false);
-//			retMap.put("msg", "更新失败");
-//			throw new RuntimeException();
-//		}
-		
-		
 		return retMap;
 	}
 	
-	
+	@MethodLog2(remark="导出工资单汇总信息",type="导出")
+	public void exportExcel(HttpServletRequest request, HttpServletResponse response){
+		String str="姓名,出勤,加班,总工时,应发工资,总工资,预发工资,剩余工资";
+		List list=payrollDao.findListByGroupUser("2019");
+		HSSFWorkbook wb = new HSSFWorkbook();
+		// 生成Excel的sheet
+		HSSFSheet sheet1 = wb.createSheet("汇总信息");
+		HSSFCellStyle cellStyle = wb.createCellStyle();
+		cellStyle.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
+		cellStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+		HSSFFont hf=wb.createFont();
+//		hf.setColor(hf.COLOR_RED);
+		hf.setFontHeightInPoints((short)10);
+		hf.setFontName("宋体");
+		cellStyle.setFont(hf);
+		//合并单元格的实现
+//		CellRangeAddress cellRange1 = new CellRangeAddress(0, 0, (short) 0, (short) 10);
+//        sheet.addMergedRegion(cellRange1);
+//        CellRangeAddress
+
+		
+		String[] title=str.split(",");
+		// Create a row and put some cells in it. Rows are 0 based.
+		HSSFRow row1 = sheet1.createRow((short) 0);
+		HSSFCell cell0=null;
+		for(int m=0;m<title.length;m++){
+			sheet1.setColumnWidth(m,10*512);
+			sheet1.setDefaultColumnWidth(10000);  
+			sheet1.setDefaultRowHeight((short) (3 * 256)); //设置默认行高，表示2个字符的高度
+			sheet1.setDefaultRowHeightInPoints(30);
+			cell0=null;
+			cell0 = row1.createCell((short) m);		
+			cell0.setCellStyle(cellStyle);
+			cell0.setCellValue(title[m]);
+		}
+		HSSFRow row2=null;
+		HSSFCell cell=null;
+		for (int j = 1; j <= list.size(); j++) {
+			row2=null;
+		    row2 = sheet1.createRow((short) j);
+		    for (int i = 0; i < title.length; i++) {
+		    	cell=null;
+		    	cell = row2.createCell((short) i);	
+//		    	if(title[i].equalsIgnoreCase("性别")||title[i].equalsIgnoreCase("民族")||title[i].equalsIgnoreCase("政治面貌")||title[i].equalsIgnoreCase("专家类别")){
+//		    		cell.setCellValue(String.valueOf(((Object[])list.get(j-1))[i].toString()));
+//		    	}else{
+		    		if(null!=((Object[])list.get(j-1))[i]){
+		    			cell.setCellValue(String.valueOf(((Object[])list.get(j-1))[i]));
+		    		}else{
+		    			cell.setCellValue("");
+		    		}
+//		    	}
+		    }
+		}
+		OutputStream  output=null;
+		try {
+		    response.reset();
+		    response.setContentType("application/vnd.ms-excel;charset=utf-8");
+		    response.setHeader("Content-Disposition", "attachment;filename="
+			    + new String(("汇总信息表"+".xls").getBytes(), "iso-8859-1"));
+		    output = response.getOutputStream();
+		    wb.write(output);
+		    output.flush();
+		    
+		} catch (Exception e) {
+		    e.printStackTrace();
+
+		}finally{
+			if(output!=null){
+				try {
+					output.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 }

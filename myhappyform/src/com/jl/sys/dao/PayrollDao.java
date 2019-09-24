@@ -26,5 +26,15 @@ public interface PayrollDao {
 	public void updatePayrollData(String yuefen,String xm);
 	
 	public List<PayrollInfo> findListByYf(String yf);
+	
+	
+	/**
+	 * 根据人员分类汇总信息
+	 * @Title findListByGroupUser
+	 * @return
+	 * @author zpj
+	 * @time 2019年9月18日 下午1:38:30
+	 */
+	public List<Map> findListByGroupUser(String nianfen);
 
 }

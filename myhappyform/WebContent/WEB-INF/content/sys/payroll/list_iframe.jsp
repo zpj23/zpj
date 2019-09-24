@@ -168,6 +168,8 @@ $(document).ready(function(){
          }, '-',
          { text: '导出', iconCls: 'icon-export', handler: function () {
              //保存时结束当前编辑的行，自动触发onAfterEdit事件如果要与后台交互可将数据通过Ajax提交后台
+             exportExcel();
+             
          }
          }, '-',
          { text: '刷新', iconCls: 'icon-refresh', handler: function () {
@@ -251,21 +253,21 @@ function chf(textarea,tfield){
 			var temp= $(edr[6].target).val();
 			if(null!=temp&&temp!=""&&null!=newval&&newval!=""){
 				var yfgz=temp*newval;
-				$(edr[10].target).val(yfgz);
+				$(edr[10].target).val(yfgz.toFixed(1));
 			}
 		}else if(tfield=="jbgz"){
 			//判断如果改变的是基本工资，则用应发工资-基本工资=加班工资和奖金
 			var yfgz=$(edr[10].target).val();
 			if(null!=yfgz&&yfgz!=""&&null!=newval&&newval!=""){
 				var jbgzhjj=yfgz-newval;
-				$(edr[9].target).val(jbgzhjj);
+				$(edr[9].target).val(jbgzhjj.toFixed(1));
 			}
 		}else if(tfield=="jbgzhjj"){
 			//判断如果改变的是加班工资和奖金，则用应发工资-加班工资和奖金=基本工资
 			var yfgz=$(edr[10].target).val();
 			if(null!=yfgz&&yfgz!=""&&null!=newval&&newval!=""){
 				var jbgz=yfgz-newval;
-				$(edr[8].target).val(jbgz);
+				$(edr[8].target).val(jbgz.toFixed(1));
 			}
 		}else if(tfield=="qtkk"){
 			//判断如果改变的是其他扣款，则  总工资=应发工资+劳护补贴+费用补贴+满勤-其他扣款
@@ -275,15 +277,15 @@ function chf(textarea,tfield){
 			var mq=$(edr[13].target).val();//满勤
 			var qtkk=$(edr[14].target).val();//其他扣款
 			var zgz=parseFloat(yfgz)+parseFloat(lhbt)+parseFloat(fybt)+parseFloat(mq)-parseFloat(newval);
-			$(edr[15].target).val(zgz);
+			$(edr[15].target).val(zgz.toFixed(1));
 			var yfgzy=$(edr[16].target).val();
 			var sygz=zgz-parseFloat(yfgzy);
-			$(edr[17].target).val(sygz);
+			$(edr[17].target).val(sygz.toFixed(1));
 		}else if(tfield=="yfgzy"){
 			//判断如果改变的是预发工资，剩余工资=总工资-预发工资
 			var zgz=$(edr[15].target).val();
 			var sygz=zgz-parseFloat(newval);
-			$(edr[17].target).val(sygz);
+			$(edr[17].target).val(sygz.toFixed(1));
 		}
 	}
 	
@@ -353,12 +355,22 @@ function guid() {
     return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
 }
 
+function exportExcel(){
+	$.messager.confirm('温馨提示', '您确定要导出2019年所有数据吗', function(b) {
+		if (b) {
+			form1.action="jlPayrollAction_exportExcel";
+			form1.submit();
+		}
+	});
+	
+	
+}
 
 
 </script>
 </head>
 <body>
-
+<form action="" name="form1" method="post"  id="form1"  ></form>
 <table id="datagrid" fit="true" fitColumns="true" title="工资明细" class="easyui-datagrid" style="height: auto; width: auto;"  
         url=""  
         singleSelect="true" iconCls="icon-save" rownumbers="true" pageSize="${ipagesize}" pageList="${ipagelist}" pagination="true">  

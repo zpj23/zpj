@@ -37,7 +37,11 @@ $(document).ready(function(){
 		},{
 			field : 'description',
 			title : '操作描述',
-			width : 200
+			width : 200,
+			formatter:function(value,row){  
+		        var content = '<span title=\"' + value + '\" class="easyui-tooltip">' + value + '</span>';  
+		        return content;  
+		    }  
 		},{
 			field : 'type',
 			title : '操作类型',

@@ -127,8 +127,8 @@ function dataimport(){
 	form1.submit();
 }
 function dataoutput(){
-	form1.action="jlManualCheckInfoAction_exportExcel";
-	form1.submit();
+// 	form1.action="jlManualCheckInfoAction_exportExcel";
+// 	form1.submit();
 }
 
 

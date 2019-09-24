@@ -3,6 +3,9 @@ package com.jl.sys.service;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.jl.sys.pojo.PayrollInfo;
 import com.jl.sys.pojo.UserInfo;
 
@@ -63,4 +66,14 @@ public interface PayrollService {
 	public boolean updateSgxmListByYf(String yf);
 	
 	public List findListByYf(String yf);
+	
+	/**
+	 * 导出工资单汇总信息 根据人来汇总
+	 * @Title exportExcel
+	 * @param request
+	 * @param response
+	 * @author zpj
+	 * @time 2019年9月18日 上午11:44:41
+	 */
+	public void exportExcel(HttpServletRequest request, HttpServletResponse response);
 }
