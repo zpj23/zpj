@@ -86,6 +86,8 @@ public class SetCharacterFilter implements Filter{
 				chain.doFilter(servletRequest, servletResponse);
 			}else if(str_href.indexOf("ByWx")>-1){//微信上的请求
 				chain.doFilter(servletRequest, servletResponse);
+			}else if(str_href.indexOf("jlDepartmentInfoAction_getDep")>-1){//请求部门信息
+				chain.doFilter(servletRequest, servletResponse);
 			}else if(str_href.indexOf("loginAction_downloadPrintActive")>-1){
 				chain.doFilter(servletRequest, servletResponse);
 			}else if(str_href.indexOf("Action_")>-1){
