@@ -46,7 +46,8 @@ public class PayrollDaoImpl extends BaseDao<PayrollInfo> implements PayrollDao{
 		if(null!=param.get("sgxm")&&!"".equalsIgnoreCase(param.get("sgxm").toString())){
 			sql.append(" and  a.sgxm like ").append("'%"+param.get("sgxm")+"%'  ");
 		}
-		sql.append(" order by yf asc ");
+//		sql.append(" order by yf desc ");
+		sql.append(" order by str_to_date(yf, '%Y-%c') desc ");
 		List list=this.findMapObjBySql(sql.toString(), null, page, rows);
 		return list;
 	}
