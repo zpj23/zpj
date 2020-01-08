@@ -131,7 +131,7 @@ public class PayrollDaoImpl extends BaseDao<PayrollInfo> implements PayrollDao{
 	public void calculatePayroll(String yuefen,String xm,String zonggongshi,String lhbt){
 		List list=this.findMapObjBySql("select * from jl_payroll_info where xm='"+xm+"' and yf='"+yuefen+"'", null, 1, 1);
 		Map map=(Map)list.get(0);
-		DecimalFormat format=new DecimalFormat("0.0");//构造方法的字符格式这里如果小数不足1位,会以0补足.
+		DecimalFormat format=new DecimalFormat("0.00");//构造方法的字符格式这里如果小数不足1位,会以0补足.
 		
 		//应发工资,通过工价包月*总工时得到
 		float yfgz=Float.parseFloat(zonggongshi)*Float.parseFloat((String)map.get("gjby"));
