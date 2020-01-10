@@ -37,8 +37,16 @@ public class PayrollDaoImpl extends BaseDao<PayrollInfo> implements PayrollDao{
 		if(null!=param.get("username")&&!"".equalsIgnoreCase(param.get("username").toString())){
 			sql.append(" and  a.xm like ").append("'%"+param.get("username")+"%'  ");
 		}
+//		if(null!=param.get("yuefen")&&!"".equalsIgnoreCase(param.get("yuefen").toString())){
+//			sql.append(" and  a.yf = ").append("'"+param.get("yuefen").toString()+"'  ");
+//		}
 		if(null!=param.get("yuefen")&&!"".equalsIgnoreCase(param.get("yuefen").toString())){
-			sql.append(" and  a.yf = ").append("'"+param.get("yuefen").toString()+"'  ");
+			//说明查询的是1月份
+			if(param.get("yuefen").toString().length()==6&&param.get("yuefen").toString().indexOf("-1")>0){
+				sql.append(" and  a.yf = ").append("'"+param.get("yuefen").toString()+"'  ");
+			}else{
+				sql.append(" and  a.yf like ").append("'"+param.get("yuefen").toString()+"%'  ");
+			}
 		}
 		if(null!=param.get("departmentname")&&!"".equalsIgnoreCase(param.get("departmentname").toString())){
 			sql.append(" and  a.gd like ").append("'%"+param.get("departmentname")+"%'  ");
@@ -52,14 +60,19 @@ public class PayrollDaoImpl extends BaseDao<PayrollInfo> implements PayrollDao{
 		return list;
 	}
 	
-	public Map findCount(Map<String,String> param){
+	public List findList(Map<String,String> param){
 		StringBuffer sql = new StringBuffer();
-		sql.append(" select count(a.id) zs ,SUM(chuqin) cq,SUM(jiaban) jb,SUM(zonggongshi) zgs,convert(SUM(zgz),decimal(15,1)) zgz,convert(SUM(yfgzy),decimal(15,1)) yfgzy,convert(SUM(yfgz),decimal(15,1)) as yfgz,convert(SUM(sygz),decimal(15,1)) sygz from jl_payroll_info a  where 1=1  ");
+		sql.append(" select xm,yf,gd,chuqin,jiaban,zonggongshi,gjby,jbgz,jbgzhjj,yfgz,lhbt,fybt,mq,qtkk,zgz,yfgzy,sygz,qz,bz from jl_payroll_info a  where 1=1  ");
 		if(null!=param.get("username")&&!"".equalsIgnoreCase(param.get("username").toString())){
 			sql.append(" and  a.xm like ").append("'%"+param.get("username")+"%'  ");
 		}
 		if(null!=param.get("yuefen")&&!"".equalsIgnoreCase(param.get("yuefen").toString())){
-			sql.append(" and  a.yf = ").append("'"+param.get("yuefen").toString()+"'  ");
+			//说明查询的是1月份
+			if(param.get("yuefen").toString().length()==6&&param.get("yuefen").toString().indexOf("-1")>0){
+				sql.append(" and  a.yf = ").append("'"+param.get("yuefen").toString()+"'  ");
+			}else{
+				sql.append(" and  a.yf like ").append("'"+param.get("yuefen").toString()+"%'  ");
+			}
 		}
 		if(null!=param.get("departmentname")&&!"".equalsIgnoreCase(param.get("departmentname").toString())){
 			sql.append(" and  a.gd like ").append("'%"+param.get("departmentname")+"%'  ");
@@ -67,7 +80,37 @@ public class PayrollDaoImpl extends BaseDao<PayrollInfo> implements PayrollDao{
 		if(null!=param.get("sgxm")&&!"".equalsIgnoreCase(param.get("sgxm").toString())){
 			sql.append(" and  a.sgxm like ").append("'%"+param.get("sgxm")+"%'  ");
 		}
-		List<Map> list=this.findMapObjBySql(sql.toString(), null, 1, 10000);
+		sql.append(" order by str_to_date(yf, '%Y-%c') desc ");
+		List list = this.findBySql2(sql.toString());
+//		List list=this.findMapObjBySql(sql.toString());
+		return list;
+	}
+	
+	public Map findCount(Map<String,String> param){
+		StringBuffer sql = new StringBuffer();
+		sql.append(" select count(a.id) zs ,SUM(chuqin) cq,SUM(jiaban) jb,SUM(zonggongshi) zgs,convert(SUM(zgz),decimal(15,1)) zgz,convert(SUM(yfgzy),decimal(15,1)) yfgzy,convert(SUM(yfgz),decimal(15,1)) as yfgz,convert(SUM(sygz),decimal(15,1)) sygz from jl_payroll_info a  where 1=1  ");
+		if(null!=param.get("username")&&!"".equalsIgnoreCase(param.get("username").toString())){
+			sql.append(" and  a.xm like ").append("'%"+param.get("username")+"%'  ");
+		}
+		if(null!=param.get("yuefen")&&!"".equalsIgnoreCase(param.get("yuefen").toString())){
+			//说明查询的是1月份
+			if(param.get("yuefen").toString().length()==6&&param.get("yuefen").toString().indexOf("-1")>0){
+				sql.append(" and  a.yf = ").append("'"+param.get("yuefen").toString()+"'  ");
+			}else{
+				sql.append(" and  a.yf like ").append("'"+param.get("yuefen").toString()+"%'  ");
+			}
+		}
+//		if(null!=param.get("yuefen")&&!"".equalsIgnoreCase(param.get("yuefen").toString())){
+//			sql.append(" and  a.yf = ").append("'"+param.get("yuefen").toString()+"'  ");
+//		}
+		if(null!=param.get("departmentname")&&!"".equalsIgnoreCase(param.get("departmentname").toString())){
+			sql.append(" and  a.gd like ").append("'%"+param.get("departmentname")+"%'  ");
+		}
+		if(null!=param.get("sgxm")&&!"".equalsIgnoreCase(param.get("sgxm").toString())){
+			sql.append(" and  a.sgxm like ").append("'%"+param.get("sgxm")+"%'  ");
+		}
+		List<Map> list=this.findMapObjBySql(sql.toString());
+		
 		if(null!=list&&list.size()>0){
 			return list.get(0);
 		}else{

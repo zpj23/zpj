@@ -75,5 +75,5 @@ public interface PayrollService {
 	 * @author zpj
 	 * @time 2019年9月18日 上午11:44:41
 	 */
-	public void exportExcel(HttpServletRequest request, HttpServletResponse response);
+	public void exportExcel(Map<String,String> param,HttpServletRequest request, HttpServletResponse response);
 }

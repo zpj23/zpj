@@ -10,9 +10,29 @@ public interface PayrollDao {
 	public void saveInfo(PayrollInfo pi);
 	
 	
+	/**
+	 * 工资单列表查询展示分页
+	 * @Title findList
+	 * @param page
+	 * @param rows
+	 * @param param
+	 * @return
+	 * @author zpj
+	 * @time 2020年1月10日 下午3:33:19
+	 */
 	public List findList(int page,int rows,Map<String,String> param);
 	
 	public Map findCount(Map<String,String> param);
+	/**
+	 * 工资单中导出excel使用，不用分页信息
+	 * @Title findList
+	 * @param param
+	 * @return
+	 * @author zpj
+	 * @time 2020年1月10日 下午3:32:53
+	 */
+	public List findList(Map<String,String> param);
+	
 	
 	public PayrollInfo findById(String id);
 	

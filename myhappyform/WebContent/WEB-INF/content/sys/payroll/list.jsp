@@ -50,40 +50,84 @@ function admin_add(title,url,w,h){
 	h=document.body.clientHeight-100;
 	layer_show(title,url,w,h);
 }
-/*删除*/
-// function admin_del(id){
-// 	layer.confirm('确认要删除吗？',function(index){
-// 		//此处请求后台程序，下方是成功后的前台处理……
-// 		$.ajax({
-// 			   type: "POST",
-// 			   url: "jlPayrollAction_doDel",
-// 			   async:false,
-// 			   data: "id="+id,
-// 			   success: function(data){
-// 				   if(data==1){
-// 						layer.msg('已删除!',{icon:1,time:1000});
-// 				   }else{
-// 					   layer.msg('删除失败!',{icon: 5,time:1000});
-// 				   }
-// 				   tolist();
-// 			   }
-// 			});
-// 	});
-// }
 
+function composeTime(){
+	var year=$("#nianfen").val();
+	var month=$('#yuefen').val();
+	var tempStr="";
+	if(year!=null&&year!=""){
+		tempStr+=year;
+	}
+	if(tempStr!=""){
+		if(month!=null&&month!=""){
+			tempStr+="-"+month;
+		}
+	}else{
+		if(month!=null&&month!=""){
+			alert("请先选择年份");
+		}
+	}
+	
+	return tempStr;
+}
 
 function searchInfo(){
-	
-	list_iframe.contentWindow.load($('#username').val(),$('#yuefen').val());
+	var year=$("#nianfen").val();
+	var month=$('#yuefen').val();
+	var tempStr="";
+	if(year!=null&&year!=""){
+		tempStr+=year;
+	}
+	if(tempStr!=""){
+		if(month!=null&&month!=""){
+			tempStr+="-"+month;
+		}
+	}else{
+		if(month!=null&&month!=""){
+			alert("请先选择年份");
+			return;
+		}
+	}	
+	list_iframe.contentWindow.load($('#username').val(),tempStr);
 }
 function tolist(){
-	list_iframe.contentWindow.load($('#username').val(),$('#yuefen').val());
+	var year=$("#nianfen").val();
+	var month=$('#yuefen').val();
+	var tempStr="";
+	if(year!=null&&year!=""){
+		tempStr+=year;
+	}
+	if(tempStr!=""){
+		if(month!=null&&month!=""){
+			tempStr+="-"+month;
+		}
+	}else{
+		if(month!=null&&month!=""){
+			alert("请先选择年份");
+			return;
+		}
+	}	
+	list_iframe.contentWindow.load($('#username').val(),tempStr);
 }
 
 function dataoutput(){
-	alert("导出数据");
-// 	form1.action="jlManualCheckInfoAction_exportExcel";
-// 	form1.submit();
+	var year=$("#nianfen").val();
+	var month=$('#yuefen').val();
+	var tempStr="";
+	if(year!=null&&year!=""){
+		tempStr+=year;
+	}
+	if(tempStr!=""){
+		if(month!=null&&month!=""){
+			tempStr+="-"+month;
+		}
+	}else{
+		if(month!=null&&month!=""){
+			alert("请先选择年份");
+			return;
+		}
+	}
+	list_iframe.contentWindow.outputparam($('#username').val(),tempStr);
 }
 //更新项目工资单中的某个月份的数据
 function updateSgxmByYf(){
@@ -139,7 +183,8 @@ function showProcess(isShow, title, msg) {
 		<div class="text-c"> 
 <!-- 			<input type="checkbox" id="orderWay" name="orderWay"  />排序方式 -->
 			<input type="text" class="input-text" style="width:120px" placeholder="姓名" id="username" name="username" />
-			<input type="text" placeholder="选择月份" onfocus="WdatePicker({dateFmt:'yyyy-M'})" id="yuefen" name="yuefen" class="input-text Wdate" style="width:80px;">
+			<input type="text" placeholder="选择年份" onfocus="WdatePicker({dateFmt:'yyyy'})" id="nianfen" name="nianfen" class="input-text Wdate" style="width:80px;">
+			<input type="text" placeholder="选择月份" onfocus="WdatePicker({dateFmt:'M'})" id="yuefen" name="yuefen" class="input-text Wdate" style="width:80px;">
 			<button type="button"  class="btn btn-success" onclick="searchInfo();" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 查询</button>
 			&nbsp;&nbsp;&nbsp;&nbsp;
 			<input type="text" placeholder="选择月份" onfocus="WdatePicker({dateFmt:'yyyy-M'})" id="sgxmyf" name="sgxmyf" class="input-text Wdate" style="width:80px;">

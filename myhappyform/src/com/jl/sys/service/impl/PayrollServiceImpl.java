@@ -118,9 +118,13 @@ public class PayrollServiceImpl implements PayrollService{
 	}
 	
 	@MethodLog2(remark="导出工资单汇总信息",type="导出")
-	public void exportExcel(HttpServletRequest request, HttpServletResponse response){
-		String str="姓名,出勤,加班,总工时,应发工资,总工资,预发工资,剩余工资";
-		List list=payrollDao.findListByGroupUser("2019");
+	public void exportExcel(Map<String,String> param,HttpServletRequest request, HttpServletResponse response){
+		String str="姓名,月份,工地,出勤（小时）,加班（小时）,总工时（小时）,工价包月,基本工资,加班工资和奖金,应发工资,劳护补贴,费用补贴,满勤,其他扣款,总工资,预发工资,剩余工资,签字,备注";
+//		List list=payrollDao.findListByGroupUser("2019");
+		List list=payrollDao.findList(param);
+		Map countMap=payrollDao.findCount(param); 
+		
+		
 		HSSFWorkbook wb = new HSSFWorkbook();
 		// 生成Excel的sheet
 		HSSFSheet sheet1 = wb.createSheet("汇总信息");
@@ -171,12 +175,31 @@ public class PayrollServiceImpl implements PayrollService{
 //		    	}
 		    }
 		}
+		//总计汇总求和  暂不做
+		row2=null;
+		row2 = sheet1.createRow((short) list.size()+1);
+		for (int i = 0; i < title.length; i++) {
+			cell=null;
+			cell = row2.createCell((short) i);
+			if(i==0){
+				cell.setCellValue("合计");
+			}else if(i==14){
+				cell.setCellValue(String.valueOf(countMap.get("zgz")));
+			}else if(i==15){
+				cell.setCellValue(String.valueOf(countMap.get("yfgzy")));
+			}else if(i==16){
+				cell.setCellValue(String.valueOf(countMap.get("sygz")));
+			}else{
+				cell.setCellValue("");
+			}
+		}
 		OutputStream  output=null;
 		try {
+			String title1=param.get("username")+"-"+param.get("yuefen")+"-";//String.valueOf(((Object[])list.get(0))[0]);
 		    response.reset();
 		    response.setContentType("application/vnd.ms-excel;charset=utf-8");
 		    response.setHeader("Content-Disposition", "attachment;filename="
-			    + new String(("汇总信息表"+".xls").getBytes(), "iso-8859-1"));
+			    + new String((title1+"年度汇总表"+".xls").getBytes(), "iso-8859-1"));
 		    output = response.getOutputStream();
 		    wb.write(output);
 		    output.flush();

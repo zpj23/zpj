@@ -356,14 +356,16 @@ function guid() {
 }
 
 function exportExcel(){
-	$.messager.confirm('温馨提示', '您确定要导出2019年所有数据吗', function(b) {
+	parent.dataoutput();
+	
+}
+function outputparam(username,yuefen){
+	$.messager.confirm('温馨提示', '您确定要导出数据吗', function(b) {
 		if (b) {
-			form1.action="jlPayrollAction_exportExcel";
+			form1.action="jlPayrollAction_exportExcel?username="+username+"&yuefen="+yuefen;
 			form1.submit();
 		}
 	});
-	
-	
 }
 
 

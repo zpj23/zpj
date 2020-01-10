@@ -309,7 +309,12 @@ public class PayrollAction extends IAction {
 	})
 	public void exportExcel(){
 //		user = (UserInfo) request.getSession().getAttribute("jluserinfo");
-		payrollService.exportExcel(request,response);
+		String yuefen=request.getParameter("yuefen");
+		String username=request.getParameter("username");
+		Map<String,String> param=new HashMap();
+		param.put("yuefen", yuefen);
+		param.put("username", username);
+		payrollService.exportExcel(param,request,response);
 		
 	}
 	
