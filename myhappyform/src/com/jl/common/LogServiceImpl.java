@@ -43,7 +43,8 @@ public class LogServiceImpl{
     	String methodName = pjp.getSignature().getName();
     	 HttpServletRequest request=null;
     	if(checkMethod(methodName)){
-	        String clazzName = pjp.getTarget().getClass().getSimpleName();  
+//	        String clazzName = pjp.getTarget().getClass().getSimpleName();
+	        pjp.getTarget().getClass().getMethods();
 	        	       
 	        ActionContext ac = ActionContext.getContext();
 	        UserInfo userinfo=null;
@@ -53,11 +54,9 @@ public class LogServiceImpl{
 			         userinfo = (UserInfo) request.getSession().getAttribute("jluserinfo");
 		        }
 	        }
-	        
-	        if(userinfo!=null){
-	        	
+	        String type =getMthodType(pjp);
+	        if(userinfo!=null&&!type.equalsIgnoreCase("")){
 	        	try{
-//	        		request.getMethod();
 //	        		Map map = request.getParameterMap();
 //	        		String reqType=request.getMethod();
 //	        		JSONArray json = JSONArray.fromObject(map);
@@ -65,7 +64,6 @@ public class LogServiceImpl{
 	        		LogInfo loginfo=new LogInfo();
 	        		loginfo.setId(UUID.randomUUID().toString());
 	        		loginfo.setCreatetime(new Date());
-	        		String type =getMthodType(pjp);
 	        		loginfo.setType(type);
 	        		String remark = getMthodRemark(pjp);
 	        		loginfo.setDescription(("操作类型："+remark));
