@@ -82,9 +82,9 @@ public class SgxmAction extends IAction {
 			  String lstr=gson.toJson(list);
 			  str.append(lstr);
 			  str.append(",\"footer\":[{\"id\":\"1\","
-			  		+ "\"zgz\":\""+(Double)map.get("total_zgz")+"\","
-			  		+ "\"yfgzy\":\""+(Double)map.get("total_yfgzy")+"\","
-			  		+ "\"sygz\":\""+(Double)map.get("total_sygz")+"\","
+			  		+ "\"zgz\":\""+map.get("total_zgz")+"\","
+			  		+ "\"yfgzy\":\""+map.get("total_yfgzy")+"\","
+			  		+ "\"sygz\":\""+map.get("total_sygz")+"\","
 			  		+ "\"xm\":\"\","
 			  		+ "\"yf\":\"\","
 			  		+ "\"gd\":\"\","

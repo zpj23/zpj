@@ -53,7 +53,7 @@ public class SgxmDaoImpl extends BaseDao<SgxmInfo> implements SgxmDao {
 	
 	public Map findCount(Map<String,String> param){
 		StringBuffer sql = new StringBuffer();
-		sql.append(" select count(a.id) zs ,SUM(chuqin) cq,SUM(jiaban) jb,SUM(zonggongshi) zgs,SUM(zgz) zgz,convert(SUM(yfgz),decimal(15,1)) as yfgz,SUM(yfgzy) yfgzy,SUM(sygz) sygz from jl_sgxm_tj_info a  where 1=1  ");
+		sql.append(" select count(a.id) zs ,SUM(chuqin) cq,SUM(jiaban) jb,SUM(zonggongshi) zgs,convert(SUM(zgz),decimal(15,1)) zgz,convert(SUM(yfgz),decimal(15,1)) as yfgz,convert(SUM(yfgzy),decimal(15,1)) yfgzy,convert(SUM(sygz),decimal(15,1)) sygz from jl_sgxm_tj_info a  where 1=1  ");
 		if(null!=param.get("username")&&!"".equalsIgnoreCase(param.get("username").toString())){
 			sql.append(" and  a.xm like ").append("'%"+param.get("username")+"%'  ");
 		}
@@ -66,7 +66,8 @@ public class SgxmDaoImpl extends BaseDao<SgxmInfo> implements SgxmDao {
 		if(null!=param.get("sgxm")&&!"".equalsIgnoreCase(param.get("sgxm").toString())){
 			sql.append(" and  a.sgxm like ").append("'%"+param.get("sgxm")+"%'  ");
 		}
-		List<Map> list=this.findMapObjBySql(sql.toString(), null, 1, 10000);
+//		List<Map> list=this.findMapObjBySql(sql.toString(), null, 1, 10000);
+		List<Map> list=this.findMapObjBySql(sql.toString());
 		if(null!=list&&list.size()>0){
 			return list.get(0);
 		}else{
@@ -88,13 +89,17 @@ public class SgxmDaoImpl extends BaseDao<SgxmInfo> implements SgxmDao {
 			String lastDay=DateHelper.getLastdayOfMonth(pi.getYf(), "yyyy-MM");
 			List<Map> list=invokeCall(firstDay, lastDay,pi.getXm());
 //			StringBuffer sql=new StringBuffer(500);
-			DecimalFormat df = new DecimalFormat ("#.0");
+			DecimalFormat df = new DecimalFormat ("#.00");
 			List<Map> alreadylist=this.findMapObjBySql("select * from jl_sgxm_tj_info where yf='"+pi.getYf()+"' and xm='"+pi.getXm()+"' ");
 			StringBuffer nameBuffer;
 			StringBuffer sgxmBuffer;
 			StringBuffer dpBuffer;
 			//平均每个小时的工资
-			float ehgz=(Float.parseFloat(pi.getZgz()))/(Float.parseFloat(pi.getZonggongshi()));
+			float ehgz=0;
+			if(Float.parseFloat(pi.getZgz())!=0&&Float.parseFloat(pi.getZonggongshi())!=0){
+				ehgz=(Float.parseFloat(pi.getZgz()))/(Float.parseFloat(pi.getZonggongshi()));
+			}
+			
 			boolean flag=false;//判断是否存在新的
 			for(int q=0;q<list.size();q++){
 				flag=false;
@@ -107,11 +112,12 @@ public class SgxmDaoImpl extends BaseDao<SgxmInfo> implements SgxmDao {
 								alreadylist.get(p).get("sgxm").toString().equalsIgnoreCase(sgxmBuffer.toString())&&
 								alreadylist.get(p).get("gd").toString().equalsIgnoreCase(dpBuffer.toString())){
 //							System.out.println("修改现有的项目工资信息");
-							float zgs=(float)list.get(q).get("t5");
+							double zgs=(double)list.get(q).get("t5");
 							//计算应发工资=总工时*工价包月
-							float yfgz=zgs*Float.parseFloat(pi.getGjby());
+							double yfgz=zgs*Float.parseFloat(pi.getGjby());
 							//总工资平均分到每个工时里面去的总工时 用每个小时的工资*小时数
-							float zgz =zgs*ehgz;
+							
+							double zgz =zgs*ehgz;
 							this.executeUpdateOrDelete(" update jl_sgxm_tj_info set chuqin='"+list.get(q).get("t3")+"',jiaban='"+list.get(q).get("t4")+"',zonggongshi='"+list.get(q).get("t5")+"' ,lhbt='"+list.get(q).get("t6")+"',gjby='"+pi.getGjby()+"', jbgz='"+pi.getJbgz()+"',yfgz='"+df.format(yfgz)+"',zgz='"+df.format(zgz)+"'  where yf='"+pi.getYf()+"' and xm='"+nameBuffer+"' and sgxm='"+sgxmBuffer+"' and gd='"+dpBuffer+"' ");
 							flag=true;
 							alreadylist.remove(p);
@@ -122,11 +128,11 @@ public class SgxmDaoImpl extends BaseDao<SgxmInfo> implements SgxmDao {
 				}
 				if(!flag){
 //					System.out.println("新增项目工资信息");
-					float zgs=(float)list.get(q).get("t5");
+					double zgs=(double)list.get(q).get("t5");
 					//计算应发工资=总工时*工价包月
-					float yfgz=zgs*Float.parseFloat(pi.getGjby());
+					double yfgz=zgs*Float.parseFloat(pi.getGjby());
 					//总工资平均分到每个工时里面去的总工时 用每个小时的工资*小时数
-					float zgz =zgs*ehgz;
+					double zgz =zgs*ehgz;
 					this.executeUpdateOrDelete("insert into jl_sgxm_tj_info (id,xm,yf,gd,chuqin,jiaban,zonggongshi,gjby,jbgz,jbgzhjj,yfgz,lhbt,fybt,mq,qtkk,zgz,yfgzy,sygz,sgxm) values(UUID(),'"+nameBuffer+"','"+pi.getYf()+"','"+dpBuffer+"','"+list.get(q).get("t3")+"','"+list.get(q).get("t4")+"','"+list.get(q).get("t5")+"','"+pi.getGjby()+"','"+pi.getJbgz()+"','0','"+df.format(yfgz)+"','"+list.get(q).get("t6")+"','0','0','0','"+df.format(zgz)+"','0','0','"+sgxmBuffer+"' )");
 				}
 			}
