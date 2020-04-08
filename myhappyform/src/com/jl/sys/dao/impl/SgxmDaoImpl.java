@@ -53,7 +53,7 @@ public class SgxmDaoImpl extends BaseDao<SgxmInfo> implements SgxmDao {
 	
 	public Map findCount(Map<String,String> param){
 		StringBuffer sql = new StringBuffer();
-		sql.append(" select count(a.id) zs ,SUM(chuqin) cq,SUM(jiaban) jb,SUM(zonggongshi) zgs,convert(SUM(zgz),decimal(15,1)) zgz,convert(SUM(yfgz),decimal(15,1)) as yfgz,convert(SUM(yfgzy),decimal(15,1)) yfgzy,convert(SUM(sygz),decimal(15,1)) sygz from jl_sgxm_tj_info a  where 1=1  ");
+		sql.append(" select count(a.id) zs ,SUM(chuqin) cq,SUM(jiaban) jb,SUM(zonggongshi) zgs,convert(SUM(zgz),decimal(15,1)) zgz,convert(SUM(yfgz),decimal(15,1)) as yfgz,convert(SUM(yfgzy),decimal(15,1)) yfgzy,convert(SUM(sygz),decimal(15,1)) sygz,convert(SUM(fybt),decimal(15,1)) fybt,convert(SUM(mq),decimal(15,1)) mq,convert(SUM(qtkk),decimal(15,1)) qtkk from jl_sgxm_tj_info a  where 1=1  ");
 		if(null!=param.get("username")&&!"".equalsIgnoreCase(param.get("username").toString())){
 			sql.append(" and  a.xm like ").append("'%"+param.get("username")+"%'  ");
 		}
@@ -94,10 +94,27 @@ public class SgxmDaoImpl extends BaseDao<SgxmInfo> implements SgxmDao {
 			StringBuffer nameBuffer;
 			StringBuffer sgxmBuffer;
 			StringBuffer dpBuffer;
-			//平均每个小时的工资
+			//平均每个小时的总工资占比 工资
 			float ehgz=0;
 			if(Float.parseFloat(pi.getZgz())!=0&&Float.parseFloat(pi.getZonggongshi())!=0){
 				ehgz=(Float.parseFloat(pi.getZgz()))/(Float.parseFloat(pi.getZonggongshi()));
+			}
+			//平均每小时费用补贴占比
+			float efybt=0;
+			if(Float.parseFloat(pi.getFybt())!=0&&Float.parseFloat(pi.getZonggongshi())!=0){
+				efybt=(Float.parseFloat(pi.getFybt()))/(Float.parseFloat(pi.getZonggongshi()));
+			}
+			//平均每个工时满勤的占比
+			float emq=0;
+			if(Float.parseFloat(pi.getMq())!=0&&Float.parseFloat(pi.getZonggongshi())!=0){
+				emq=(Float.parseFloat(pi.getMq()))/(Float.parseFloat(pi.getZonggongshi()));
+			}
+			
+			
+			//平均每个工时其他扣款的占比
+			float eqtkk=0;
+			if(Float.parseFloat(pi.getQtkk())!=0&&Float.parseFloat(pi.getZonggongshi())!=0){
+				eqtkk=(Float.parseFloat(pi.getQtkk()))/(Float.parseFloat(pi.getZonggongshi()));
 			}
 			
 			boolean flag=false;//判断是否存在新的
@@ -116,9 +133,15 @@ public class SgxmDaoImpl extends BaseDao<SgxmInfo> implements SgxmDao {
 							//计算应发工资=总工时*工价包月
 							double yfgz=zgs*Float.parseFloat(pi.getGjby());
 							//总工资平均分到每个工时里面去的总工时 用每个小时的工资*小时数
-							
 							double zgz =zgs*ehgz;
-							this.executeUpdateOrDelete(" update jl_sgxm_tj_info set chuqin='"+list.get(q).get("t3")+"',jiaban='"+list.get(q).get("t4")+"',zonggongshi='"+list.get(q).get("t5")+"' ,lhbt='"+list.get(q).get("t6")+"',gjby='"+pi.getGjby()+"', jbgz='"+pi.getJbgz()+"',yfgz='"+df.format(yfgz)+"',zgz='"+df.format(zgz)+"'  where yf='"+pi.getYf()+"' and xm='"+nameBuffer+"' and sgxm='"+sgxmBuffer+"' and gd='"+dpBuffer+"' ");
+							//费用补贴分到每个工时里面*总工时
+							double fybt=zgs*efybt;
+							//满勤分到每个工时*总工时
+							double mq=zgs*emq;
+							//其他扣款分到每个工时里面*总工时
+							double qtkk=zgs*eqtkk;
+							
+							this.executeUpdateOrDelete(" update jl_sgxm_tj_info set chuqin='"+list.get(q).get("t3")+"',jiaban='"+list.get(q).get("t4")+"',zonggongshi='"+list.get(q).get("t5")+"' ,lhbt='"+list.get(q).get("t6")+"',gjby='"+pi.getGjby()+"', jbgz='"+pi.getJbgz()+"',yfgz='"+df.format(yfgz)+"',fybt='"+df.format(fybt)+"',mq='"+df.format(mq)+"',qtkk='"+df.format(qtkk)+"',zgz='"+df.format(zgz)+"'  where yf='"+pi.getYf()+"' and xm='"+nameBuffer+"' and sgxm='"+sgxmBuffer+"' and gd='"+dpBuffer+"' ");
 							flag=true;
 							alreadylist.remove(p);
 							break;
@@ -133,7 +156,14 @@ public class SgxmDaoImpl extends BaseDao<SgxmInfo> implements SgxmDao {
 					double yfgz=zgs*Float.parseFloat(pi.getGjby());
 					//总工资平均分到每个工时里面去的总工时 用每个小时的工资*小时数
 					double zgz =zgs*ehgz;
-					this.executeUpdateOrDelete("insert into jl_sgxm_tj_info (id,xm,yf,gd,chuqin,jiaban,zonggongshi,gjby,jbgz,jbgzhjj,yfgz,lhbt,fybt,mq,qtkk,zgz,yfgzy,sygz,sgxm) values(UUID(),'"+nameBuffer+"','"+pi.getYf()+"','"+dpBuffer+"','"+list.get(q).get("t3")+"','"+list.get(q).get("t4")+"','"+list.get(q).get("t5")+"','"+pi.getGjby()+"','"+pi.getJbgz()+"','0','"+df.format(yfgz)+"','"+list.get(q).get("t6")+"','0','0','0','"+df.format(zgz)+"','0','0','"+sgxmBuffer+"' )");
+					//费用补贴分到每个工时里面*总工时
+					double fybt=zgs*efybt;
+					//满勤分到每个工时*总工时
+					double mq=zgs*emq;
+					//其他扣款分到每个工时里面*总工时
+					double qtkk=zgs*eqtkk;
+					
+					this.executeUpdateOrDelete("insert into jl_sgxm_tj_info (id,xm,yf,gd,chuqin,jiaban,zonggongshi,gjby,jbgz,jbgzhjj,yfgz,lhbt,fybt,mq,qtkk,zgz,yfgzy,sygz,sgxm) values(UUID(),'"+nameBuffer+"','"+pi.getYf()+"','"+dpBuffer+"','"+list.get(q).get("t3")+"','"+list.get(q).get("t4")+"','"+list.get(q).get("t5")+"','"+pi.getGjby()+"','"+pi.getJbgz()+"','0','"+df.format(yfgz)+"','"+list.get(q).get("t6")+"','"+df.format(fybt)+"','"+df.format(mq)+"','"+df.format(qtkk)+"','"+df.format(zgz)+"','0','0','"+sgxmBuffer+"' )");
 				}
 			}
 			StringBuffer ids=new StringBuffer(200);

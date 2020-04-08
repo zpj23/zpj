@@ -28,6 +28,9 @@ public class SgxmServiceImpl implements SgxmService {
 		map.put("total_yfgzy", countMap.get("yfgzy"));//预发工资
 		map.put("total_sygz", countMap.get("sygz"));//剩余工资
 		map.put("total_yfgz", countMap.get("yfgz"));//应发工资
+		map.put("total_fybt", countMap.get("fybt"));//费用补贴
+		map.put("total_mq", countMap.get("mq"));//满勤
+		map.put("total_qtkk", countMap.get("qtkk"));//其他扣款
 		return map;
 	}
 	
