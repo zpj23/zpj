@@ -234,5 +234,21 @@ public class SgxmAction extends IAction {
 			this.jsonWrite(false);
 		}
 	}
-	
+	@Action(value="sgxmAction_exportExcel",results={
+			@Result(name="success",type="json", params={"root","jsonData"})
+	})
+	public void exportExcel(){
+//		user = (UserInfo) request.getSession().getAttribute("jluserinfo");
+		String yuefen=request.getParameter("yuefen");
+		String username=request.getParameter("username");
+		String departmentname=request.getParameter("departmentname");
+		String sgxm=request.getParameter("sgxm");
+		Map<String,String> param=new HashMap();
+		param.put("yuefen", yuefen);
+		param.put("username", username);
+		param.put("departmentname", departmentname);
+		param.put("sgxm", sgxm);
+		sgxmService.exportExcel(param,request,response);
+		
+	}
 }

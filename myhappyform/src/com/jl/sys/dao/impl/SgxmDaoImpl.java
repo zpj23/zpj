@@ -51,6 +51,27 @@ public class SgxmDaoImpl extends BaseDao<SgxmInfo> implements SgxmDao {
 		return list;
 	}
 	
+	public List findList(Map<String,String> param){
+		StringBuffer sql = new StringBuffer();
+		sql.append(" select a.* from jl_sgxm_tj_info a  where 1=1  ");
+		if(null!=param.get("username")&&!"".equalsIgnoreCase(param.get("username").toString())){
+			sql.append(" and  a.xm like ").append("'%"+param.get("username")+"%'  ");
+		}
+		if(null!=param.get("yuefen")&&!"".equalsIgnoreCase(param.get("yuefen").toString())){
+			sql.append(" and  a.yf = ").append("'"+param.get("yuefen").toString()+"'  ");
+		}
+		if(null!=param.get("departmentname")&&!"".equalsIgnoreCase(param.get("departmentname").toString())){
+			sql.append(" and  a.gd like ").append("'%"+param.get("departmentname")+"%'  ");
+		}
+		if(null!=param.get("sgxm")&&!"".equalsIgnoreCase(param.get("sgxm").toString())){
+			sql.append(" and  a.sgxm like ").append("'%"+param.get("sgxm")+"%'  ");
+		}
+//		sql.append(" order by yf desc ");
+		sql.append(" order by str_to_date(yf, '%Y-%c') desc ");
+		List list=this.findBySql2(sql.toString());
+		return list;
+	}
+	
 	public Map findCount(Map<String,String> param){
 		StringBuffer sql = new StringBuffer();
 		sql.append(" select count(a.id) zs ,SUM(chuqin) cq,SUM(jiaban) jb,SUM(zonggongshi) zgs,convert(SUM(zgz),decimal(15,1)) zgz,convert(SUM(yfgz),decimal(15,1)) as yfgz,convert(SUM(yfgzy),decimal(15,1)) yfgzy,convert(SUM(sygz),decimal(15,1)) sygz,convert(SUM(fybt),decimal(15,1)) fybt,convert(SUM(mq),decimal(15,1)) mq,convert(SUM(qtkk),decimal(15,1)) qtkk from jl_sgxm_tj_info a  where 1=1  ");

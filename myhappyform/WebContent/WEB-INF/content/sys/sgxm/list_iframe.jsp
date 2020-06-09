@@ -229,7 +229,17 @@ function bindInfo(ri){
 				$(et.target).bind("keyup", function(){
 	            	chf($(this),"jbgzhjj");
 	            });
-			}else if(et.field == "qtkk"){
+			}else if(et.field == "fybt"){
+                //费用补贴
+                $(et.target).bind("keyup", function(){
+                    chf($(this),"fybt");
+                });
+            }else if(et.field == "mq"){
+                //满勤
+                $(et.target).bind("keyup", function(){
+                    chf($(this),"mq");
+                });
+            }else if(et.field == "qtkk"){
 				//其他扣款
 				$(et.target).bind("keyup", function(){
 	            	chf($(this),"qtkk");
@@ -269,11 +279,34 @@ function chf(textarea,tfield){
 				var jbgz=yfgz-newval;
 				$(edr[9].target).val(jbgz.toFixed(2));
 			}
-		}else if(tfield=="qtkk"){
+		}else if(tfield=="fybt"){
+            //判断如果改变的是费用补贴，则用总工资=应发工资+劳护补贴+费用补贴+满勤-其他扣款
+            var yfgz=$(edr[11].target).val();//应发工资
+            var lhbt=$(edr[12].target).val();//劳护补贴
+            var mq=$(edr[14].target).val();//满勤
+            var qtkk=$(edr[15].target).val();//其他扣款
+            var zgz=parseFloat(yfgz)+parseFloat(lhbt)+parseFloat(newval)+parseFloat(mq)-parseFloat(qtkk);
+            $(edr[16].target).val(zgz.toFixed(2));
+            var yfgzy=$(edr[17].target).val();
+            var sygz=zgz-parseFloat(yfgzy);
+            $(edr[18].target).val(sygz.toFixed(2));
+        }else if(tfield=="mq"){
+            //判断如果改变的是满勤，则用总工资=应发工资+劳护补贴+费用补贴+满勤-其他扣款
+            var yfgz=$(edr[11].target).val();//应发工资
+            var lhbt=$(edr[12].target).val();//劳护补贴
+            var fybt=$(edr[13].target).val();//费用补贴
+            var qtkk=$(edr[15].target).val();//其他扣款
+            var zgz=parseFloat(yfgz)+parseFloat(lhbt)+parseFloat(fybt)+parseFloat(newval)-parseFloat(qtkk);
+            $(edr[16].target).val(zgz.toFixed(2));
+            var yfgzy=$(edr[17].target).val();
+            var sygz=zgz-parseFloat(yfgzy);
+            $(edr[18].target).val(sygz.toFixed(2));
+
+        }else if(tfield=="qtkk"){
 			//判断如果改变的是其他扣款，则  总工资=应发工资+劳护补贴+费用补贴+满勤-其他扣款
 			var yfgz=$(edr[11].target).val();//应发工资
 			var lhbt=$(edr[12].target).val();//劳护补贴
-			var fybt=$(edr[12].target).val();//费用补贴
+			var fybt=$(edr[13].target).val();//费用补贴
 			var mq=$(edr[14].target).val();//满勤
 			var qtkk=$(edr[15].target).val();//其他扣款
 			var zgz=parseFloat(yfgz)+parseFloat(lhbt)+parseFloat(fybt)+parseFloat(mq)-parseFloat(newval);

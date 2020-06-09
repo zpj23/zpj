@@ -2,6 +2,9 @@ package com.jl.sys.service;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.jl.sys.pojo.PayrollInfo;
 import com.jl.sys.pojo.SgxmInfo;
 
@@ -20,4 +23,7 @@ public interface SgxmService {
 	public SgxmInfo findById(String id);
 	
 	public void saveInfo(SgxmInfo pi);
+	
+	
+	public void exportExcel(Map<String,String> param,HttpServletRequest request, HttpServletResponse response);
 }

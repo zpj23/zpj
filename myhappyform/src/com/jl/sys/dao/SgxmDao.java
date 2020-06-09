@@ -44,4 +44,7 @@ public interface SgxmDao {
 	
 	public void saveInfo(SgxmInfo pi);
 	
+	
+	public List findList(Map<String,String> param);
+	
 }
