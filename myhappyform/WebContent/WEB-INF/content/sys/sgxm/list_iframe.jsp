@@ -170,6 +170,7 @@ $(document).ready(function(){
          }, '-',
          { text: '导出', iconCls: 'icon-export', handler: function () {
              //保存时结束当前编辑的行，自动触发onAfterEdit事件如果要与后台交互可将数据通过Ajax提交后台
+        	 exportExcel();
          }
          }, '-',
          { text: '刷新', iconCls: 'icon-refresh', handler: function () {
@@ -389,13 +390,25 @@ function S4() {
 function guid() {
     return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
 }
-
+function exportExcel(){
+	parent.dataoutput();
+	
+}
+function outputparam(username,sgxm,departmentname,yuefen){
+	$.messager.confirm('温馨提示', '您确定要导出数据吗', function(b) {
+		if (b) {
+			alert(username);
+			form1.action="sgxmAction_exportExcel?username="+username+"&sgxm="+sgxm+"&departmentname="+departmentname+"&yuefen="+yuefen;
+			form1.submit();
+		}
+	});
+}
 
 
 </script>
 </head>
 <body>
-
+<form action="" name="form1" method="post"  id="form1"  ></form>
 <table id="datagrid" fit="true" fitColumns="true" title="项目工资明细" class="easyui-datagrid" style="height: auto; width: auto;"  
         url=""  
         singleSelect="true" iconCls="icon-save" rownumbers="true" pageSize="${ipagesize}" pageList="${ipagelist}" pagination="true">  
@@ -407,16 +420,16 @@ function guid() {
             <th rowspan="2" field="gd" data-options="editor:{type:'text'},width:80" align="center"  >工地</th>  
         	<th rowspan="2" field="sgxm" data-options="editor:{type:'text'},width:65,resizable:'true',formatter:showContents" align="center" >施工项目</th>
             <th colspan="3"  >出勤明细</th>
-            <th rowspan="2" field="gjby" data-options="editor:{type:'numberbox',options:{precision:2}},width:65,resizable:'true'" align="center" >工价/包月</th>  
-            <th rowspan="2" field="jbgz" data-options="editor:{type:'numberbox',options:{precision:2}},width:65,resizable:'true'" align="center" >基本工资</th>  
-            <th rowspan="2" field="jbgzhjj" data-options="editor:{type:'numberbox',options:{precision:2}},width:65,resizable:'true'" align="center" >加班工资和奖金</th>  
-            <th rowspan="2" field="yfgz" data-options="editor:{type:'numberbox',options:{precision:2}},width:65,resizable:'true'" align="center" >应发工资</th>  
-            <th rowspan="2" field="lhbt" data-options="editor:{type:'numberbox',options:{precision:2}},width:65,resizable:'true'" align="center" >劳护补贴</th>  
-            <th rowspan="2" field="fybt" data-options="editor:{type:'numberbox',options:{precision:2}},width:65,resizable:'true'" align="center" >费用补贴（元）</th>  
-            <th rowspan="2" field="mq" data-options="editor:{type:'numberbox',options:{precision:2}},width:65,resizable:'true'" align="center" >满勤</th>  
-            <th rowspan="2" field="qtkk" data-options="editor:{type:'numberbox',options:{precision:2}},width:65,resizable:'true'" align="center" >其他扣款</th> 
-            <th rowspan="2" field="zgz" data-options="editor:{type:'numberbox',options:{precision:2}},width:65,resizable:'true'" align="center" >总工资（元）</th>
-            <th rowspan="2" field="yfgzy" data-options="editor:{type:'numberbox',options:{precision:2}},width:65,resizable:'true'" align="center" >预付工资（元）</th>
+            <th rowspan="2" field="gjby" data-options="editor:{type:'numberbox',options:{precision:2}},width:65,resizable:'true'" align="center" ><font color='red'>工价/包月</font></th>  
+            <th rowspan="2" field="jbgz" data-options="editor:{type:'numberbox',options:{precision:2}},width:65,resizable:'true'" align="center" ><font color='red'>基本工资</font></th>  
+            <th rowspan="2" field="jbgzhjj" data-options="editor:{type:'numberbox',options:{precision:2}},width:65,resizable:'true'" align="center" ><font color='red'>加班工资和奖金</font></th>  
+            <th rowspan="2" field="yfgz" data-options="editor:{type:'numberbox',options:{precision:2}},width:65,resizable:'true'" align="center" ><font color='green'>应发工资</font></th>  
+            <th rowspan="2" field="lhbt" data-options="editor:{type:'numberbox',options:{precision:2}},width:65,resizable:'true'" align="center" ><font color='green'>劳护补贴</font></th>  
+            <th rowspan="2" field="fybt" data-options="editor:{type:'numberbox',options:{precision:2}},width:65,resizable:'true'" align="center" ><font color='red'>费用补贴（元）</font></th>  
+            <th rowspan="2" field="mq" data-options="editor:{type:'numberbox',options:{precision:2}},width:65,resizable:'true'" align="center" ><font color='red'>满勤</font></th>  
+            <th rowspan="2" field="qtkk" data-options="editor:{type:'numberbox',options:{precision:2}},width:65,resizable:'true'" align="center" ><font color='red'>其他扣款</font></th> 
+            <th rowspan="2" field="zgz" data-options="editor:{type:'numberbox',options:{precision:2}},width:65,resizable:'true'" align="center" ><font color='green'>总工资（元）</font></th>
+            <th rowspan="2" field="yfgzy" data-options="editor:{type:'numberbox',options:{precision:2}},width:65,resizable:'true'" align="center" ><font color='red'>预付工资（元）</font></th>
             <th rowspan="2" field="sygz" data-options="editor:{type:'numberbox',options:{precision:2}},width:65,resizable:'true'" align="center" >剩余工资（元）</th>
             <th rowspan="2" field="qz" data-options="editor:{type:'text'},width:65,resizable:'true',formatter:showContents" align="center" >签字</th>
             <th rowspan="2" field="bz" data-options="editor:{type:'text'},width:65,resizable:'true',formatter:showContents" align="center" >备注</th>

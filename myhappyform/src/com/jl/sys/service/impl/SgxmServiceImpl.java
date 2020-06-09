@@ -59,7 +59,7 @@ public class SgxmServiceImpl implements SgxmService {
 	
 	@MethodLog2(remark="导出项目工资汇总信息",type="导出")
 	public void exportExcel(Map<String,String> param,HttpServletRequest request, HttpServletResponse response){
-		String str="姓名,月份,工地,出勤（小时）,加班（小时）,总工时（小时）,工价包月,基本工资,加班工资和奖金,应发工资,劳护补贴,费用补贴,满勤,其他扣款,总工资,预发工资,剩余工资,签字,备注";
+		String str="姓名,月份,工地,施工项目,出勤（小时）,加班（小时）,总工时（小时）,工价包月,基本工资,加班工资和奖金,应发工资,劳护补贴,费用补贴,满勤,其他扣款,总工资,预发工资,剩余工资,签字,备注";
 //		List list=payrollDao.findListByGroupUser("2019");
 		List list=sgxmDao.findList(param);
 		Map countMap=sgxmDao.findCount(param); 
@@ -135,7 +135,7 @@ public class SgxmServiceImpl implements SgxmService {
 		}
 		OutputStream  output=null;
 		try {
-			String title1=param.get("username")+"-"+param.get("yuefen")+"-";//String.valueOf(((Object[])list.get(0))[0]);
+			String title1=param.get("username")+"-"+param.get("yuefen")+"-"+param.get("sgxm")+"-";//String.valueOf(((Object[])list.get(0))[0]);
 		    response.reset();
 		    response.setContentType("application/vnd.ms-excel;charset=utf-8");
 		    response.setHeader("Content-Disposition", "attachment;filename="

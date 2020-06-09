@@ -53,7 +53,7 @@ public class SgxmDaoImpl extends BaseDao<SgxmInfo> implements SgxmDao {
 	
 	public List findList(Map<String,String> param){
 		StringBuffer sql = new StringBuffer();
-		sql.append(" select a.* from jl_sgxm_tj_info a  where 1=1  ");
+		sql.append(" select xm,yf,gd,sgxm,chuqin,jiaban,zonggongshi,gjby,jbgz,jbgzhjj,yfgz,lhbt,fybt,mq,qtkk,zgz,yfgzy,sygz,qz,bz from jl_sgxm_tj_info a  where 1=1  ");
 		if(null!=param.get("username")&&!"".equalsIgnoreCase(param.get("username").toString())){
 			sql.append(" and  a.xm like ").append("'%"+param.get("username")+"%'  ");
 		}

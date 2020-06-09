@@ -424,7 +424,7 @@ function outputparam(username,yuefen){
             <th rowspan="2" field="fybt" data-options="editor:{type:'numberbox',options:{precision:2}},width:65,resizable:'true'" align="center" ><font color='red'>费用补贴（元）</font></th>  
             <th rowspan="2" field="mq" data-options="editor:{type:'numberbox',options:{precision:2}},width:65,resizable:'true'" align="center" ><font color='red'>满勤</font></th>  
             <th rowspan="2" field="qtkk" data-options="editor:{type:'numberbox',options:{precision:2}},width:65,resizable:'true'" align="center" ><font color='red'>其他扣款</font></th> 
-            <th rowspan="2" field="zgz" data-options="editor:{type:'numberbox',options:{precision:2}},width:65,resizable:'true'" align="center" >总工资（元）</th>
+            <th rowspan="2" field="zgz" data-options="editor:{type:'numberbox',options:{precision:2}},width:65,resizable:'true'" align="center" ><font color='green'>总工资（元）</font></th>
             <th rowspan="2" field="yfgzy" data-options="editor:{type:'numberbox',options:{precision:2}},width:65,resizable:'true'" align="center" ><font color='red'>预付工资（元）</font></th>
             <th rowspan="2" field="sygz" data-options="editor:{type:'numberbox',options:{precision:2}},width:65,resizable:'true'" align="center" >剩余工资（元）</th>
             <th rowspan="2" field="qz" data-options="editor:{type:'text'},width:65,resizable:'true',formatter:showContents" align="center" >签字</th>

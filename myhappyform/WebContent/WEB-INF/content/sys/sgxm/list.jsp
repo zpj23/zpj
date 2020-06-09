@@ -83,6 +83,9 @@ function initDep(){
 	     }
 	});
 }
+function dataoutput(){
+	list_iframe.contentWindow.outputparam($('#username').val(),$('#sgxm').val(),$('#departmentid').val(),$('#yuefen').val());
+}
 
 </script>
 </head>
