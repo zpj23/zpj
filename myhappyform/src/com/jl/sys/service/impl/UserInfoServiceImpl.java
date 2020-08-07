@@ -4,12 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import com.goldenweb.fxpg.comm.BaseService.MethodLog2;
 import com.goldenweb.fxpg.frame.tools.MD5;
 import com.jl.common.BaseService;
 import com.jl.sys.dao.UserInfoDao;
@@ -20,6 +19,9 @@ import com.jl.sys.service.UserInfoService;
 @Service
 @Component("jlUserInfoService")
 public class UserInfoServiceImpl extends BaseService<UserInfo> implements UserInfoService{
+	
+	Logger logger=Logger.getLogger(UserInfoServiceImpl.class);
+	
 	@Autowired
 	private UserInfoDao jlUserInfoDao;
 	
@@ -44,6 +46,7 @@ public class UserInfoServiceImpl extends BaseService<UserInfo> implements UserIn
 			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error(e);
 			return null;
 		}
 	}
@@ -79,6 +82,7 @@ public class UserInfoServiceImpl extends BaseService<UserInfo> implements UserIn
 			jlRoleInfoService.deleteRoleUserByUserid(String.valueOf(id));
 		}catch (Exception e) {
 			e.printStackTrace();
+			logger.error(e);
 			throw new RuntimeException();
 		}
 	}
@@ -157,6 +161,7 @@ public class UserInfoServiceImpl extends BaseService<UserInfo> implements UserIn
 		try{
 			jlUserInfoDao.importData(sql.toString());
 		}catch (Exception e) {
+			logger.error(e);
 			e.printStackTrace();
 		}
 	}

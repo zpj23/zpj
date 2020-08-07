@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -30,7 +31,7 @@ import net.sf.json.JSONObject;
 @Component("jlPayrollAction")
 @ParentPackage("json-default")
 public class PayrollAction extends IAction {
-	
+	Logger logger=Logger.getLogger(PayrollAction.class);
 	
 	@Autowired
 	private PayrollService payrollService;
@@ -133,6 +134,7 @@ public class PayrollAction extends IAction {
 		try {
 			this.jsonWrite(jsonData);
 		} catch (IOException e) {
+			logger.error(e);
 			e.printStackTrace();
 		}
 	} 
@@ -200,16 +202,19 @@ public class PayrollAction extends IAction {
 			 pi.setCreatetime(new Date());
 			 
 			 PayrollInfo temp=payrollService.findById(pi.getId());
-			 if(null!=temp){
-				insertLog(user,"修改工资单信息","修改前的数据："+temp.toString()+"修改后的数据："+pi.toString());
-			 }else{
-				insertLog(user,"新增工资单信息",pi.toString());
-			 }
+			 
 			 
 			 payrollService.saveInfo(pi);
+			 int upinfo=payrollService.updateSgxmInfoWhenSaveInfo(pi);
+			 if(null!=temp){
+				insertLog(user,"修改工资单信息"+upinfo,"修改前的数据："+temp.toString()+"修改后的数据："+pi.toString());
+			 }else{
+				insertLog(user,"新增工资单信息"+upinfo,pi.toString());
+			 }
 			 this.jsonWrite(true);
 		 }catch (Exception e) {
 			e.printStackTrace();
+			logger.error(e);
 			this.jsonWrite(false);
 		}
 	}
@@ -242,6 +247,7 @@ public class PayrollAction extends IAction {
 			this.jsonWrite(true);
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.error(e);
 			this.jsonWrite(false);
 		}
 	}
@@ -266,6 +272,7 @@ public class PayrollAction extends IAction {
 			this.jsonWrite(true);
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.error(e);
 			this.jsonWrite(false);
 		}
 	}
@@ -286,6 +293,7 @@ public class PayrollAction extends IAction {
 			this.jsonWrite(flag);
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.error(e);
 			this.jsonWrite(false);
 		}
 	}
@@ -299,6 +307,7 @@ public class PayrollAction extends IAction {
 			List list=payrollService.findListByYf(yf);
 			this.jsonWrite(list);
 		} catch (IOException e) {
+			logger.error(e);
 			e.printStackTrace();
 		}
 	}

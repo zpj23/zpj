@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -30,6 +31,7 @@ import net.sf.json.JSONObject;
 @Component("sgxmAction")
 @ParentPackage("json-default")
 public class SgxmAction extends IAction {
+	Logger logger=Logger.getLogger(SgxmAction.class);
 	@Autowired
 	private SgxmService sgxmService;
 	@Autowired
@@ -55,72 +57,74 @@ public class SgxmAction extends IAction {
 			results={
 			@Result(type="json", params={"root","jsonData"})})
 	public void getListJson(){
-		String tpage=request.getParameter("page");
-		String trows=request.getParameter("rows");
-		String departmentname=request.getParameter("departmentname");
-		String yuefen=request.getParameter("yuefen");
-		String username=request.getParameter("username");
-		String sgxm=request.getParameter("sgxm");
-		
-		if(null!=tpage&&!"".equalsIgnoreCase(tpage)){
-			page=Integer.parseInt(tpage);
-		}
-		if(null!=trows&&!"".equalsIgnoreCase(trows)){
-			rows=Integer.parseInt(trows);
-		}
-		Map<String,String> param=new HashMap<String,String>();
-		param.put("departmentname", departmentname);
-		param.put("yuefen", yuefen);
-		param.put("username", username);
-		param.put("sgxm", sgxm);
-		Map map=sgxmService.findList(page,rows,param);
-		List list=(List)map.get("list");
-//		int countNumber=(Integer)map.get("count");
-		if(list!=null&&list.size()>0){
-			  StringBuffer str =new StringBuffer();
-			  str.append("{\"total\":\"").append(map.get("count")).append("\",\"rows\":");
-			  String lstr=gson.toJson(list);
-			  str.append(lstr);
-			  str.append(",\"footer\":[{\"id\":\"1\","
-			  		+ "\"zgz\":\""+map.get("total_zgz")+"\","
-			  		+ "\"yfgzy\":\""+map.get("total_yfgzy")+"\","
-			  		+ "\"sygz\":\""+map.get("total_sygz")+"\","
-			  		+ "\"xm\":\"\","
-			  		+ "\"yf\":\"\","
-			  		+ "\"gd\":\"\","
-			  		+ "\"gjby\":\"\","
-			  		+ "\"jbgz\":\"\","
-			  		+ "\"jbgzhjj\":\"\","
-			  		+ "\"yfgz\":\""+map.get("total_yfgz")+"\","
-			  		+ "\"lhbt\":\"\","
-			  		+ "\"fybt\":\""+map.get("total_fybt")+"\","
-			  		+ "\"mq\":\""+map.get("total_mq")+"\","
-			  		+ "\"qtkk\":\""+map.get("total_qtkk")+"\","
-			  		+ "\"qz\":\"\","
-			  		+ "\"bz\":\"\","
-			  		+ "\"chuqin\":\""+(Double)map.get("chuqin")+"\","
-			  		+ "\"jiaban\":\""+(Double)map.get("jiaban")+"\","
-			  		+ "\"zonggongshi\":\""+(Double)map.get("zonggongshi")+"\""
-			  		+ "}]");
-			  
-			  str.append("}");
-			  jsonData= str.toString();
-		}else{
-			//置空原来的数据
-			StringBuffer str =new StringBuffer();
-			  str.append("{\"total\":\"0\",\"rows\":[]");
-			  str.append(",\"footer\":[{\"id\":\"1\",\"zgz\":\"0\",\"yfgzy\":\"0\",\"sygz\":\"0\",\"xm\":\"\","
-			  		+ "\"yf\":\"\",\"gd\":\"\",\"gjby\":\"\",\"jbgz\":\"\",\"jbgzhjj\":\"\",\"yfgz\":\"0\","
-			  		+ "\"lhbt\":\"\",\"fybt\":\"\",\"mq\":\"\",\"qtkk\":\"\",\"qz\":\"\",\"bz\":\"\","
-			  		+ "\"chuqin\":\"0\",\"jiaban\":\"0\",\"zonggongshi\":\"0\"}]");
-			  
-			  str.append("}");
-			  jsonData= str.toString();
-		}
 		try {
+			String tpage=request.getParameter("page");
+			String trows=request.getParameter("rows");
+			String departmentname=request.getParameter("departmentname");
+			String yuefen=request.getParameter("yuefen");
+			String username=request.getParameter("username");
+			String sgxm=request.getParameter("sgxm");
+			
+			if(null!=tpage&&!"".equalsIgnoreCase(tpage)){
+				page=Integer.parseInt(tpage);
+			}
+			if(null!=trows&&!"".equalsIgnoreCase(trows)){
+				rows=Integer.parseInt(trows);
+			}
+			Map<String,String> param=new HashMap<String,String>();
+			param.put("departmentname", departmentname);
+			param.put("yuefen", yuefen);
+			param.put("username", username);
+			param.put("sgxm", sgxm);
+			Map map=sgxmService.findList(page,rows,param);
+			List list=(List)map.get("list");
+	//		int countNumber=(Integer)map.get("count");
+			if(list!=null&&list.size()>0){
+				  StringBuffer str =new StringBuffer();
+				  str.append("{\"total\":\"").append(map.get("count")).append("\",\"rows\":");
+				  String lstr=gson.toJson(list);
+				  str.append(lstr);
+				  str.append(",\"footer\":[{\"id\":\"1\","
+				  		+ "\"zgz\":\""+map.get("total_zgz")+"\","
+				  		+ "\"yfgzy\":\""+map.get("total_yfgzy")+"\","
+				  		+ "\"sygz\":\""+map.get("total_sygz")+"\","
+				  		+ "\"xm\":\"\","
+				  		+ "\"yf\":\"\","
+				  		+ "\"gd\":\"\","
+				  		+ "\"gjby\":\"\","
+				  		+ "\"jbgz\":\"\","
+				  		+ "\"jbgzhjj\":\"\","
+				  		+ "\"yfgz\":\""+map.get("total_yfgz")+"\","
+				  		+ "\"lhbt\":\"\","
+				  		+ "\"fybt\":\""+map.get("total_fybt")+"\","
+				  		+ "\"mq\":\""+map.get("total_mq")+"\","
+				  		+ "\"qtkk\":\""+map.get("total_qtkk")+"\","
+				  		+ "\"qz\":\"\","
+				  		+ "\"bz\":\"\","
+				  		+ "\"chuqin\":\""+(Double)map.get("chuqin")+"\","
+				  		+ "\"jiaban\":\""+(Double)map.get("jiaban")+"\","
+				  		+ "\"zonggongshi\":\""+(Double)map.get("zonggongshi")+"\""
+				  		+ "}]");
+				  
+				  str.append("}");
+				  jsonData= str.toString();
+			}else{
+				//置空原来的数据
+				StringBuffer str =new StringBuffer();
+				  str.append("{\"total\":\"0\",\"rows\":[]");
+				  str.append(",\"footer\":[{\"id\":\"1\",\"zgz\":\"0\",\"yfgzy\":\"0\",\"sygz\":\"0\",\"xm\":\"\","
+				  		+ "\"yf\":\"\",\"gd\":\"\",\"gjby\":\"\",\"jbgz\":\"\",\"jbgzhjj\":\"\",\"yfgz\":\"0\","
+				  		+ "\"lhbt\":\"\",\"fybt\":\"\",\"mq\":\"\",\"qtkk\":\"\",\"qz\":\"\",\"bz\":\"\","
+				  		+ "\"chuqin\":\"0\",\"jiaban\":\"0\",\"zonggongshi\":\"0\"}]");
+				  
+				  str.append("}");
+				  jsonData= str.toString();
+			}
+		
 			this.jsonWrite(jsonData);
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.error(e);
 		}
 	} 
 	
@@ -199,6 +203,7 @@ public class SgxmAction extends IAction {
 			 this.jsonWrite(true);
 		 }catch (Exception e) {
 			e.printStackTrace();
+			logger.error(e);
 			this.jsonWrite(false);
 		}
 	}
@@ -231,6 +236,7 @@ public class SgxmAction extends IAction {
 			this.jsonWrite(true);
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.error(e);
 			this.jsonWrite(false);
 		}
 	}

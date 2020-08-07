@@ -611,7 +611,8 @@ public class BaseDao<T extends Serializable>{
 	 */
 	public int executeUpdateOrDelete(String sql) {
 		try {
-			// return jdbcTemplate.update(sql);			
+			// return jdbcTemplate.update(sql);	
+//			System.out.println(sql);
 			Session session = sessionFactory.getCurrentSession();
 			session.createSQLQuery(sql).executeUpdate();
 			return 0;

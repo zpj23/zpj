@@ -104,7 +104,7 @@ public class SgxmDaoImpl extends BaseDao<SgxmInfo> implements SgxmDao {
 		return list;
 	}
 	
-	public synchronized void updateMultiInfo(PayrollInfo pi){
+	public synchronized int updateMultiInfo(PayrollInfo pi){
 		try{
 			String firstDay=DateHelper.getFirstdayOfMonth(pi.getYf(), "yyyy-MM");
 			String lastDay=DateHelper.getLastdayOfMonth(pi.getYf(), "yyyy-MM");
@@ -198,7 +198,7 @@ public class SgxmDaoImpl extends BaseDao<SgxmInfo> implements SgxmDao {
 //				System.out.println("删除已经不存在的项目工资信息");
 				this.executeUpdateOrDelete("delete from jl_sgxm_tj_info where id in ("+ids+")");
 			}
-			
+			return 1;
 		}catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException();

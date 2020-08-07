@@ -1,9 +1,7 @@
 package com.jl.sys.service.impl;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,6 +13,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -28,7 +27,6 @@ import com.jl.common.BaseService.MethodLog2;
 import com.jl.sys.dao.HistoryStaffNameDao;
 import com.jl.sys.dao.ManualInfoDao;
 import com.jl.sys.dao.PayrollDao;
-import com.jl.sys.dao.SgxmDao;
 import com.jl.sys.pojo.CheckInfo;
 import com.jl.sys.pojo.HistoryStaffname;
 import com.jl.sys.pojo.LogInfo;
@@ -36,10 +34,9 @@ import com.jl.sys.pojo.PayrollInfo;
 import com.jl.sys.pojo.UserInfo;
 import com.jl.sys.service.LogInfoService;
 import com.jl.sys.service.ManualInfoService;
-import com.jl.sys.service.PayrollService;
-import com.jl.util.DateHelper;
 @Service
 public class ManualInfoServiceImpl implements ManualInfoService {
+	Logger logger=Logger.getLogger(ManualInfoServiceImpl.class);
 	@Autowired
 	private ManualInfoDao mDao;
 	@Autowired
@@ -58,6 +55,7 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 			mDao.saveInfo(cInfo);
 		}catch (Exception e) {
 			e.printStackTrace();
+			logger.error(e);
 			throw new RuntimeException();  
 		}
 		HistoryStaffname hs=new HistoryStaffname();
@@ -127,6 +125,7 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 			mDao.delInfo(id);
 		}catch (Exception e) {
 			e.printStackTrace();
+			logger.error(e);
 			throw new RuntimeException();  
 		}
 	}
@@ -185,7 +184,7 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 		    
 		} catch (Exception e) {
 		    e.printStackTrace();
-
+		    logger.error(e);
 		}finally{
 			if(output!=null){
 				try {
@@ -238,6 +237,7 @@ public class ManualInfoServiceImpl implements ManualInfoService {
 			return ret;
 		}catch (RuntimeException e) {
 			e.printStackTrace();
+			logger.error(e);
 			throw new RuntimeException();
 		}
 		

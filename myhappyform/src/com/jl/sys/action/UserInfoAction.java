@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -39,7 +40,7 @@ import com.jl.sys.service.UserInfoService;
 @Component("jlUserInfoAction")
 @ParentPackage("json-default")
 public class UserInfoAction extends IAction{
-
+	Logger logger=Logger.getLogger(UserInfoAction.class);
 	@Autowired
 	private UserInfoService jlUserInfoService;
 	
@@ -93,22 +94,23 @@ public class UserInfoAction extends IAction{
 			results={
 			@Result(type="json", params={"root","jsonData"})})
 	public void saveUser(){
-		//根据部门编码获取部门名称
-//		String depname=jlDepartmentInfoService.findDeptByDeptCode(user.getDepartmentcode()).getName();
-//		user.setDepartmentname(depname);
-		if(user.getId()!=0){
-			user.setUpdatetime(new Date());
-//			user.setUpdateuserid(ui.getId());
-			UserInfo ui=jlUserInfoService.findById(user.getId());
-			user.setCreatetime(ui.getCreatetime());
-			user.setCreateuserid(ui.getCreateuserid());
-			jlUserInfoService.saveUser(user);
-		}else{
-			user.setCreatetime(new Date());
-//			user.setCreateuserid(ui.getId());
-			jlUserInfoService.saveUser(user);
-		}
 		try {
+		//根据部门编码获取部门名称
+	//		String depname=jlDepartmentInfoService.findDeptByDeptCode(user.getDepartmentcode()).getName();
+	//		user.setDepartmentname(depname);
+			if(user.getId()!=0){
+				user.setUpdatetime(new Date());
+	//			user.setUpdateuserid(ui.getId());
+				UserInfo ui=jlUserInfoService.findById(user.getId());
+				user.setCreatetime(ui.getCreatetime());
+				user.setCreateuserid(ui.getCreateuserid());
+				jlUserInfoService.saveUser(user);
+			}else{
+				user.setCreatetime(new Date());
+	//			user.setCreateuserid(ui.getId());
+				jlUserInfoService.saveUser(user);
+			}
+		
 			JSONObject job=new JSONObject();
 			job.put("status","y");
 			job.put("statusText", "保存成功");
@@ -117,6 +119,7 @@ public class UserInfoAction extends IAction{
 			this.jsonWrite(job);
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error(e);
 		}
 	}
 	
@@ -183,41 +186,43 @@ public class UserInfoAction extends IAction{
 			results={
 			@Result(type="json", params={"root","jsonData"})})
 	public void jlUserInfoAction_getUserListJsonByChoose(){
-		user = (UserInfo)request.getSession().getAttribute("jluserinfo");
-		String datemin=request.getParameter("datemin");//开始时间
-		String datemax=request.getParameter("datemax");//结束时间
-		String username=request.getParameter("username");//用户名称
-		String tpage=request.getParameter("page");
-		String trows=request.getParameter("rows");
-		if(null!=tpage&&!"".equalsIgnoreCase(tpage)){
-			page=Integer.parseInt(tpage);
-		}
-		if(null!=trows&&!"".equalsIgnoreCase(trows)){
-			rows=Integer.parseInt(trows);
-		}
-		Map<String,String> param=new HashMap<String,String>();
-		param.put("datemin", datemin);
-		param.put("datemax", datemax);
-		param.put("username", username);
-		
-		Map map=jlUserInfoService.findList(user,page,rows,param);
-		List<UserInfo> list=(List<UserInfo>)map.get("list");
-		int countNumber=(Integer)map.get("count");
-		if(list!=null&&list.size()>0){
-			  StringBuffer str =new StringBuffer();
-			  str.append("{\"total\":\"").append(countNumber).append("\",\"rows\":");
-//			  JSONArray jsonArray = JSONArray.fromObject(list);
-			  String lstr=gson.toJson(list);
-			  str.append(lstr);
-			  str.append("}");
-			  jsonData= str.toString();
-		}else{
-			jsonData="[]";
-		}
 		try {
+			user = (UserInfo)request.getSession().getAttribute("jluserinfo");
+			String datemin=request.getParameter("datemin");//开始时间
+			String datemax=request.getParameter("datemax");//结束时间
+			String username=request.getParameter("username");//用户名称
+			String tpage=request.getParameter("page");
+			String trows=request.getParameter("rows");
+			if(null!=tpage&&!"".equalsIgnoreCase(tpage)){
+				page=Integer.parseInt(tpage);
+			}
+			if(null!=trows&&!"".equalsIgnoreCase(trows)){
+				rows=Integer.parseInt(trows);
+			}
+			Map<String,String> param=new HashMap<String,String>();
+			param.put("datemin", datemin);
+			param.put("datemax", datemax);
+			param.put("username", username);
+			
+			Map map=jlUserInfoService.findList(user,page,rows,param);
+			List<UserInfo> list=(List<UserInfo>)map.get("list");
+			int countNumber=(Integer)map.get("count");
+			if(list!=null&&list.size()>0){
+				  StringBuffer str =new StringBuffer();
+				  str.append("{\"total\":\"").append(countNumber).append("\",\"rows\":");
+	//			  JSONArray jsonArray = JSONArray.fromObject(list);
+				  String lstr=gson.toJson(list);
+				  str.append(lstr);
+				  str.append("}");
+				  jsonData= str.toString();
+			}else{
+				jsonData="[]";
+			}
+		
 			this.jsonWrite(jsonData);
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.error(e);
 		}
 	}
 	

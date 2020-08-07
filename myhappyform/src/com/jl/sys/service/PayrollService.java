@@ -22,6 +22,16 @@ public interface PayrollService {
 	public void saveInfo(PayrollInfo pi);
 	
 	/**
+	 * 保存时自动更新 保存项目工资
+	 * @Title updateSgxmInfoWhenSaveInfo
+	 * @param pi
+	 * @return
+	 * @author zpj
+	 * @time 2020年8月7日 下午3:40:34
+	 */
+	public int updateSgxmInfoWhenSaveInfo(PayrollInfo pi);
+	
+	/**
 	 * 删除数据
 	 * @Title delInfo
 	 * @param id

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -26,7 +27,7 @@ import com.jl.sys.service.RoleInfoService;
 @Component("jlRoleInfoAction")
 @ParentPackage("json-default")
 public class RoleInfoAction extends IAction {
-	
+	Logger logger=Logger.getLogger(RoleInfoAction.class);
 	private UserInfo user;
 	
 	public String role_user_list_id;
@@ -142,6 +143,7 @@ public class RoleInfoAction extends IAction {
 			this.jsonWrite(job);
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error(e);
 		}
 	}
 	
@@ -238,6 +240,7 @@ public class RoleInfoAction extends IAction {
 			this.jsonWrite(jsonData);
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.error(e);
 		}
 	}
 	
@@ -260,6 +263,7 @@ public class RoleInfoAction extends IAction {
 				this.jsonWrite(1);
 			} catch (IOException e) {
 				e.printStackTrace();
+				logger.error(e);
 			}
 		}
 	}

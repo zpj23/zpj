@@ -1,18 +1,15 @@
 package com.jl.sys.service.impl;
 
-import java.awt.Font;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
-import javax.management.RuntimeErrorException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
@@ -26,14 +23,13 @@ import org.springframework.stereotype.Service;
 import com.jl.common.BaseService.MethodLog2;
 import com.jl.sys.dao.PayrollDao;
 import com.jl.sys.dao.SgxmDao;
-import com.jl.sys.pojo.LogInfo;
 import com.jl.sys.pojo.PayrollInfo;
 import com.jl.sys.pojo.UserInfo;
 import com.jl.sys.service.LogInfoService;
 import com.jl.sys.service.PayrollService;
 @Service
 public class PayrollServiceImpl implements PayrollService{
-		
+	Logger logger=Logger.getLogger(PayrollServiceImpl.class);	
 	@Autowired
 	private PayrollDao payrollDao; 
 	@Autowired
@@ -43,22 +39,26 @@ public class PayrollServiceImpl implements PayrollService{
 	public LogInfoService jlLogInfoService;
 	
 	public void saveInfo(PayrollInfo pi){
-		
-		calculateSgxmInfo(pi);
 		payrollDao.saveInfo(pi);
 	}
 	
+	public int updateSgxmInfoWhenSaveInfo(PayrollInfo pi){
+		return calculateSgxmInfo(pi);
+	}
 	/**
 	 * 施工项目的造价信息
 	 * @Title calculateSgxmInfo
 	 * @author zpj
 	 * @time 2019年6月24日 下午2:34:50
 	 */
-	public synchronized void calculateSgxmInfo(PayrollInfo pi){
+	public synchronized int calculateSgxmInfo(PayrollInfo pi){
 		
 		try{
-			sgxmDao.updateMultiInfo(pi);
+			int temp= sgxmDao.updateMultiInfo(pi);
+			return temp;
 		}catch (Exception e) {
+			logger.error(e);
+			logger.error(pi.toString());
 			throw new RuntimeException();
 		}
 		
@@ -206,13 +206,14 @@ public class PayrollServiceImpl implements PayrollService{
 		    
 		} catch (Exception e) {
 		    e.printStackTrace();
-
+		    logger.error(e);
 		}finally{
 			if(output!=null){
 				try {
 					output.close();
 				} catch (IOException e) {
 					e.printStackTrace();
+					logger.error(e);
 				}
 			}
 		}

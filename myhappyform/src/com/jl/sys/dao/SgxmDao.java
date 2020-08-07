@@ -35,7 +35,7 @@ public interface SgxmDao {
 	 * @author zpj
 	 * @time 2019年6月25日 下午4:05:53
 	 */
-	public void updateMultiInfo(PayrollInfo pi);
+	public int updateMultiInfo(PayrollInfo pi);
 	
 	
 	public SgxmInfo findById(String id);

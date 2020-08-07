@@ -117,6 +117,7 @@ public class ManualCheckPhoneAction extends IAction {
 			this.jsonWrite(map);
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.error(e);
 		}
 		
 	}
@@ -137,6 +138,7 @@ public class ManualCheckPhoneAction extends IAction {
 			this.jsonWrite(list);
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.error(e);
 		}
 		
 	}
@@ -171,6 +173,7 @@ public class ManualCheckPhoneAction extends IAction {
 		}catch (Exception e) {
 			System.out.println("日志记录失败");
 			e.printStackTrace();
+			logger.error(e);
 		}
 		/************记录数据***结束*******/
 		Map map =new HashMap();
@@ -199,8 +202,10 @@ public class ManualCheckPhoneAction extends IAction {
 				this.jsonWrite(map);
 			} catch (IOException e1) {
 				e1.printStackTrace();
+				logger.error(e);
 			}
 			e.printStackTrace();
+			logger.error(e);
 		}
 	}
 	/**
@@ -230,8 +235,10 @@ public class ManualCheckPhoneAction extends IAction {
 				this.jsonWrite(map);
 			} catch (IOException e1) {
 				e1.printStackTrace();
+				logger.error(e);
 			}
 			e.printStackTrace();
+			logger.error(e);
 		}
 		
 		
@@ -256,6 +263,7 @@ public class ManualCheckPhoneAction extends IAction {
 			this.jsonWrite(map);
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.error(e);
 		}
 	
 	}
@@ -278,6 +286,7 @@ public class ManualCheckPhoneAction extends IAction {
 			this.jsonWrite(map);
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.error(e);
 		}
 		
 	}
@@ -301,6 +310,7 @@ public class ManualCheckPhoneAction extends IAction {
 					this.jsonWrite(map);
 				} catch (IOException e1) {
 					e1.printStackTrace();
+					logger.error(e);
 				}
 			}
 		}
@@ -337,6 +347,7 @@ public class ManualCheckPhoneAction extends IAction {
 		}catch (Exception e) {
 			System.out.println("日志记录失败");
 			e.printStackTrace();
+			logger.error(e);
 		}
 		/************记录数据***结束*******/
 		
@@ -445,9 +456,11 @@ public class ManualCheckPhoneAction extends IAction {
 				job.put("msg",false);
 				this.jsonWrite(job);
 			} catch (Exception e1) {
+				logger.error(e);
 				e1.printStackTrace();
 			}
 			e.printStackTrace();
+			logger.error(e);
 		}
 	}
 	

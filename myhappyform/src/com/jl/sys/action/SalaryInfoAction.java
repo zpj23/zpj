@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -32,7 +33,7 @@ import com.jl.sys.service.SalaryService;
 @Component("jlSalaryInfoAction")
 @ParentPackage("json-default")
 public class SalaryInfoAction extends IAction{
-	
+	Logger logger=Logger.getLogger(SalaryInfoAction.class);
 	private static final long serialVersionUID = 1L;
 
 	private UserInfo user;
@@ -99,9 +100,11 @@ public class SalaryInfoAction extends IAction{
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 				retStr="未找到文件";
+				logger.error(e);
 			} catch (Exception e) {
 				retStr="数据格式不正确";
 				e.printStackTrace();
+				logger.error(e);
 			}
 		}
 		return "success";
@@ -112,40 +115,42 @@ public class SalaryInfoAction extends IAction{
 			results={
 			@Result(type="json", params={"root","jsonData"})})
 	public void getUserListJson(){
-		user = (UserInfo)request.getSession().getAttribute("jluserinfo");
-		String username=request.getParameter("username");//用户名称
-		String year=request.getParameter("year");//年月
-		String tpage=request.getParameter("page");
-		String trows=request.getParameter("rows");
-		if(null!=tpage&&!"".equalsIgnoreCase(tpage)){
-			page=Integer.parseInt(tpage);
-		}
-		if(null!=trows&&!"".equalsIgnoreCase(trows)){
-			rows=Integer.parseInt(trows);
-		}
-		Map<String,String> param=new HashMap<String,String>();
-		param.put("year", year);
-		param.put("username", username);
-		Map map=salaryService.findList(user,page,rows,param);
-		List<UserInfo> list=(List<UserInfo>)map.get("list");
-		int countNumber=(Integer)map.get("count");
-//		request.setAttribute("zgs", (Double)map.get("zgs"));
-		if(list!=null&&list.size()>0){
-			  StringBuffer str =new StringBuffer();
-			  str.append("{\"total\":\"").append(countNumber).append("\",\"rows\":");
-//			  JSONArray jsonArray = JSONArray.fromObject(list);
-			  String lstr=gson.toJson(list);
-			  str.append(lstr);
-			  str.append(",\"footer\":[{\"id\":\"1\",\"userName\":\"\",\"bankName\":\"\",\"bankCard\":\"合计：\",\"advance\":\""+(Double)map.get("wzgs")+"\",\"remark\":\"\",\"year\":\"\"}]");
-			  str.append("}");
-			  jsonData= str.toString();
-		}else{
-			jsonData="[]";
-		}
 		try {
+			user = (UserInfo)request.getSession().getAttribute("jluserinfo");
+			String username=request.getParameter("username");//用户名称
+			String year=request.getParameter("year");//年月
+			String tpage=request.getParameter("page");
+			String trows=request.getParameter("rows");
+			if(null!=tpage&&!"".equalsIgnoreCase(tpage)){
+				page=Integer.parseInt(tpage);
+			}
+			if(null!=trows&&!"".equalsIgnoreCase(trows)){
+				rows=Integer.parseInt(trows);
+			}
+			Map<String,String> param=new HashMap<String,String>();
+			param.put("year", year);
+			param.put("username", username);
+			Map map=salaryService.findList(user,page,rows,param);
+			List<UserInfo> list=(List<UserInfo>)map.get("list");
+			int countNumber=(Integer)map.get("count");
+	//		request.setAttribute("zgs", (Double)map.get("zgs"));
+			if(list!=null&&list.size()>0){
+				  StringBuffer str =new StringBuffer();
+				  str.append("{\"total\":\"").append(countNumber).append("\",\"rows\":");
+	//			  JSONArray jsonArray = JSONArray.fromObject(list);
+				  String lstr=gson.toJson(list);
+				  str.append(lstr);
+				  str.append(",\"footer\":[{\"id\":\"1\",\"userName\":\"\",\"bankName\":\"\",\"bankCard\":\"合计：\",\"advance\":\""+(Double)map.get("wzgs")+"\",\"remark\":\"\",\"year\":\"\"}]");
+				  str.append("}");
+				  jsonData= str.toString();
+			}else{
+				jsonData="[]";
+			}
+		
 			this.jsonWrite(jsonData);
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.error(e);
 		}
 	}
 	
@@ -181,6 +186,7 @@ public class SalaryInfoAction extends IAction{
 			this.jsonWrite(job);
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error(e);
 		}
 	}
 	
@@ -195,6 +201,7 @@ public class SalaryInfoAction extends IAction{
 				this.jsonWrite(1);
 			} catch (IOException e) {
 				e.printStackTrace();
+				logger.error(e);
 			}
 		}
 	}

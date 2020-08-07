@@ -124,6 +124,7 @@ public class ManualCheckInfoAction extends IAction{
 			jlLogInfoService.logInfo(loginfo);
 		}catch (Exception e) {
 			System.out.println("日志记录失败");
+			logger.error(e);
 			e.printStackTrace();
 		}
 		/************记录数据***结束*******/
@@ -165,6 +166,7 @@ public class ManualCheckInfoAction extends IAction{
 				mService.saveInfo(tmpci);
 			}catch (Exception e) {
 				e.printStackTrace();
+				logger.error(e);
 				continue;
 			}
 			
@@ -212,6 +214,7 @@ public class ManualCheckInfoAction extends IAction{
 			jlLogInfoService.logInfo(loginfo);
 		}catch (Exception e) {
 			System.out.println("日志记录失败");
+			logger.error(e);
 			e.printStackTrace();
 		}
 		/************记录数据***结束*******/
@@ -282,6 +285,7 @@ public class ManualCheckInfoAction extends IAction{
 			this.jsonWrite(job);
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error(e);
 		}
 	}
 	/**
@@ -301,6 +305,7 @@ public class ManualCheckInfoAction extends IAction{
 			this.jsonWrite(r);
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error(e);
 		}
 	}
 	
@@ -316,6 +321,7 @@ public class ManualCheckInfoAction extends IAction{
 				this.jsonWrite(1);
 			} catch (IOException e) {
 				e.printStackTrace();
+				logger.error(e);
 			}
 		}
 	}
@@ -409,6 +415,7 @@ public class ManualCheckInfoAction extends IAction{
 			this.jsonWrite(jsonData);
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.error(e);
 		}
 	}
 	
@@ -474,6 +481,7 @@ public class ManualCheckInfoAction extends IAction{
 			this.jsonWrite(list);
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.error(e);
 		}
 	}
 	
@@ -512,6 +520,7 @@ public class ManualCheckInfoAction extends IAction{
 			this.jsonWrite(retMap);
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.error(e);
 		}
 	}
 	
