@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -12,18 +14,20 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "jl_location_info")
 public class LocationInfo implements java.io.Serializable{
-	private String id;//主键id
+	private int id;//主键id
 	private int userid;//用户id;
 	private String zuobiao;//坐标
 	private Date updatetime;//更新时间
 	private String address;//地址
+	private String ltime;//微信小程序上传来的时间
 	
 	@Id
-	@Column(name = "id", nullable = false, length=50)
-	public String getId() {
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", nullable = false ,precision = 22, scale = 0)
+	public int getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	@Column(name = "userid", precision = 22, scale = 0)
@@ -55,6 +59,14 @@ public class LocationInfo implements java.io.Serializable{
 	public void setAddress(String address) {
 		this.address = address;
 	}
+	@Column(name = "ltime",  length=20)
+	public String getLtime() {
+		return ltime;
+	}
+	public void setLtime(String ltime) {
+		this.ltime = ltime;
+	}
+	
 	
 	
 	

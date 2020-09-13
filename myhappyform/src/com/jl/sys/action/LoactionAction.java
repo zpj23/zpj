@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -17,7 +20,9 @@ import org.springframework.stereotype.Component;
 
 import com.goldenweb.sys.util.IAction;
 import com.jl.sys.pojo.LocationInfo;
+import com.jl.sys.pojo.UserInfo;
 import com.jl.sys.service.LocationService;
+import com.jl.sys.service.UserInfoService;
 
 @Namespace("/")
 @Scope("prototype")
@@ -26,6 +31,86 @@ import com.jl.sys.service.LocationService;
 public class LoactionAction extends IAction{
 	@Autowired
 	private LocationService locationService;
+	@Autowired
+	private UserInfoService jlUserInfoService;
+	
+	private UserInfo user;
+	
+	Logger logger=Logger.getLogger(LoactionAction.class);
+	
+	
+	/**
+	 * 保存微信打卡记录
+	 * @Title jlLocationAction_saveLocationInfoByPhone
+	 * @author zpj
+	 * @throws IOException 
+	 * @time 2017-9-29 下午1:38:17
+	 */
+	@Action(value="jlLocationAction_saveLocationInfoByPhone",
+			results={
+			@Result(type="json", params={"root","jsonData"})})
+	public void saveLocationInfoByPhone() throws IOException{
+		String loginId=request.getParameter("loginId");
+		String longAndLat=request.getParameter("longAndLat");
+		String checkAddress=request.getParameter("checkAddress");
+		String checkTime=request.getParameter("checkTime");
+		Map retMap=new HashMap<>();
+		try {
+			LocationInfo locationInfo=new LocationInfo();
+			locationInfo.setUserid(Integer.parseInt(loginId));
+			locationInfo.setUpdatetime(new Date());
+			locationInfo.setZuobiao(longAndLat);
+			locationInfo.setAddress(checkAddress);
+			locationInfo.setLtime(checkTime);
+			locationService.updateLocation(locationInfo);
+			retMap.put("flag", true);
+			jsonWrite(retMap);
+		} catch (IOException e) {
+			e.printStackTrace();
+			retMap.put("flag", false);
+			jsonWrite(retMap);
+		}
+	}
+	
+	@Action(value="jlLocationAction_findListInfoByPhone",
+			results={
+			@Result(type="json", params={"root","jsonData"})})
+	public void findListInfoByPhone(){
+		user = getCurrentUser(request);
+//		String staffname=request.getParameter("staffname");
+		String datemin=request.getParameter("datemin");//开始时间
+		String datemax=request.getParameter("datemax");//结束时间
+		String cpage=request.getParameter("cpage");
+		String pagerow=request.getParameter("pagerow");//分页行数
+		Map<String,String> param=new HashMap<String,String>();
+		int pr=Integer.parseInt(pagerow);
+		param.put("datemin", datemin);
+		param.put("datemax", datemax);
+//		param.put("username", staffname);
+		page=Integer.parseInt(cpage);
+		Map map=locationService.findList(user,page,pr,param);
+		int tot=(Integer)map.get("count");
+		double totalPage=Math.ceil((float)tot/pr);
+		map.put("totalpage",totalPage );
+		try {
+			this.jsonWrite(map);
+		} catch (IOException e) {
+			e.printStackTrace();
+			logger.error(e);
+		}
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * 更新位置信息
 	 * @Title jlLocationAction_updateLocationByPhone
@@ -43,7 +128,6 @@ public class LoactionAction extends IAction{
 		
 		
 		LocationInfo locationInfo=new LocationInfo();
-		locationInfo.setId(UUID.randomUUID().toString());
 		locationInfo.setUserid(Integer.parseInt(id));
 		locationInfo.setUpdatetime(new Date());
 		locationInfo.setZuobiao(longitude+","+latitude);
@@ -56,6 +140,11 @@ public class LoactionAction extends IAction{
 			e.printStackTrace();
 		}
 	}
+	
+	
+	
+	
+	
 	@Action(value="jlLocationAction_showByName",
 			results={
 			@Result(type="json", params={"root","jsonData"})})
@@ -73,6 +162,26 @@ public class LoactionAction extends IAction{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public UserInfo getCurrentUser(HttpServletRequest request){
+		UserInfo user = (UserInfo)request.getSession().getAttribute("jluserinfo");
+//		Enumeration enumeration =request.getSession().getAttributeNames();//获取session中所有的键值对
+//		while(enumeration.hasMoreElements()){
+//            String AddFileName=enumeration.nextElement().toString();//获取session中的键值
+//            UserInfo value=(UserInfo)request.getSession().getAttribute(AddFileName);//根据键值取出session中的值
+//            System.out.println(AddFileName);
+//            System.out.println(value.getLoginname());
+//            //String FileName= (String)session.getAttribute("AddFileName");
+//        }
+		if(user==null){
+			String id= request.getParameter("loginId");
+			String isAdmin=request.getParameter("isAdmin");
+			user=jlUserInfoService.findById(Integer.parseInt(id));
+			user.setIsAdmin(isAdmin);
+			request.getSession().setAttribute("jluserinfo",user);
+		}
+		return user;
 	}
 	
 }

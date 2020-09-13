@@ -23,9 +23,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGEncodeParam;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
 
 /**
@@ -361,47 +358,47 @@ public class FileUploadUtils {
 	 *            最小的尺寸
 	 * @throws IOException
 	 */
-	public static void createMiniPic(File file, float width, float height)
-			throws IOException {
-		Image src = javax.imageio.ImageIO.read(file); // 构造Image对象
-		int old_w = src.getWidth(null); // 得到源图宽
-		int old_h = src.getHeight(null);
-		int new_w = 0;
-		int new_h = 0; // 得到源图长
-		float tempdouble;
-		if (old_w >= old_h) {
-			tempdouble = old_w / width;
-		} else {
-			tempdouble = old_h / height;
-		}
-
-		if (old_w >= width || old_h >= height) { // 如果文件小于锁略图的尺寸则复制即可
-			new_w = Math.round(old_w / tempdouble);
-			new_h = Math.round(old_h / tempdouble);// 计算新图长宽
-			while (new_w > width && new_h > height) {
-				if (new_w > width) {
-					tempdouble = new_w / width;
-					new_w = Math.round(new_w / tempdouble);
-					new_h = Math.round(new_h / tempdouble);
-				}
-				if (new_h > height) {
-					tempdouble = new_h / height;
-					new_w = Math.round(new_w / tempdouble);
-					new_h = Math.round(new_h / tempdouble);
-				}
-			}
-			BufferedImage tag = new BufferedImage(new_w, new_h,
-					BufferedImage.TYPE_INT_RGB);
-			tag.getGraphics().drawImage(src, 0, 0, new_w, new_h, null); // 绘制缩小后的图
-			FileOutputStream newimage = new FileOutputStream(file); // 输出到文件流
-			JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(newimage);
-			JPEGEncodeParam param = encoder.getDefaultJPEGEncodeParam(tag);
-			param.setQuality((float) (100 / 100.0), true);// 设置图片质量,100最大,默认70
-			encoder.encode(tag, param);
-			encoder.encode(tag); // 将JPEG编码
-			newimage.close();
-		}
-	}
+//	public static void createMiniPic(File file, float width, float height)
+//			throws IOException {
+//		Image src = javax.imageio.ImageIO.read(file); // 构造Image对象
+//		int old_w = src.getWidth(null); // 得到源图宽
+//		int old_h = src.getHeight(null);
+//		int new_w = 0;
+//		int new_h = 0; // 得到源图长
+//		float tempdouble;
+//		if (old_w >= old_h) {
+//			tempdouble = old_w / width;
+//		} else {
+//			tempdouble = old_h / height;
+//		}
+//
+//		if (old_w >= width || old_h >= height) { // 如果文件小于锁略图的尺寸则复制即可
+//			new_w = Math.round(old_w / tempdouble);
+//			new_h = Math.round(old_h / tempdouble);// 计算新图长宽
+//			while (new_w > width && new_h > height) {
+//				if (new_w > width) {
+//					tempdouble = new_w / width;
+//					new_w = Math.round(new_w / tempdouble);
+//					new_h = Math.round(new_h / tempdouble);
+//				}
+//				if (new_h > height) {
+//					tempdouble = new_h / height;
+//					new_w = Math.round(new_w / tempdouble);
+//					new_h = Math.round(new_h / tempdouble);
+//				}
+//			}
+//			BufferedImage tag = new BufferedImage(new_w, new_h,
+//					BufferedImage.TYPE_INT_RGB);
+//			tag.getGraphics().drawImage(src, 0, 0, new_w, new_h, null); // 绘制缩小后的图
+//			FileOutputStream newimage = new FileOutputStream(file); // 输出到文件流
+//			JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(newimage);
+//			JPEGEncodeParam param = encoder.getDefaultJPEGEncodeParam(tag);
+//			param.setQuality((float) (100 / 100.0), true);// 设置图片质量,100最大,默认70
+//			encoder.encode(tag, param);
+//			encoder.encode(tag); // 将JPEG编码
+//			newimage.close();
+//		}
+//	}
 
 	/**
 	 * 判断文件类型是否是合法的,就是判断allowTypes中是否包含contentType

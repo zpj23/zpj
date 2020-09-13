@@ -14,7 +14,7 @@ import javax.crypto.KeyGenerator;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.jasypt.properties.EncryptableProperties;
 
-import sun.misc.BASE64Decoder;
+//import sun.misc.BASE64Decoder;
 
 public class DESCipherCrossoverDelphi {
 	Key key;
@@ -84,25 +84,25 @@ public class DESCipherCrossoverDelphi {
 	 * @param strMi
 	 * @return
 	 */
-	public String getDesString(String strMi) {
-		BASE64Decoder base64De = new BASE64Decoder();
-		byte[] byteMing = null;
-		byte[] byteMi = null;
-		String strMing = "";
-		try {
-			byteMi = base64De.decodeBuffer(strMi);
-			byteMing = this.getDesCode(byteMi);
-			strMing = new String(byteMing, "UTF8");
-		} catch (Exception e) {
-			throw new RuntimeException(
-					"Error initializing SqlMap class. Cause: " + e);
-		} finally {
-			base64De = null;
-			byteMing = null;
-			byteMi = null;
-		}
-		return strMing;
-	}
+//	public String getDesString(String strMi) {
+//		BASE64Decoder base64De = new BASE64Decoder();
+//		byte[] byteMing = null;
+//		byte[] byteMi = null;
+//		String strMing = "";
+//		try {
+//			byteMi = base64De.decodeBuffer(strMi);
+//			byteMing = this.getDesCode(byteMi);
+//			strMing = new String(byteMing, "UTF8");
+//		} catch (Exception e) {
+//			throw new RuntimeException(
+//					"Error initializing SqlMap class. Cause: " + e);
+//		} finally {
+//			base64De = null;
+//			byteMing = null;
+//			byteMi = null;
+//		}
+//		return strMing;
+//	}
 
 	/**
 	 * 加密以byte[]明文输入,byte[]密文输出
@@ -164,7 +164,7 @@ public class DESCipherCrossoverDelphi {
 		 String deStr = new DESCipherCrossoverDelphi().getEncString(str1);
 		System.out.println("密文:" + deStr);
 		 // DES解密
-		 System.out.println("明文:" + new DESCipherCrossoverDelphi().getDesString("H3Zy4txGn88="));
+//		 System.out.println("明文:" + new DESCipherCrossoverDelphi().getDesString("H3Zy4txGn88="));
 	}
 
 	/**
