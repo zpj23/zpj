@@ -51,6 +51,13 @@ public class UserInfoServiceImpl extends BaseService<UserInfo> implements UserIn
 		}
 	}
 	
+	public List<UserInfo> findUserByUserName(String username){
+		return jlUserInfoDao.findUserByUserName(username);
+	}
+	public List<UserInfo> findUserByOpenId(String openId){
+		return jlUserInfoDao.findUserByOpenId(openId);
+	}
+	
 //	@MethodLog2(remark="查询用户列表",type="查询")
 	public Map findList(UserInfo user,int page,int rows,Map<String,String> param){
 		List list=jlUserInfoDao.findList(user,page,rows,param);

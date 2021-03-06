@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
@@ -50,6 +51,7 @@ public class LoactionAction extends IAction{
 			results={
 			@Result(type="json", params={"root","jsonData"})})
 	public void saveLocationInfoByPhone() throws IOException{
+		user = getCurrentUser(request);
 		String loginId=request.getParameter("loginId");
 		String longAndLat=request.getParameter("longAndLat");
 		String checkAddress=request.getParameter("checkAddress");
@@ -62,6 +64,7 @@ public class LoactionAction extends IAction{
 			locationInfo.setZuobiao(longAndLat);
 			locationInfo.setAddress(checkAddress);
 			locationInfo.setLtime(checkTime);
+			locationInfo.setUsername(user.getUsername());
 			locationService.updateLocation(locationInfo);
 			retMap.put("flag", true);
 			jsonWrite(retMap);
@@ -77,16 +80,27 @@ public class LoactionAction extends IAction{
 			@Result(type="json", params={"root","jsonData"})})
 	public void findListInfoByPhone(){
 		user = getCurrentUser(request);
-//		String staffname=request.getParameter("staffname");
-		String datemin=request.getParameter("datemin");//开始时间
-		String datemax=request.getParameter("datemax");//结束时间
+		String username=request.getParameter("username");
+		String year=request.getParameter("datemin");//年份
+		String month=request.getParameter("yuefen");//月份
+		String tianshu=request.getParameter("tianshu");//日期
 		String cpage=request.getParameter("cpage");
 		String pagerow=request.getParameter("pagerow");//分页行数
 		Map<String,String> param=new HashMap<String,String>();
 		int pr=Integer.parseInt(pagerow);
-		param.put("datemin", datemin);
-		param.put("datemax", datemax);
-//		param.put("username", staffname);
+		StringBuilder dat=new StringBuilder(50);
+		if(StringUtils.isNotEmpty(year)){
+			dat.append(year);
+			if(StringUtils.isNotEmpty(month)){
+				dat.append("-").append(month);
+				if(StringUtils.isNotEmpty(tianshu)){
+					dat.append("-").append(tianshu);
+				}
+			}
+			
+		}
+		param.put("date", dat.toString());
+		param.put("username", username);
 		page=Integer.parseInt(cpage);
 		Map map=locationService.findList(user,page,pr,param);
 		int tot=(Integer)map.get("count");
@@ -117,29 +131,29 @@ public class LoactionAction extends IAction{
 	 * @author zpj
 	 * @time 2017-9-29 下午1:38:17
 	 */
-	@Action(value="jlLocationAction_updateLocationByPhone",
-			results={
-			@Result(type="json", params={"root","jsonData"})})
-	public void jlLocationAction_updateLocationByPhone(){
-		String id=request.getParameter("id");
-		String longitude=request.getParameter("longitude");
-		String latitude=request.getParameter("latitude");
-		String address=request.getParameter("address");
-		
-		
-		LocationInfo locationInfo=new LocationInfo();
-		locationInfo.setUserid(Integer.parseInt(id));
-		locationInfo.setUpdatetime(new Date());
-		locationInfo.setZuobiao(longitude+","+latitude);
-		locationInfo.setAddress(address);
-		locationService.updateLocation(locationInfo);
-		try {
-			jsonWrite("success");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+//	@Action(value="jlLocationAction_updateLocationByPhone",
+//			results={
+//			@Result(type="json", params={"root","jsonData"})})
+//	public void jlLocationAction_updateLocationByPhone(){
+//		String id=request.getParameter("id");
+//		String longitude=request.getParameter("longitude");
+//		String latitude=request.getParameter("latitude");
+//		String address=request.getParameter("address");
+//		
+//		
+//		LocationInfo locationInfo=new LocationInfo();
+//		locationInfo.setUserid(Integer.parseInt(id));
+//		locationInfo.setUpdatetime(new Date());
+//		locationInfo.setZuobiao(longitude+","+latitude);
+//		locationInfo.setAddress(address);
+//		locationService.updateLocation(locationInfo);
+//		try {
+//			jsonWrite("success");
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
 	
 	
 	
@@ -162,6 +176,24 @@ public class LoactionAction extends IAction{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	
+	
+	@Action(value="jlLocationAction_show",results={
+			@Result(name="success",location="sys/manualcheck/showInTencentMap.jsp"),//fashionHome.jsp
+			@Result(name="error",location="/login.jsp")
+	})
+	public String showInMap(){
+		return "success";
+	}
+	
+	@Action(value="jlLocationAction_showBaidu",results={
+			@Result(name="success",location="sys/manualcheck/showInBaiduMap.jsp"),//fashionHome.jsp
+			@Result(name="error",location="/login.jsp")
+	})
+	public String showInBaiduMap(){
+		return "success";
 	}
 	
 	public UserInfo getCurrentUser(HttpServletRequest request){

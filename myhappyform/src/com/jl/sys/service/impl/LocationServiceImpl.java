@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.jl.common.BaseService.MethodLog2;
 import com.jl.sys.dao.LocationDao;
 import com.jl.sys.pojo.LocationInfo;
 import com.jl.sys.pojo.UserInfo;
@@ -16,6 +17,7 @@ public class LocationServiceImpl implements LocationService {
 	@Autowired
 	private LocationDao locationDao;
 	@Override
+	@MethodLog2(remark="打卡",type="新增")
 	public void updateLocation(LocationInfo locationInfo) {
 		locationDao.updateLocation(locationInfo);
 	}

@@ -41,7 +41,7 @@ $(document).ready(function(){
 		columns : [ [ {
 			field : 'workdate',
 			title : '施工日期',
-			width : 30,
+			width : 50,
 			formatter: function(value, rowData, rowIndex){
 				var str=rowData.workdate;
 				var ret=str.substr(0,10);
@@ -51,11 +51,11 @@ $(document).ready(function(){
 		},{
 			field : 'staffname',
 			title : '施工人员',
-			width : 20
+			width : 30
 		},{
 			field : 'sgxm',
 			title : '施工项目',
-			width : 30,
+			width : 40,
 			formatter:function(value,row){ 
 				if(value==undefined||value=="undefined"){
 					return "";

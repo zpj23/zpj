@@ -118,6 +118,7 @@ public class IAction extends ActionSupport implements ServletRequestAware,Servle
 	public void jsonWrite(Object obj) throws IOException{
 		Gson gson = new Gson();
 		response.setCharacterEncoding("utf-8");
+		response.setContentType("text/html;charset=utf-8");
 		response.getWriter().write(gson.toJson(obj));
 	}
 	

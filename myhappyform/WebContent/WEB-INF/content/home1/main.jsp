@@ -35,6 +35,7 @@
 var hzbArray=new Array();//横坐标
 var zzbArray=new Array();//纵坐标
 var SETTIMEFLAG=0;
+var today=new Date();
 $(document).ready(function(){
 	initInfo();
 	
@@ -139,7 +140,7 @@ function initInfo(){
 	 		type: "POST",
 			   url: "jlManualCheckInfoAction_initChartByArr",
 			   async:true,
-			   data: "departmentid="+code+"&departmentname="+name+"&datemin=2019",
+			   data: "departmentid="+code+"&departmentname="+name+"&datemin="+today.getFullYear(),
 			   success: function(arr){
 				  var datas=$.parseJSON(arr);
 				  for(var str in datas){

@@ -62,6 +62,17 @@ public interface RoleInfoService {
 	 * @time 2016-5-6 下午3:49:35
 	 */
 	public void saveRoleUser(int rid,String users);
+	
+	/**
+	 * 单独保存某一个用户和角色的关系
+	 * @Description (TODO这里用一句话描述这个方法的作用)
+	 * @title saveRoleUserSingle
+	 * @param rid
+	 * @param user void
+	 * @author zpj
+	 * @Date 2021年2月18日 下午5:51:38
+	 */
+	public void saveRoleUserSingle(int rid,int user);
 	/**
 	 * 保存角色部门关系表
 	 * @Title saveRoleDepartment

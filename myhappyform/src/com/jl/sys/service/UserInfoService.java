@@ -65,7 +65,25 @@ public interface UserInfoService {
 	 */
 	public UserInfo findById(int id);
 	
-	
+	/**
+	 * 
+	 * @Description (TODO根据用户姓名查询用户信息)
+	 * @title findUserByUserName
+	 * @return List<UserInfo> 
+	 * @author zpj
+	 * @Date 2021年2月17日 下午6:36:28
+	 */
+	public List<UserInfo> findUserByUserName(String username);
+	/**
+	 * 
+	 * @Description (TODO根据openId查询已绑定用户)
+	 * @title findUserByOpenId
+	 * @param username
+	 * @return List<UserInfo>
+	 * @author zpj
+	 * @Date 2021年2月19日 上午10:52:52
+	 */
+	public List<UserInfo> findUserByOpenId(String openId);
 	/**
 	 * 根据组织机构code查询下面用户
 	 * @Title findUserByDepCode

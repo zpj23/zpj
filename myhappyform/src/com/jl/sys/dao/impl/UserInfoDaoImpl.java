@@ -1,9 +1,10 @@
 package com.jl.sys.dao.impl;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-
+import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.goldenweb.fxpg.frame.tools.MD5;
@@ -34,6 +35,16 @@ public class UserInfoDaoImpl extends BaseDao<UserInfo> implements UserInfoDao{
 		return this.get(id);
 	}
 	
+	public List<UserInfo> findUserByUserName(String username){
+		StringBuffer sql = new StringBuffer(100).append(" from UserInfo where username='").append(username+"'");
+		List<UserInfo> list=this.findObjectByHql(sql.toString());
+		return list;
+	}
+	public List<UserInfo> findUserByOpenId(String openId){
+		StringBuffer sql = new StringBuffer(100).append(" from UserInfo where openid='").append(openId+"'");
+		List<UserInfo> list=this.findObjectByHql(sql.toString());
+		return list;
+	}
 	@Override
 	public List findList(UserInfo user,int page,int rows,Map<String,String> param){
 		StringBuffer sql = new StringBuffer();
@@ -81,18 +92,22 @@ public class UserInfoDaoImpl extends BaseDao<UserInfo> implements UserInfoDao{
 		try{
 			int id=user.getId();
 			UserInfo ui=this.findById(id);
-			
+			Session session =null;
 			if(ui!=null){
 				user.setPassword(ui.getPassword());
 				this.merge(user, String.valueOf(id));
+				return user.getId();
 			}else{
 				//新增
 				String pwd =user.getLoginname()+ "{"+user.getPassword()+"}";  //加密规则 ：  用户名{密码}
 				pwd = MD5.md5s(pwd); // 密码加密
 				user.setPassword(pwd);
-				this.save(user);
+//				this.save(user);
+				session=sessionFactory.getCurrentSession();
+				Serializable id1 = session.save(user);
+				return (Integer) id1;
 			}
-			return 1;
+			
 		}catch (Exception e) {
 			return 0;
 		}

@@ -3,6 +3,7 @@ package com.jl.sys.action;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -45,6 +46,7 @@ import com.jl.sys.service.RoleInfoService;
 import com.jl.sys.service.UserInfoService;
 import com.jl.util.ClientTool;
 import com.jl.util.DateHelper;
+import com.jl.util.PingyinTool;
 import com.jl.util.StringFormat;
 import com.jl.util.WxUtil;
 import com.thread.User;
@@ -135,7 +137,7 @@ public class LoginAction extends IAction{
 			@Result(type="json", params={"root","jsonData"})})
 	public void jlLoginAction_getUserOpenIdByWx(){
 		String js_code=request.getParameter("js_code");
-		String user_id=request.getParameter("user_id");
+//		String user_id=request.getParameter("user_id");
 		
 		CloseableHttpClient  httpClient=ClientTool.getHttpClient();
 	    HttpClientContext localContext= HttpClientContext.create();
@@ -145,7 +147,7 @@ public class LoginAction extends IAction{
 			Gson gson = new Gson();
 			Map resultMap=gson.fromJson(result, Map.class);
 			//{"session_key":"xVW70veOHdZs9SwHx8aWdg==","expires_in":7200,"openid":"oKhAE0a3OqRqQymVFchr9q3a6uw0"}
-			jlUserInfoService.updateOpenId(user_id,(String)resultMap.get("openid"));
+//			jlUserInfoService.updateOpenId(user_id,(String)resultMap.get("openid"));
 			jsonWrite(result);
 	    } catch (Exception e) {
 			e.printStackTrace();
@@ -153,7 +155,7 @@ public class LoginAction extends IAction{
 		
 	}
 	/**
-	 * 微信的登陆验证
+	 * 微信的登陆验证 绑定用户
 	 * @Title jlLoginAction_loginByWx
 	 * @author zpj
 	 * @time 2019年7月22日 下午2:13:41
@@ -162,16 +164,72 @@ public class LoginAction extends IAction{
 			results={
 			@Result(type="json", params={"root","jsonData"})})
 	public void jlLoginAction_loginByWx(){
-		String username=request.getParameter("username");
-		String password=request.getParameter("password");
-		System.out.println(username+">>>>>"+password);
-		UserInfo tempUser=new UserInfo();
-		tempUser.setLoginname(username);
-		tempUser.setPassword(password);
-		UserInfo luser=jlUserInfoService.findLogin(tempUser,false);
+		String username=request.getParameter("userName");
+		String openId=request.getParameter("openId");
+		String nickName=request.getParameter("nickName");
+		System.out.println(username+">>>"+openId+">>>"+nickName);
 		Map retMap=new HashMap();
-		if(null!=luser){
+		retMap.put("flag", true);
+		UserInfo tempUser=new UserInfo();
+		//查询该openId是否已经绑定过用户
+		List<UserInfo> opeIdList=new ArrayList<>();
+		if(!"".equalsIgnoreCase(openId)){
+			opeIdList=jlUserInfoService.findUserByOpenId(openId);
+		}
+		List<UserInfo> userList=jlUserInfoService.findUserByUserName(username);
+		int userid=0;
+		if(null!=userList&&userList.size()==1){
+			userid=userList.get(0).getId();
+			if(opeIdList!=null&&opeIdList.size()>0&&opeIdList.get(0).getId()!=userid){
+				retMap.put("flag", false);
+				retMap.put("msg", "绑定失败,该微信已绑定其他用户，无法继续绑定");
+			}else{
+				if(null!=userList.get(0).getOpenid()&&!"".equalsIgnoreCase(userList.get(0).getOpenid())){
+					//当前用户名已经注册绑定过对应用户和微信信息
+					if(!openId.equalsIgnoreCase(userList.get(0).getOpenid())){
+						retMap.put("flag", false);
+						retMap.put("msg", "绑定失败,该用户已绑定其他微信,无法重复绑定");
+					}
+//					else{
+//						//绑定到对应用户上的openId
+//						jlUserInfoService.updateOpenId(String.valueOf(userid),openId);
+//					}
+					
+				}else{
+					
+					//绑定到对应用户上的openId
+					jlUserInfoService.updateOpenId(String.valueOf(userid),openId);
+				}
+			}
 			
+		}else if(userList.size()==0){
+			//判断微信是否绑定过
+			if(opeIdList!=null&&opeIdList.size()>0&&opeIdList.get(0).getId()!=userid){
+				retMap.put("flag", false);
+				retMap.put("msg", "绑定失败,该微信已绑定其他用户，无法继续绑定");
+			}else{
+				//不存在当前用户，需要新增
+				tempUser.setCreatetime(new Date());
+				tempUser.setLoginname(PingyinTool.cn2Spell(username));
+				tempUser.setUsername(username);
+				tempUser.setPassword("111111");
+				//默认到海通
+				tempUser.setDepartmentcode("HTGD");
+				tempUser.setDepartmentname("海通工地");
+				tempUser.setIsdel(1);//需要审核下用是否注销来判断
+				tempUser.setRemark("微信注册");
+				tempUser.setOpenid(openId);
+				tempUser.setRemark(nickName);
+				userid=jlUserInfoService.saveUser(tempUser);
+				//角色id写死7 普通角色； 单独保存某一个用户与角色的关系
+				jlRoleInfoService.saveRoleUserSingle(7,userid);
+			}
+		}
+		//重新查询该对象
+		UserInfo luser=jlUserInfoService.findById(userid);
+		if(!(boolean)(retMap.get("flag"))){
+			
+		}else if(null!=luser){
 			//根据登陆用户信息查询 根据user id信息查询用户所有的角色和部门所有的角色查询关联表对应角色
 			//如果用户角色和部门角色相同，则取一个，再以及角色对应的菜单信息，以及菜单对应的操作信息
 			// role的 id、rolecode、rolename   
@@ -195,13 +253,9 @@ public class LoginAction extends IAction{
 					rolecodeSet.add(dlist.get(j)[1]);
 				}
 			}
-			
-			
-			
-			
 			if(rolecodeSet.isEmpty()){
-				retMap.put("info", "该用户未授权,无法登陆！");
-				retMap.put("msg",false);
+				retMap.put("msg", "该用户未授权,无法登陆！");
+				retMap.put("flag",false);
 			}else{
 				//用户的map对象
 				Map umap=new HashMap();
@@ -213,19 +267,21 @@ public class LoginAction extends IAction{
 				umap.put("telephone", luser.getTelephone());
 				if(rolecodeSet.contains("ROLE_1462257894696")){//是管理员角色
 					umap.put("isAdmin", "1");
-				}else{//其他角色
+				}else if(rolecodeSet.contains("ROLE_1464940613464")){//带班角色
 					umap.put("isAdmin", "0");
+				}else if(rolecodeSet.contains("ROLE_1613640992689")){//带班角色
+					umap.put("isAdmin", "-1");
 				}
 				retMap.put("user", umap);
 				retMap.put("flag", true);
-				retMap.put("msg", "登陆成功");
+				retMap.put("msg", "绑定成功");
 			}	
 			
 			
 			
 		}else{
 			retMap.put("flag", false);
-			retMap.put("msg", "用户名或密码错误");
+			retMap.put("msg", "绑定失败,用户不存在");
 		}
 		
 		

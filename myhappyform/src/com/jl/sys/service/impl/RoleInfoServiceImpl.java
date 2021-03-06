@@ -113,6 +113,11 @@ public class RoleInfoServiceImpl implements RoleInfoService {
 			roleUserDao.saveUserRole(mri);
 		}
 	}
+	@MethodLog2(remark="单独保存角色_用户信息",type="新增/编辑")
+	public void saveRoleUserSingle(int rid,int userid){
+		UserRoleInfo mri=new UserRoleInfo(0,userid,rid);
+		roleUserDao.saveUserRole(mri);
+	}
 
 	@MethodLog2(remark="保存角色_部门信息",type="新增/编辑")
 	public void saveRoleDepartment(int rid, String departments) {

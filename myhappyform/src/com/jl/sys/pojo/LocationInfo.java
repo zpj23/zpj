@@ -20,6 +20,7 @@ public class LocationInfo implements java.io.Serializable{
 	private Date updatetime;//更新时间
 	private String address;//地址
 	private String ltime;//微信小程序上传来的时间
+	private String username;//姓名
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -65,6 +66,13 @@ public class LocationInfo implements java.io.Serializable{
 	}
 	public void setLtime(String ltime) {
 		this.ltime = ltime;
+	}
+	@Column(name = "username",  length=30)
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
 	}
 	
 	

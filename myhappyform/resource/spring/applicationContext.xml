@@ -31,8 +31,8 @@
 		<!-- 配置监控统计拦截的filters，去掉后监控界面sql无法统计 -->  
 		<property name="filters" value="stat" />
 		<!-- 配置初始化大小、最小、最大 -->  
-		<property name="initialSize" value="1" />
-		<property name="minIdle" value="1" />
+		<property name="initialSize" value="10" />
+		<property name="minIdle" value="10" />
 		<property name="maxActive" value="20" />
 		<!-- 配置获取连接等待超时的时间 -->  
 		<property name="maxWait" value="60000" />

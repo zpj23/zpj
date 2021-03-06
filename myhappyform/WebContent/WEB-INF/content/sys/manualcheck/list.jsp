@@ -58,6 +58,13 @@ function manager_add(title,url,w,h){
 	h=document.body.clientHeight-100;
 	layer_show(title,url,w,h);
 }
+
+
+function check_in(title,url,w,h){
+	w=document.body.clientWidth-100;
+	h=document.body.clientHeight-100;
+	layer_show(title,url,w,h);
+}
 /*删除*/
 function admin_del(id){
 	layer.confirm('确认要删除吗？',function(index){
@@ -198,6 +205,8 @@ function analysis(){
 	  <c:if test="${jluserinfo.isAdmin=='1'}">
 	  	<a href="javascript:;" style="color: white" onclick="analysis()" class="btn btn-secondary radius"><i class="Hui-iconfont">&#xe618;</i>数据分析</a>
 	  	<a href="javascript:;" style="color: white" onclick="shenhe()" class="btn btn-success radius"><i class="Hui-iconfont">&#xe618;</i>批量审核</a>
+<!-- 	  	<a href="javascript:;" style="color: white" onclick="check_in('打卡信息','jlLocationAction_show','800','650')" class="btn btn-secondary radius"><i class="Hui-iconfont">&#xe6c9;</i>打卡信息</a> -->
+	  	<a href="javascript:;" style="color: white" onclick="check_in('打卡信息','jlLocationAction_showBaidu','800','650')" class="btn btn-secondary radius"><i class="Hui-iconfont">&#xe6c9;</i>打卡信息百度地图</a>
 	  </c:if> 
 	  <a href="javascript:;" style="color: white" onclick="dataoutput()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe644;</i>导出数据</a>
 	  <a href="javascript:;" style="color: white" onclick="admin_add('添加信息','jlManualCheckInfoAction_toAdd','800','650')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加信息</a>
