@@ -81,25 +81,16 @@ public class LoactionAction extends IAction{
 	public void findListInfoByPhone(){
 		user = getCurrentUser(request);
 		String username=request.getParameter("username");
-		String year=request.getParameter("datemin");//年份
-		String month=request.getParameter("yuefen");//月份
-		String tianshu=request.getParameter("tianshu");//日期
+		String datamin=request.getParameter("datemin");//年份
+		String datemax=request.getParameter("datemax");//年份
+		
 		String cpage=request.getParameter("cpage");
 		String pagerow=request.getParameter("pagerow");//分页行数
 		Map<String,String> param=new HashMap<String,String>();
 		int pr=Integer.parseInt(pagerow);
 		StringBuilder dat=new StringBuilder(50);
-		if(StringUtils.isNotEmpty(year)){
-			dat.append(year);
-			if(StringUtils.isNotEmpty(month)){
-				dat.append("-").append(month);
-				if(StringUtils.isNotEmpty(tianshu)){
-					dat.append("-").append(tianshu);
-				}
-			}
-			
-		}
-		param.put("date", dat.toString());
+		param.put("datemin", datamin);
+		param.put("datemax", datemax);
 		param.put("username", username);
 		page=Integer.parseInt(cpage);
 		Map map=locationService.findList(user,page,pr,param);

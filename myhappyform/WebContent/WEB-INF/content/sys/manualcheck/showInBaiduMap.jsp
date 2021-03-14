@@ -35,7 +35,9 @@ function initMap() {
 	bigMap.setCurrentCity("江苏省");
 	currentMapLevel=bigMap.getZoom();
     var today=new Date();
-    $("#datemin").val(today.getFullYear());
+//     $("#datemin").val(today.getFullYear());
+//     $("#yuefen").val(today.getMonth()<9?0+""+(today.getMonth()+1):today.getMonth()+1);
+//     $("#tianshu").val(today.getDate()<10?0+""+today.getDate():today.getDate());
 }
 
 function createHtml(obj){
@@ -83,16 +85,17 @@ function deleteOverlays() {
 }
 function initData(){
 	deleteOverlays();
-	if($("#datemin").val()==""&&($("#yuefen").val()!=""||$("#tianshu").val()!="")){
-		layer.msg('请先选择年份!',{icon: 5,time:3000});
-		return;
-	}
+// 	if($("#datemin").val()==""&&($("#yuefen").val()!=""||$("#tianshu").val()!="")){
+// 		layer.msg('请先选择年份!',{icon: 5,time:3000});
+// 		return;
+// 	}
 	$.ajax({
  		type: "POST",
 		   url: "jlLocationAction_findListInfoByPhone",
 		   async:false,
-		   data: "datemin="+$("#datemin").val()+"&yuefen="+$("#yuefen").val()+"&tianshu="+$("#tianshu").val()+"&username="+$("#username").val()+"&sgxm="+$("#sgxm").val()+"&sgqy="+$("#sgqy").val()+"&workcontent="+$("#workcontent").val()+"&departmentid="+$("#departmentid").val()+"&cpage=1&pagerow=2000",
+		   data: "datemin="+$("#datemin").val()+"&datemax="+$("#datemax").val()+"&username="+$("#username").val()+"&sgxm="+$("#sgxm").val()+"&sgqy="+$("#sgqy").val()+"&workcontent="+$("#workcontent").val()+"&departmentid="+$("#departmentid").val()+"&cpage=1&pagerow=2000",
 		   success: function(arr){
+// 			   parent.layer.close(index);
 			  var datas=$.parseJSON(arr);
 // 			  console.log(datas);
 			  var arr=datas.list;
@@ -108,6 +111,7 @@ function initData(){
 				  createMarker(arr[i]);
 			  }
 			  initTableList(arr);
+			  
 		   }
  	});
 	
@@ -194,18 +198,16 @@ function qqMapToBMap(lng, lat) {
 <!-- <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 统计管理 <span class="c-gray en">&gt;</span> 柱状图统计 <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav> -->
 <div class="pd-20">
 <div class="text-c"> 
-		<input type="text" placeholder="选择年份" onfocus="WdatePicker({dateFmt:'yyyy',minDate:'2020',maxDate:'2025'})" id="datemin" name="datemin" class="input-text Wdate" style="width:80px;">
-		<input type="text" placeholder="选择月份" onfocus="WdatePicker({dateFmt:'MM'})" id="yuefen" name="yuefen" class="input-text Wdate" style="width:80px;">
-		<input type="text" placeholder="选择日期" onfocus="WdatePicker({dateFmt:'dd'})" id="tianshu" name="tianshu" class="input-text Wdate" style="width:80px;">
-<!-- 		<input type="text" class="input-text" style="width:170px" placeholder="输入施工项目" id="sgxm" name="sgxm" /> -->
-<!-- 		<input type="text" class="input-text" style="width:170px" placeholder="输入施工区域" id="sgqy" name="sgqy" /> -->
+<!-- 		<input type="text" placeholder="选择年份" onfocus="WdatePicker({dateFmt:'yyyy',minDate:'2020',maxDate:'2025'})" id="datemin" name="datemin" class="input-text Wdate" style="width:80px;"> -->
+<!-- 		<input type="text" placeholder="选择月份" onfocus="WdatePicker({dateFmt:'MM'})" id="yuefen" name="yuefen" class="input-text Wdate" style="width:80px;"> -->
+<!-- 		<input type="text" placeholder="选择日期" onfocus="WdatePicker({dateFmt:'dd'})" id="tianshu" name="tianshu" class="input-text Wdate" style="width:80px;"> -->
+		
+		<input type="text" placeholder="日期开始" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'datemax\')}'})" id="datemin" name="datemin" class="input-text Wdate" style="width:180px;">
+		-
+		<input type="text" placeholder="日期结束" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'datemin\')}'})" id="datemax" name="datemax" class="input-text Wdate" style="width:180px;">
+		
 		
 		<input type="text" class="input-text" style="width:150px" placeholder="输入施工人员名称" id="username" name="username" />
-<!-- 		<input type="text" class="input-text" style="width:150px" placeholder="输入工作内容" id="workcontent" name="workcontent" /> -->
-<!-- 		<span class="select-box inline"> -->
-<!-- 			<select class="select" size="1" name="departmentid" id="departmentid" value="" onchange="" datatype="*" nullmsg="请选择所属部门！"> -->
-<!-- 	          <option value="" selected>所属区域</option> -->
-<!-- 	        </select> -->
         </span>
 		<button type="button"  class="btn btn-success" onclick="initData();" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 构造</button>
 </div>

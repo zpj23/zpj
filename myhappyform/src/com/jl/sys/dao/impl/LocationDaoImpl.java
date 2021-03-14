@@ -21,8 +21,11 @@ public class LocationDaoImpl extends BaseDao<LocationInfo> implements LocationDa
 	public List findList(UserInfo user,int page,int rows,Map<String,String> param){
 		StringBuffer sql = new StringBuffer();
 		sql.append(" select a.id,a.address,a.zuobiao,DATE_FORMAT(a.updatetime,'%Y-%m-%d %H:%i:%s') as updatetime,a.username from jl_location_info a where 1=1   ");
-		if(null!=param.get("date")&&!"".equalsIgnoreCase(param.get("date").toString())){
-			sql.append(" and a.updatetime like ").append("'"+param.get("date")+"%'");
+		if(null!=param.get("datemin")&&!"".equalsIgnoreCase(param.get("datemin").toString())){
+			sql.append(" and a.updatetime >= ").append("'"+param.get("datemin")+"'");
+		}
+		if(null!=param.get("datemax")&&!"".equalsIgnoreCase(param.get("datemax").toString())){
+			sql.append(" and a.updatetime <= ").append("'"+param.get("datemax")+"'");
 		}
 		if(null!=param.get("username")&&!"".equalsIgnoreCase(param.get("username").toString())){
 			sql.append(" and a.username like '%"+param.get("username")+"%' ");
@@ -38,8 +41,11 @@ public class LocationDaoImpl extends BaseDao<LocationInfo> implements LocationDa
 	public int findCount(UserInfo user,Map<String,String> param){
 		StringBuffer sql = new StringBuffer();
 		sql.append(" select count(id) from jl_location_info a where 1=1 ");
-		if(null!=param.get("date")&&!"".equalsIgnoreCase(param.get("date").toString())){
-			sql.append(" and a.updatetime like ").append("'"+param.get("date")+"%'");
+		if(null!=param.get("datemin")&&!"".equalsIgnoreCase(param.get("datemin").toString())){
+			sql.append(" and a.updatetime >= ").append("'"+param.get("datemin")+"'");
+		}
+		if(null!=param.get("datemax")&&!"".equalsIgnoreCase(param.get("datemax").toString())){
+			sql.append(" and a.updatetime <= ").append("'"+param.get("datemax")+"'");
 		}
 		if(null!=param.get("username")&&!"".equalsIgnoreCase(param.get("username").toString())){
 			sql.append(" and a.username like '%"+param.get("username")+"%' ");

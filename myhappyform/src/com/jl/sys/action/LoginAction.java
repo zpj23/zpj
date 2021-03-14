@@ -126,6 +126,47 @@ public class LoginAction extends IAction{
 			return "error";
 		}
 	}
+	
+	/**
+	 *根据用户openid获取用户对象信息
+	 * @throws IOException 
+	 */
+	@Action(value="jlLoginAction_getUserByOpenIdByWx",
+			results={
+			@Result(type="json", params={"root","jsonData"})})
+	public void jlLoginAction_getUserByOpenIdByWx() throws IOException{
+		String openId=request.getParameter("openId");
+		List<UserInfo> list=jlUserInfoService.findUserByOpenId(openId);
+		Map resultMap =new HashMap<>();
+		if(list!=null&&list.size()>0){
+			UserInfo luser=list.get(0);
+			Map umap=new HashMap();
+			umap.put("id", luser.getId());
+			umap.put("loginname", luser.getLoginname());
+			umap.put("openId", luser.getOpenid());
+			umap.put("departmentcode",luser.getDepartmentcode());
+			umap.put("departmentname",luser.getDepartmentname());
+			umap.put("telephone", luser.getTelephone());
+			//用户的授权角色
+			List<Object[]> ulist =jlRoleInfoService.findRoleIdByUserId(luser.getId());
+			Set rolecodeSet=new HashSet();
+			for(int i=0;i<ulist.size();i++){
+				rolecodeSet.add(ulist.get(i)[1]);
+			}
+			if(rolecodeSet.contains("ROLE_1462257894696")){//是管理员角色
+				umap.put("isAdmin", "1");
+			}else if(rolecodeSet.contains("ROLE_1464940613464")){//带班角色
+				umap.put("isAdmin", "0");
+			}else{// if(rolecodeSet.contains("ROLE_1613640992689")){//普通角色
+				umap.put("isAdmin", "-1");
+			}
+			resultMap.put("user", umap);
+		}else{
+			resultMap.put("user", null);
+		}
+		jsonWrite(resultMap);
+	}
+	
 	/**
 	 * 获取用户的openid
 	 * @Title jlLoginAction_getUserOpenIdByWx
@@ -148,7 +189,35 @@ public class LoginAction extends IAction{
 			Map resultMap=gson.fromJson(result, Map.class);
 			//{"session_key":"xVW70veOHdZs9SwHx8aWdg==","expires_in":7200,"openid":"oKhAE0a3OqRqQymVFchr9q3a6uw0"}
 //			jlUserInfoService.updateOpenId(user_id,(String)resultMap.get("openid"));
-			jsonWrite(result);
+			String openId=(String)resultMap.get("openid");
+			List<UserInfo> list=jlUserInfoService.findUserByOpenId(openId);
+			if(list!=null&&list.size()>0){
+				UserInfo luser=list.get(0);
+				Map umap=new HashMap();
+				umap.put("id", luser.getId());
+				umap.put("loginname", luser.getLoginname());
+				umap.put("openId", luser.getOpenid());
+				umap.put("departmentcode",luser.getDepartmentcode());
+				umap.put("departmentname",luser.getDepartmentname());
+				umap.put("telephone", luser.getTelephone());
+				//用户的授权角色
+				List<Object[]> ulist =jlRoleInfoService.findRoleIdByUserId(luser.getId());
+				Set rolecodeSet=new HashSet();
+				for(int i=0;i<ulist.size();i++){
+					rolecodeSet.add(ulist.get(i)[1]);
+				}
+				if(rolecodeSet.contains("ROLE_1462257894696")){//是管理员角色
+					umap.put("isAdmin", "1");
+				}else if(rolecodeSet.contains("ROLE_1464940613464")){//带班角色
+					umap.put("isAdmin", "0");
+				}else{// if(rolecodeSet.contains("ROLE_1613640992689")){//普通角色
+					umap.put("isAdmin", "-1");
+				}
+				resultMap.put("user", umap);
+			}else{
+				resultMap.put("user", null);
+			}
+			jsonWrite(resultMap);
 	    } catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -219,7 +288,7 @@ public class LoginAction extends IAction{
 				tempUser.setIsdel(1);//需要审核下用是否注销来判断
 				tempUser.setRemark("微信注册");
 				tempUser.setOpenid(openId);
-				tempUser.setRemark(nickName);
+//				tempUser.setRemark(nickName);
 				userid=jlUserInfoService.saveUser(tempUser);
 				//角色id写死7 普通角色； 单独保存某一个用户与角色的关系
 				jlRoleInfoService.saveRoleUserSingle(7,userid);
@@ -253,10 +322,10 @@ public class LoginAction extends IAction{
 					rolecodeSet.add(dlist.get(j)[1]);
 				}
 			}
-			if(rolecodeSet.isEmpty()){
-				retMap.put("msg", "该用户未授权,无法登陆！");
-				retMap.put("flag",false);
-			}else{
+//			if(rolecodeSet.isEmpty()){
+//				retMap.put("msg", "该用户未授权,无法登陆！");
+//				retMap.put("flag",false);
+//			}else{
 				//用户的map对象
 				Map umap=new HashMap();
 				umap.put("id", luser.getId());
@@ -269,13 +338,13 @@ public class LoginAction extends IAction{
 					umap.put("isAdmin", "1");
 				}else if(rolecodeSet.contains("ROLE_1464940613464")){//带班角色
 					umap.put("isAdmin", "0");
-				}else if(rolecodeSet.contains("ROLE_1613640992689")){//带班角色
+				}else{// if(rolecodeSet.contains("ROLE_1613640992689")){//普通角色
 					umap.put("isAdmin", "-1");
 				}
 				retMap.put("user", umap);
 				retMap.put("flag", true);
 				retMap.put("msg", "绑定成功");
-			}	
+//			}	
 			
 			
 			
