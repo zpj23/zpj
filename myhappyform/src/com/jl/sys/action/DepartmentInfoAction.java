@@ -72,6 +72,18 @@ public class DepartmentInfoAction extends IAction{
 	public String toiframe(){
 		return "success";
 	}
+	
+	@Action(value="jlDepartmentInfoAction_chooseLocation",results={
+			@Result(name="success",location="sys/department/showMap.jsp"),//fashionHome.jsp
+			@Result(name="error",location="/login.jsp")
+	})
+	public String chooseLocation(){
+		String zuobiao=request.getParameter("zuobiao");
+		request.setAttribute("zuobiao", zuobiao);
+		return "success";
+	}
+	
+	
 	/**
 	 * 获取部门下拉框列表值
 	 * @Title jlDepartmentInfoAction_getDep

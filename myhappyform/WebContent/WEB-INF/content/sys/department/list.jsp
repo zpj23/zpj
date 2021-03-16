@@ -81,6 +81,10 @@ function removeDep(id){
 			});
 	});
 }
+
+function location_chooseBack(zuobiao){
+	list_iframe.contentWindow.location_chooseBack(zuobiao);
+}
 </script>
 </head>
 <body>

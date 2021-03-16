@@ -65,6 +65,13 @@ function closethisWin(){
 		$("#userid").val(userid);
 		$("#username").val(username);
 	}
+	
+	function chooseLocation(){
+		parent.location_show('选择地点（双击）','jlDepartmentInfoAction_chooseLocation?zuobiao='+$("#zuobiao").val(),'800','650');
+	}
+	function location_chooseBack(zuobiao){
+		$("#zuobiao").val(zuobiao);
+	}
 </script>
 </head>
 <body>
@@ -86,6 +93,13 @@ function closethisWin(){
      	<input type="hidden"  value="${dep.parent_code}"  id="parent_code" name="dep.parent_code" />
      	<input type="hidden"  value="${dep.parent_id}"  id="parent_id" name="dep.parent_id" />
      	
+      </div>
+      <div class="col-4"> </div>
+    </div>
+    <div class="row cl">
+      <label class="form-label col-4"><span class="c-red"></span>定位坐标：</label>
+      <div class="formControls col-4">
+        <input type="text" class="input-text" onclick="chooseLocation()" value="${dep.zuobiao}" placeholder="" id="zuobiao" name="dep.zuobiao"  readonly="readonly"  >
       </div>
       <div class="col-4"> </div>
     </div>

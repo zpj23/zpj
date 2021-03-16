@@ -103,6 +103,14 @@ function user_show(title,url,w,h){
 function user_chooseBack(userid,username){
 	detail_frame.user_chooseBack(userid,username);
 }
+
+function location_show(title,url,w,h){
+	parent.layer_show(title,url,w,h);
+}
+function location_chooseBack(zuobiao){
+	detail_frame.location_chooseBack(zuobiao);
+}
+
 function toRefreshTree(){
 	document.getElementById("detail_frame").src="";
 	var node = $('#tt').tree('getSelected');

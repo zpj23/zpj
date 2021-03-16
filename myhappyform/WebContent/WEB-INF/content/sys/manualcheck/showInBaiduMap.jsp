@@ -10,8 +10,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 <meta http-equiv="Cache-Control" content="no-siteapp" />
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.5&ak=sNyur13vORywDFGWIkwSmuDi"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.2&ak=sNyur13vORywDFGWIkwSmuDi"></script>
 <script type="text/javascript" src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/library/GeoUtils/1.2/src/GeoUtils_min.js"></script>
 <title></title>
 <script type="text/javascript">
 var marker=null;
@@ -19,17 +20,23 @@ var markerArr=new Array();
 var labelArr=new Array();
 var bigMap;
 var basePath="${ctx}";
-var currentMapLevel=17;
+var currentMapLevel=16;
+var depArr=[];
+var zts=0;
+var currentCircle;
+var totalData=[];//总的数据，后期根据下拉框重新定制构造地图和列表的数据
+var buildData=[];//后续动态构造列表数组
 $(function () {
 	initMap();
-// 	initDep();
+	initDep();
 });
 
 //地图初始化函数，本例取名为init，开发者可根据实际情况定义
 function initMap() {
 	bigMap = new BMap.Map("container",{mapType:BMAP_HYBRID_MAP}); 
 	bigMap.enableScrollWheelZoom();
-	bigMap.centerAndZoom(new BMap.Point(120.798883,32.084829),17);
+	bigMap.enableDoubleClickZoom();
+	bigMap.centerAndZoom(new BMap.Point(120.798883,32.084829),16);
 	var mapType1 = new BMap.MapTypeControl({mapTypes: [BMAP_NORMAL_MAP,BMAP_HYBRID_MAP]});
 	bigMap.addControl(mapType1);  
 	bigMap.setCurrentCity("江苏省");
@@ -68,7 +75,7 @@ function createMarker(obj) {
 		})();
 		
 		marker.setTitle(obj.username);
-			var label=new BMap.Label(obj.username);
+			var label=new BMap.Label(obj.username+"_"+obj.updatetime);
 			var size=new BMap.Size(20,20);
 			label.setOffset(size);
 			marker.setLabel(label);
@@ -85,20 +92,22 @@ function deleteOverlays() {
 }
 function initData(){
 	deleteOverlays();
-// 	if($("#datemin").val()==""&&($("#yuefen").val()!=""||$("#tianshu").val()!="")){
-// 		layer.msg('请先选择年份!',{icon: 5,time:3000});
-// 		return;
-// 	}
+	if($("#datemax").val()==""||$("#datemin").val()==""){
+		layer.msg('请先选择日期!',{icon: 5,time:3000});
+		return;
+	}
 	$.ajax({
  		type: "POST",
 		   url: "jlLocationAction_findListInfoByPhone",
 		   async:false,
 		   data: "datemin="+$("#datemin").val()+"&datemax="+$("#datemax").val()+"&username="+$("#username").val()+"&sgxm="+$("#sgxm").val()+"&sgqy="+$("#sgqy").val()+"&workcontent="+$("#workcontent").val()+"&departmentid="+$("#departmentid").val()+"&cpage=1&pagerow=2000",
-		   success: function(arr){
+		   success: function(arr1){
 // 			   parent.layer.close(index);
-			  var datas=$.parseJSON(arr);
+			  var datas=$.parseJSON(arr1);
 // 			  console.log(datas);
 			  var arr=datas.list;
+			  totalData=datas.list;
+			  zts=datas.count;
 			  layer.msg('总计查询到打卡数据'+datas.count+'条!', {
 				  offset: 't',
 				  anim: 6,
@@ -106,11 +115,14 @@ function initData(){
 				  time:5000
 				});
 			  //{"totalpage":1.0,"count":1,"list":[{"zuobiao":"120.79982,32.087973","id":1,"address":"江苏省南通市港闸区陈桥纬一路","updatetime":"2020-09-13 16:42:10","username":"super"}]}
-			  markerArr=new Array();
-			  for(var i=0;i<arr.length;i++){
-				  createMarker(arr[i]);
-			  }
-			  initTableList(arr);
+// 			  markerArr=new Array();
+// 			  $("#listTable").html('');
+// 			  htmlStr="";
+// 			  for(var i=0;i<arr.length;i++){
+// 				  createMarker(arr[i]);
+// 				  initTableList(arr[i]);
+// 			  }
+			  initByDep(0);
 			  
 		   }
  	});
@@ -141,14 +153,8 @@ function locationInfo(zb,id){
 	},3000);
 	
 }
-function initTableList(arr){
-	$("#listTable").html('');
-	var html="";
-	for(var i=0;i<arr.length;i++){
-		
-		html+="<tr onclick=\"locationInfo('"+arr[i].zuobiao+"','"+arr[i].id+"')\"><th>"+arr[i].username+"</th><td>"+arr[i].updatetime+"</td></tr>";	
-	}
-	$("#listTable").html(html);
+function initTableList(obj){
+	htmlStr+="<tr onclick=\"locationInfo('"+obj.zuobiao+"','"+obj.id+"')\"><th>"+obj.username+"</th><td>"+obj.updatetime+"</td></tr>";	
 }
 
 //初始化部门下拉框
@@ -159,15 +165,89 @@ function initDep(){
 	     async:false,
 	     success: function(data1){
 	      var str="";
-	      var data = $.parseJSON(data1);
+	      depArr= $.parseJSON(data1);
 	      str="<option value='' >请选择</option>";
-	      for(var i=0;i<data.length;i++){
-	       str+="<option value='"+data[i].code+"' >"+data[i].name+"</option>";
+	      for(var i=0;i<depArr.length;i++){
+	       str+="<option value='"+depArr[i].code+"' >"+depArr[i].name+"</option>";
 	      }
 	      $("#departmentid").html(str);
 
 	     }
 	});
+}
+
+function changeMap(val){
+	if($("#datemax").val()==""||$("#datemin").val()==""){
+		layer.msg('请先选择日期!',{icon: 5,time:3000});
+		return;
+	}
+	if(val==""){
+		initByDep(0);
+	}else{
+		for(var i=0;i<depArr.length;i++){
+			if(depArr[i].code==val){
+				var zb=depArr[i].zuobiao;
+				if(zb!=null&&zb!=""){
+					bigMap.centerAndZoom(new BMap.Point(zb.split(",")[0],zb.split(",")[1]),currentMapLevel);
+					currentCircle = new BMap.Circle(new BMap.Point(zb.split(",")[0],zb.split(",")[1]),1000*10,{fillColor:"blue", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
+					break;
+				}
+			}
+	    }
+		initByDep(1);
+	}
+}
+
+
+//下拉框修改时，重新初始化数据
+function initByDep(flag){
+  deleteOverlays();
+  buildData=new Array();
+  for(var i=0;i<totalData.length;i++){
+	var zb=totalData[i].zuobiao;
+	if(zb==null||zb==undefined||zb==''||zb==","){
+		
+	}else{
+		if(flag==0){
+			buildData.push(totalData[i]);
+// 			createMarker(totalData[i]);
+// 			htmlStr+="<tr onclick=\"locationInfo('"+totalData[i].zuobiao+"','"+totalData[i].id+"')\"><th>"+totalData[i].username+"</th><td>"+totalData[i].updatetime+"</td></tr>";	
+		}else{
+			if(InOrOutPolygon(zb.split(",")[0],zb.split(",")[1])){
+				buildData.push(totalData[i]);
+			}
+		}
+	}
+  }
+  setTimeout(buildInfo,1000);
+}
+
+
+function buildInfo(){
+	var htmlStr="";
+	markerArr=new Array();
+	$("#listTable").html('');
+	layer.msg('总计查询到打卡数据'+buildData.length+'条!', {
+		  offset: 't',
+		  anim: 6,
+		  icon: 1,
+		  time:5000
+		});
+	for(var i=0;i<buildData.length;i++){
+		createMarker(buildData[i]);
+		htmlStr+="<tr onclick=\"locationInfo('"+buildData[i].zuobiao+"','"+buildData[i].id+"')\"><th>"+buildData[i].username+"</th><td>"+buildData[i].updatetime+"</td></tr>";	
+	}
+	$("#listTable").html(htmlStr);
+}
+
+function InOrOutPolygon(lng, lat){
+    var ta=qqMapToBMap(lng,lat);
+    var pt = new BMap.Point(ta[0],ta[1]);
+   	var result = BMapLib.GeoUtils.isPointInCircle(pt, currentCircle);
+    if (result) {
+    	return true;
+    }
+    return false;
 }
 
 /**
@@ -205,7 +285,11 @@ function qqMapToBMap(lng, lat) {
 		<input type="text" placeholder="日期开始" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'datemax\')}'})" id="datemin" name="datemin" class="input-text Wdate" style="width:180px;">
 		-
 		<input type="text" placeholder="日期结束" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'datemin\')}'})" id="datemax" name="datemax" class="input-text Wdate" style="width:180px;">
-		
+		<span class="select-box inline">
+			<select class="select" size="1" name="departmentid" id="departmentid" value="" onchange="changeMap(this.options[this.options.selectedIndex].value)" datatype="*" nullmsg="请选择所属部门！">
+	          <option value="" selected>所属区域</option>
+	        </select>
+        </span>
 		
 		<input type="text" class="input-text" style="width:150px" placeholder="输入施工人员名称" id="username" name="username" />
         </span>

@@ -22,6 +22,7 @@ public class DepartmentInfo  implements java.io.Serializable{
 	private int userid;//部门管理员id
 	private String username;//部门管理员姓名;
 	private String remark;//部门说明
+	private String zuobiao;//定位坐标
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)	
@@ -91,6 +92,15 @@ public class DepartmentInfo  implements java.io.Serializable{
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
+	@Column(name = "zuobiao", length = 100)
+	public String getZuobiao() {
+		return zuobiao;
+	}
+	public void setZuobiao(String zuobiao) {
+		this.zuobiao = zuobiao;
+	}
+	
+	
 	
 
 }
